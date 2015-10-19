@@ -36,10 +36,10 @@ public class TouchablitityTests {
         LOG.debug("{}", log);
 
         List<Long> events = this.adbDevice.getTouchEvents(log);
-        List<Long> updates = this.adbDevice.getScreenUpdates(mp4);
+//        List<Long> updates = this.adbDevice.getScreenUpdates(mp4);
 
         LOG.info("Touch Events: {}", events);
-        LOG.info("Screen Updates: {}", updates);
+//        LOG.info("Screen Updates: {}", updates);
 
         // todo
         // data presentation and analysis

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tascape.qa</groupId>
+    <artifactId>thx-android-uiac</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
+        <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.tascape.qa</groupId>
+            <artifactId>lipermi</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.android</groupId>
+            <artifactId>uiautomator</artifactId>
+            <version>23</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+</project>
+
+<!--
+mvn install:install-file -Dfile=uiautomator.jar -DgroupId=com.android -DartifactId=uiautomator -Dversion=23 -Dpackaging=jar
+mvn install:install-file -Dfile=android.jar -DgroupId=com.android -DartifactId=android -Dversion=23 -Dpackaging=jar
+-->

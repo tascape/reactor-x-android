@@ -197,7 +197,7 @@ public final class Adb extends EntityCommunication {
         }
 
         @Override
-        public void stop() throws IOException {
+        public void stop() {
             LOG.trace("stop");
         }
     }
@@ -258,7 +258,7 @@ public final class Adb extends EntityCommunication {
         }
 
         @Override
-        public void stop() throws IOException {
+        public void stop() {
             LOG.trace("stop");
         }
     }
