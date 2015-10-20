@@ -18,6 +18,5 @@ ls -l
 echo "adb push bundle.jar /data/local/tmp"
 echo "adb push uia-server.jar /data/local/tmp"
 echo "adb shell uiautomator runtest uia-server.jar bundle.jar -c com.android.uiautomator.stub.UiAutomatorRmiServer"
-echo "adb forward --remove tcp:local_port"
-echo "adb forward tcp:local_port tcp:8998"
-
+echo "adb forward --remove tcp:8998"
+echo "adb forward tcp:8998 tcp:8998"
