@@ -13,3 +13,7 @@ hs_err_pid*
 /lipermi/target/
 /uia-client/target/
 /uia-server/target/
+/uia-server/nbproject/private/
+/uia-server/build/
+/uia-server/dist/
+/uia-test/target/

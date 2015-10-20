@@ -1,4 +1,19 @@
-package com.tascape.qa.th.driver;
+/*
+ * Copyright 2015.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package tascape.qa.th.driver;
 
 import com.android.uiautomator.stub.IUiCollection;
 import com.android.uiautomator.stub.IUiDevice;
@@ -20,13 +35,19 @@ import org.slf4j.LoggerFactory;
 public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
     private static final Logger LOG = LoggerFactory.getLogger(AndroidUiAutomatorDevice.class);
 
-    public static final String SYSPROP_UIAUTOMATOR_RMI_SERVER = "qa.comm.UIAUTOMATOR_RMI_SERVER";
+    public static final String SYSPROP_UIA_SERVER = "qa.th.comm.UIA_SERVER";
 
-    public static final String UIAUTOMATOR_RMI_SERVER = "uiautomator_rmi_server.jar";
+    public static final String SYSPROP_UIA_BUNDLE = "qa.th.comm.UIA_BUNDLE";
+
+    public static final String UIA_SERVER = "uia-server.jar";
+
+    public static final String UIA_BUNDLE = "bundle.jar";
 
     static {
-        LOG.debug("Please specify where uiautomator RMI server jar is by setting system property {}={}",
-                SYSPROP_UIAUTOMATOR_RMI_SERVER, "/path/to/your/" + UIAUTOMATOR_RMI_SERVER);
+        LOG.debug("Please specify where uiautomator server jar is by setting system property {}={}",
+            SYSPROP_UIA_SERVER, "/path/to/your/" + UIA_SERVER);
+        LOG.debug("Please specify where third-party bundle jar is by setting system property {}={}",
+            SYSPROP_UIA_BUNDLE, "/path/to/your/" + UIA_BUNDLE);
     }
 
     private final String ip = "localhost";
@@ -43,8 +64,9 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
 
     private IUiScrollable uiScrollableStub;
 
-    private final String uiRmiServer = SystemConfiguration.getInstance().getProperty(SYSPROP_UIAUTOMATOR_RMI_SERVER,
-            UIAUTOMATOR_RMI_SERVER);
+    private final String uiaServer = SystemConfiguration.getInstance().getProperty(SYSPROP_UIA_SERVER, UIA_SERVER);
+
+    private final String uiaBundle = SystemConfiguration.getInstance().getProperty(SYSPROP_UIA_BUNDLE, UIA_BUNDLE);
 
     public AndroidUiAutomatorDevice(int port) throws IOException, InterruptedException {
         this.port = port;
@@ -93,14 +115,21 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
     private void setupUiAutomatorRmiServer() throws IOException, InterruptedException {
         List<Object> cmdLine = new ArrayList<>();
         cmdLine.add("push");
-        cmdLine.add(uiRmiServer);
+        cmdLine.add(uiaServer);
+        cmdLine.add("/data/local/tmp/");
+        adb.adb(cmdLine);
+
+        cmdLine = new ArrayList<>();
+        cmdLine.add("push");
+        cmdLine.add(uiaBundle);
         cmdLine.add("/data/local/tmp/");
         adb.adb(cmdLine);
 
         cmdLine = new ArrayList();
         cmdLine.add("uiautomator");
         cmdLine.add("runtest");
-        cmdLine.add(UIAUTOMATOR_RMI_SERVER);
+        cmdLine.add(UIA_SERVER);
+        cmdLine.add(UIA_BUNDLE);
         cmdLine.add("-c");
         cmdLine.add("com.android.uiautomator.stub.UiAutomatorRmiServer");
         this.adb.shellAsync(cmdLine, Long.MAX_VALUE);

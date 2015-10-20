@@ -1,5 +1,6 @@
-package com.tascape.qa.th.suite;
+package tascape.qa.th.suite;
 
+import com.tascape.qa.th.suite.AbstractSuite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

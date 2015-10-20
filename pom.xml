@@ -8,10 +8,10 @@
     <artifactId>thx-android</artifactId>
     <version>1.0.0</version>  
     <packaging>pom</packaging>
-    
+
     <modules>
         <module>uia-client</module>
-        <module>uia-server</module>
+        <module>uia-test</module>
     </modules>
 
     <properties>
@@ -43,6 +43,12 @@
             <groupId>com.tascape.qa</groupId>
             <artifactId>thx-android-uiac</artifactId>
             <version>1.0.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.android</groupId>
+            <artifactId>android</artifactId>
+            <version>23</version>
             <type>jar</type>
         </dependency>
     </dependencies>
