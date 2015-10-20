@@ -1,16 +1,15 @@
-#!/bin/bash -xe
+#!/bin/bash -e
 
 rm -fr libs || echo ""
 mkdir libs
 ls -l
 
-cp ../lipermi/target/lipermi-1.0.1.jar libs
+cp ../lipermi/target/thx-android-lipermi-1.0.1.jar libs
 cp ../uia-client/target/thx-android-uiac-1.0.0.jar libs
 
 ant clean build
 
-rm  lipermi-*.jar
-rm thx-android-uiac-*.jar
+rm thx-android-*.jar
 
 ls -l
 cd bin
