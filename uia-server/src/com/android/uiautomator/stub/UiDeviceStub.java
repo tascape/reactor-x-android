@@ -5,6 +5,9 @@ import java.io.File;
 
 import com.android.uiautomator.core.UiDevice;
 import com.android.uiautomator.core.UiWatcher;
+import com.android.uiautomator.stub.IUiDevice;
+import com.android.uiautomator.stub.Point;
+import com.android.uiautomator.stub.UiSelector;
 import net.sf.lipermi.exception.LipeRMIException;
 
 /**
