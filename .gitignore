@@ -17,3 +17,4 @@ hs_err_pid*
 /uia-server/build/
 /uia-server/dist/
 /uia-test/target/
+/target/

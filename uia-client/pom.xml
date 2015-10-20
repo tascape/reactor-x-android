@@ -5,10 +5,18 @@
     <parent>
         <groupId>com.tascape.qa</groupId>
         <artifactId>thx-android</artifactId>
-        <version>1.0.0</version>  
+        <version>1.0.0</version> 
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.tascape.qa</groupId>
     <artifactId>thx-android-uiac</artifactId>
     <version>1.0.0</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.tascape.qa</groupId>
+            <artifactId>lipermi</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+    </dependencies>
 </project>
