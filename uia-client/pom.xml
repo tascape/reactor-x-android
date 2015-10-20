@@ -27,7 +27,7 @@
         <dependency>
             <groupId>com.android</groupId>
             <artifactId>uiautomator</artifactId>
-            <version>23</version>
+            <version>[21, )</version>
             <type>jar</type>
         </dependency>
     </dependencies>

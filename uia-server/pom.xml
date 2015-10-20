@@ -27,18 +27,18 @@
         <dependency>
             <groupId>com.android</groupId>
             <artifactId>uiautomator</artifactId>
-            <version>23</version>
+            <version>[21, )</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.android</groupId>
             <artifactId>android</artifactId>
-            <version>23</version>
+            <version>[21, 30)</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.tascape.qa</groupId>
-            <artifactId>uia-client</artifactId>
+            <artifactId>thx-android-uiac</artifactId>
             <version>1.0.0</version>
             <type>jar</type>
         </dependency>
