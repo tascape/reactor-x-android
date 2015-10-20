@@ -12,8 +12,3 @@
     <artifactId>thx-android-uiac</artifactId>
     <version>1.0.0</version>
 </project>
-
-<!--
-mvn install:install-file -Dfile=uiautomator.jar -DgroupId=com.android -DartifactId=uiautomator -Dversion=23 -Dpackaging=jar
-mvn install:install-file -Dfile=android.jar -DgroupId=com.android -DartifactId=android -Dversion=23 -Dpackaging=jar
--->

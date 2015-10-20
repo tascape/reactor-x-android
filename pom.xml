@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>lipermi</module>
         <module>uia-client</module>
         <module>uia-test</module>
     </modules>
@@ -71,9 +72,9 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:git@github.com:tascape/testharness-x-android.git</connection>
-        <developerConnection>scm:git:git@github.com:tascape/testharness-x-android.git</developerConnection>
-        <url>git:git@github.com:juven/testharness-x-android.git</url>
+        <connection>scm:git:git@github.com:tascape/thx-android.git</connection>
+        <developerConnection>scm:git:git@github.com:tascape/thx-android.git</developerConnection>
+        <url>git:git@github.com:juven/thx-android.git</url>
     </scm>
 </project>
 
