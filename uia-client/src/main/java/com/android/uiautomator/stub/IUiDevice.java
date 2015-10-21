@@ -49,7 +49,7 @@ public interface IUiDevice extends Serializable {
      * Helper method used for debugging to dump the current window's layout
      * hierarchy. The file root location is /data/local/tmp
      *
-     * @param fileName
+     * @param fileName name
      */
     void dumpWindowHierarchy(String fileName);
 
@@ -57,7 +57,7 @@ public interface IUiDevice extends Serializable {
      * Disables the sensors and freezes the device rotation at its current
      * rotation state.
      *
-     * @throws LipeRMIException
+     * @throws LipeRMIException for any rmi issue
      */
     void freezeRotation() throws LipeRMIException;
 
@@ -84,10 +84,9 @@ public interface IUiDevice extends Serializable {
     int getDisplayHeight();
 
     /**
-     * Returns the current rotation of the display, as defined in
-     * {@link Surface}
+     * Returns the current rotation of the display, as defined in Surface
      *
-     * @return
+     * @return int
      */
     int getDisplayRotation();
 
@@ -106,8 +105,6 @@ public interface IUiDevice extends Serializable {
      * The returned display width is adjusted per screen rotation
      *
      * @return width in dp
-     *
-     * @hide
      */
     int getDisplayWidthDp();
 
@@ -117,8 +114,6 @@ public interface IUiDevice extends Serializable {
      * The returned display height is adjusted per screen rotation
      *
      * @return height in dp
-     *
-     * @hide
      */
     int getDisplayHeightDp();
 
@@ -150,7 +145,7 @@ public interface IUiDevice extends Serializable {
      *
      * This method provides information on what type of device the test is
      * running on. If you are trying to test for different types of UI screen
-     * sizes, your test should use {@link UiDevice#getDisplaySizeDp()} instead.
+     * sizes, your test should use {@link IUiDevice#getDisplaySizeDp()} instead.
      * This value is the same returned by invoking #adb shell getprop
      * ro.product.name.
      *
@@ -159,24 +154,23 @@ public interface IUiDevice extends Serializable {
     String getProductName();
 
     /**
-     * Checks if any registered {@link UiWatcher} have triggered.
+     * Checks if any registered UiWatcher have triggered.
      *
-     * See {@link #registerWatcher(String, UiWatcher)} See
-     * {@link #hasWatcherTriggered(String)}
+     * See registerWatcher(String, UiWatcher). See hasWatcherTriggered(String)
      *
-     * @return
+     * @return boolean
      */
     boolean hasAnyWatcherTriggered();
 
     /**
-     * Checks if a specific registered {@link UiWatcher} has triggered. See
-     * {@link #registerWatcher(String, UiWatcher)}. If a UiWatcher runs and its
-     * {@link UiWatcher#checkForCondition()} call returned <code>true</code>,
+     * Checks if a specific registered UiWatcher has triggered. See
+     * registerWatcher(String, UiWatcher). If a UiWatcher runs and its
+     * UiWatcher#checkForCondition() call returned <code>true</code>,
      * then the UiWatcher is considered triggered. This is helpful if a watcher
      * is detecting errors from ANR or crash dialogs and the test needs to know
      * if a UiWatcher has been triggered.
      *
-     * @param watcherName
+     * @param watcherName name
      *
      * @return true if triggered else false
      */
@@ -195,7 +189,7 @@ public interface IUiDevice extends Serializable {
      *
      * @return true if the screen is ON else false
      *
-     * @throws LipeRMIException
+     * @throws LipeRMIException for any rmi issue
      */
     boolean isScreenOn() throws LipeRMIException;
 
@@ -265,9 +259,7 @@ public interface IUiDevice extends Serializable {
     /**
      * Simulates a short press using a key code.
      *
-     * See {@link KeyEvent}
-     *
-     * @param keyCode
+     * @param keyCode code
      *
      * @return true if successful, else return false
      */
@@ -275,8 +267,6 @@ public interface IUiDevice extends Serializable {
 
     /**
      * Simulates a short press using a key code.
-     *
-     * See {@link KeyEvent}.
      *
      * @param keyCode
      *                  the key code of the event.
@@ -300,7 +290,7 @@ public interface IUiDevice extends Serializable {
      *
      * @return true if successful, else return false
      *
-     * @throws LipeRMIException
+     * @throws LipeRMIException is any rmi issue
      */
     boolean pressRecentApps() throws LipeRMIException;
 
@@ -311,7 +301,7 @@ public interface IUiDevice extends Serializable {
      */
     boolean pressSearch();
 
-    /**
+    /*
      * Registers a {@link UiWatcher} to run automatically when the testing
      * framework is unable to find a match using a {@link UiSelector}. See
      * {@link #runWatchers()}
@@ -320,12 +310,13 @@ public interface IUiDevice extends Serializable {
      *                to register the UiWatcher
      * @param watcher
      *                {@link UiWatcher}
-     */
-//    void registerWatcher(String name, UiWatcher watcher);
-    /**
-     * Removes a previously registered {@link UiWatcher}.
      *
-     * See {@link #registerWatcher(String, UiWatcher)}
+     * void registerWatcher(String name, UiWatcher watcher);
+     */
+    /**
+     * Removes a previously registered UiWatcher.
+     *
+     * See registerWatcher(String, UiWatcher)
      *
      * @param name
      *             used to register the UiWatcher
@@ -333,16 +324,16 @@ public interface IUiDevice extends Serializable {
     void removeWatcher(String name);
 
     /**
-     * Resets a {@link UiWatcher} that has been triggered. If a UiWatcher runs
-     * and its {@link UiWatcher#checkForCondition()} call returned
+     * Resets a UiWatcher that has been triggered. If a UiWatcher runs
+     * and its UiWatcher#checkForCondition() call returned
      * <code>true</code>, then the UiWatcher is considered triggered. See
-     * {@link #registerWatcher(String, UiWatcher)}
+     * registerWatcher(String, UiWatcher)
      */
     void resetWatcherTriggers();
 
     /**
      * This method forces all registered watchers to run. See
-     * {@link #registerWatcher(String, UiWatcher)}
+     * registerWatcher(String, UiWatcher)
      */
     void runWatchers();
 
@@ -353,7 +344,7 @@ public interface IUiDevice extends Serializable {
      * If you want to un-freeze the rotation and re-enable the sensors see
      * {@link #unfreezeRotation()}.
      *
-     * @throws LipeRMIException
+     * @throws LipeRMIException for any rmi issue
      */
     void setOrientationLeft() throws LipeRMIException;
 
@@ -362,9 +353,9 @@ public interface IUiDevice extends Serializable {
      * freezes rotation by disabling the sensors.
      *
      * If you want to un-freeze the rotation and re-enable the sensors see
-     * {@link #unfreezeRotation()}.
+     * unfreezeRotation().
      *
-     * @throws LipeRMIException
+     * @throws LipeRMIException for any rmi issue
      */
     void setOrientationNatural() throws LipeRMIException;
 
@@ -373,9 +364,9 @@ public interface IUiDevice extends Serializable {
      * disabling the sensors.
      *
      * If you want to un-freeze the rotation and re-enable the sensors see
-     * {@link #unfreezeRotation()}.
+     * unfreezeRotation().
      *
-     * @throws LipeRMIException
+     * @throws LipeRMIException for any rmi issue
      */
     void setOrientationRight() throws LipeRMIException;
 
@@ -383,7 +374,7 @@ public interface IUiDevice extends Serializable {
      * This method simply presses the power button if the screen is ON else it
      * does nothing if the screen is already OFF.
      *
-     * @throws LipeRMIException
+     * @throws LipeRMIException for any rmi issue
      */
     void sleep() throws LipeRMIException;
 
@@ -393,10 +384,10 @@ public interface IUiDevice extends Serializable {
      * 5ms per step. So for a 100 steps, the swipe will take about 1/2 second to
      * complete.
      *
-     * @param startX
-     * @param startY
-     * @param endX
-     * @param endY
+     * @param startX x
+     * @param startY y
+     * @param endX   x
+     * @param endY   y
      * @param steps
      *               is the number of move steps sent to the system
      *
@@ -426,7 +417,7 @@ public interface IUiDevice extends Serializable {
      * @param storePath
      *                  where the PNG should be written to
      *
-     * @return
+     * @return boolean
      */
     boolean takeScreenshot(File storePath);
 
@@ -442,7 +433,7 @@ public interface IUiDevice extends Serializable {
      * @param quality
      *                  quality of the PNG compression; range: 0-100
      *
-     * @return
+     * @return boolean
      */
     boolean takeScreenshot(File storePath, float scale, int quality);
 
@@ -452,7 +443,7 @@ public interface IUiDevice extends Serializable {
      * execution, it is best to keep the device frozen in a specific orientation
      * until the test case execution has completed.
      *
-     * @throws LipeRMIException
+     * @throws LipeRMIException for any rmi issue
      */
     void unfreezeRotation() throws LipeRMIException;
 
@@ -465,7 +456,7 @@ public interface IUiDevice extends Serializable {
     /**
      * Waits for the current application to idle.
      *
-     * @param time
+     * @param time ms
      */
     void waitForIdle(long time);
 
@@ -494,7 +485,7 @@ public interface IUiDevice extends Serializable {
      * If the screen was OFF and it just got turned ON, this method will insert
      * a 500ms delay to allow the device time to wake up and accept input.
      *
-     * @throws LipeRMIException
+     * @throws LipeRMIException for any rmi issue
      */
     void wakeUp() throws LipeRMIException;
 }

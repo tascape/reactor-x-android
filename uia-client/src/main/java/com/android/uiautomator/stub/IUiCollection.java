@@ -30,12 +30,12 @@ public interface IUiCollection extends IUiObject {
      * It looks for any child matching the <code>childPattern</code> argument that has
      * a child UI element anywhere within its sub hierarchy that has content-description text.
      * The returned UiObject will point at the <code>childPattern</code> instance that matched the
-     * search and not at the identifying child element that matched the content description.</p>
+     * search and not at the identifying child element that matched the content description.
      *
      * @param childPattern {@link UiSelector} selector of the child pattern to match and return
      * @param text         String of the identifying child contents of of the <code>childPattern</code>
      *
-     * @return
+     * @return boolean
      *
      * @since API Level 16
      */
@@ -53,7 +53,7 @@ public interface IUiCollection extends IUiObject {
      * @param childPattern {@link UiSelector} selector of the child pattern to match and return
      * @param instance     int the desired matched instance of this <code>childPattern</code>
      *
-     * @return
+     * @return boolean
      *
      * @since API Level 16
      */
@@ -72,7 +72,7 @@ public interface IUiCollection extends IUiObject {
      * @param childPattern {@link UiSelector} selector of the child pattern to match and return
      * @param text         String of the identifying child contents of of the <code>childPattern</code>
      *
-     * @return
+     * @return boolean
      *
      * @since API Level 16
      */
@@ -87,7 +87,7 @@ public interface IUiCollection extends IUiObject {
      * @param childPattern a {@link UiSelector} that represents the matching child UI
      *                     elements to count
      *
-     * @return the number of matched childPattern under the current {@link UiCollection}
+     * @return the number of matched childPattern under the current {@link IUiCollection}
      *
      * @since API Level 16
      */

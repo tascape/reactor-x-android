@@ -44,6 +44,9 @@ public class Point implements Serializable {
 
     /**
      * Set the point's x and y coordinates
+     *
+     * @param x x
+     * @param y y
      */
     public void set(int x, int y) {
         this.x = x;
@@ -61,8 +64,8 @@ public class Point implements Serializable {
     /**
      * Offset the point's coordinates by dx, dy
      *
-     * @param dx
-     * @param dy
+     * @param dx x
+     * @param dy y
      */
     public final void offset(int dx, int dy) {
         x += dx;
@@ -72,10 +75,10 @@ public class Point implements Serializable {
     /**
      * Returns true if the point's coordinates equal (x,y)
      *
-     * @param x
-     * @param y
+     * @param x x
+     * @param y y
      *
-     * @return
+     * @return boolean
      */
     public final boolean equals(int x, int y) {
         return this.x == x && this.y == y;

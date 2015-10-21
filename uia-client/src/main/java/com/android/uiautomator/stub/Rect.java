@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  * represented by the coordinates of its 4 edges (left, top, right bottom).
  * These fields can be accessed directly. Use width() and height() to retrieve
  * the rectangle's width and height. Note: most methods do not check to see that
- * the coordinates are sorted correctly (i.e. left <= right and top <= bottom).
+ * the coordinates are sorted correctly (i.e. left - right and top - bottom).
  *
  * @author linsong wang
  */
@@ -49,8 +49,8 @@ public class Rect implements Serializable {
 
     /**
      * Create a new rectangle with the specified coordinates. Note: no range
-     * checking is performed, so the caller must ensure that left <= right and
-     * top <= bottom.
+     * checking is performed, so the caller must ensure that left - right and
+     * top - bottom.
      *
      * @param left   The X coordinate of the left side of the rectangle
      * @param top    The Y coordinate of the top of the rectangle
@@ -122,7 +122,7 @@ public class Rect implements Serializable {
     /**
      * Return a string representation of the rectangle in a compact form.
      *
-     * @return
+     * @return string
      */
     public String toShortString() {
         return toShortString(new StringBuilder(32));
@@ -131,9 +131,9 @@ public class Rect implements Serializable {
     /**
      * Return a string representation of the rectangle in a compact form.
      *
-     * @param sb
+     * @param sb sb
      *
-     * @return
+     * @return string
      */
     public String toShortString(StringBuilder sb) {
         sb.setLength(0);
@@ -152,7 +152,6 @@ public class Rect implements Serializable {
     /**
      * Return a string representation of the rectangle in a well-defined format.
      *
-     * <p>
      * You can later recover the Rect from this string through
      * {@link #unflattenFromString(String)}.
      *
@@ -176,9 +175,9 @@ public class Rect implements Serializable {
      * Returns a Rect from a string of the form returned by {@link #flattenToString},
      * or null if the string is not of that form.
      *
-     * @param str
+     * @param str string
      *
-     * @return
+     * @return rect
      */
     public static Rect unflattenFromString(String str) {
         Matcher matcher = FLATTENED_PATTERN.matcher(str);
@@ -192,9 +191,9 @@ public class Rect implements Serializable {
     }
 
     /**
-     * Returns true if the rectangle is empty (left >= right or top >= bottom)
+     * Returns true if the rectangle is empty (left - right or top - bottom)
      *
-     * @return
+     * @return boolean
      */
     public final boolean isEmpty() {
         return left >= right || top >= bottom;
@@ -202,7 +201,7 @@ public class Rect implements Serializable {
 
     /**
      * @return the rectangle's width. This does not check for a valid rectangle
-     *         (i.e. left <= right) so the result may be negative.
+     *         (i.e. left - right) so the result may be negative.
      */
     public final int width() {
         return right - left;
@@ -210,7 +209,7 @@ public class Rect implements Serializable {
 
     /**
      * @return the rectangle's height. This does not check for a valid rectangle
-     *         (i.e. top <= bottom) so the result may be negative.
+     *         (i.e. top - bottom) so the result may be negative.
      */
     public final int height() {
         return bottom - top;
@@ -258,7 +257,7 @@ public class Rect implements Serializable {
     /**
      * Set the rectangle's coordinates to the specified values. Note: no range
      * checking is performed, so it is up to the caller to ensure that
-     * left <= right and top <= bottom.
+     * left - right and top - bottom.
      *
      * @param left   The X coordinate of the left side of the rectangle
      * @param top    The Y coordinate of the top of the rectangle
@@ -332,14 +331,14 @@ public class Rect implements Serializable {
     /**
      * Returns true if (x,y) is inside the rectangle. The left and top are
      * considered to be inside, while the right and bottom are not. This means
-     * that for a x,y to be contained: left <= x < right and top <= y < bottom.
+     * that for a x,y to be contained: left - x - right and top - y - bottom.
      * An empty rectangle never contains any point.
      *
      * @param x The X coordinate of the point being tested for containment
      * @param y The Y coordinate of the point being tested for containment
      *
      * @return true iff (x,y) are contained by the rectangle, where containment
-     *         means left <= x < right and top <= y < bottom
+     *         means left - x - right and top - y - bottom
      */
     public boolean contains(int x, int y) {
         return left < right && top < bottom // check for empty first
@@ -561,10 +560,10 @@ public class Rect implements Serializable {
     }
 
     /**
-     * Swap top/bottom or left/right if there are flipped (i.e. left > right
-     * and/or top > bottom). This can be called if
+     * Swap top/bottom or left/right if there are flipped (i.e. left - right
+     * and/or top - bottom). This can be called if
      * the edges are computed separately, and may have crossed over each other.
-     * If the edges are already correct (i.e. left <= right and top <= bottom)
+     * If the edges are already correct (i.e. left - right and top - bottom)
      * then nothing is done.
      */
     public void sort() {
@@ -583,7 +582,7 @@ public class Rect implements Serializable {
     /**
      * Scales up the rect by the given scale.
      *
-     * @param scale
+     * @param scale scale
      */
     public void scale(float scale) {
         if (scale != 1.0f) {

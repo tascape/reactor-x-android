@@ -27,13 +27,11 @@ public interface IUiScrollable extends IUiCollection {
      * Scrolls forward until the UiObject is fully visible in the scrollable container (Not supported yet).
      * Use this method to make sure that the child item's edges are not offscreen.
      *
-     * @param childObject {@link UiObject} representing the child element
+     * @param childObject {@link IUiObject} representing the child element
      *
      * @return true if the child element is already fully visible, or
      *         if the method scrolled successfully until the child became fully visible;
      *         otherwise, false if the attempt to scroll failed.
-     *
-     * @hide
      */
     boolean ensureFullyVisible(IUiObject childObject);
 
@@ -71,7 +69,7 @@ public interface IUiScrollable extends IUiCollection {
      * the left-most edge for horizontal controls. Make sure to take into
      * account devices configured with right-to-left languages like Arabic and Hebrew.
      *
-     * @param maxSwipes
+     * @param maxSwipes int
      *
      * @return true on scrolled else false
      *
@@ -85,7 +83,7 @@ public interface IUiScrollable extends IUiCollection {
      * the right-most edge for horizontal controls. Make sure to take into
      * account devices configured with right-to-left languages like Arabic and Hebrew.
      *
-     * @param maxSwipes
+     * @param maxSwipes int
      *
      * @return true on scrolled, else false
      *
@@ -97,19 +95,16 @@ public interface IUiScrollable extends IUiCollection {
      * Searches for a child element in the present scrollable container.
      * The search first looks for a child element that matches the selector
      * you provided, then looks for the content-description in its children elements.
-     * If both search conditions are fulfilled, the method returns a {
-     *
-     * @ link UiObject}
+     * If both search conditions are fulfilled, the method returns a IUiObject
      * representing the element matching the selector (not the child element in its
      * subhierarchy containing the content-description). By default, this method performs a
      * scroll search.
-     * See {@link #getChildByDescription(UiSelector, String, boolean)}
      *
      * @param childPattern {@link UiSelector} for a child in a scollable layout element
      * @param text         Content-description to find in the children of
      *                     the <code>childPattern</code> match
      *
-     * @return {@link UiObject} representing the child element that matches the search conditions
+     * @return boolean
      *
      * @since API Level 16
      */
@@ -120,9 +115,7 @@ public interface IUiScrollable extends IUiCollection {
      * Searches for a child element in the present scrollable container.
      * The search first looks for a child element that matches the selector
      * you provided, then looks for the content-description in its children elements.
-     * If both search conditions are fulfilled, the method returns a {
-     *
-     * @ link UiObject}
+     * If both search conditions are fulfilled, the method returns a IUiObject
      * representing the element matching the selector (not the child element in its
      * subhierarchy containing the content-description).
      *
@@ -131,7 +124,7 @@ public interface IUiScrollable extends IUiCollection {
      *                          the <code>childPattern</code> match (may be a partial match)
      * @param allowScrollSearch set to true if scrolling is allowed
      *
-     * @return {@link UiObject} representing the child element that matches the search conditions
+     * @return boolean
      *
      * @since API Level 16
      */
@@ -146,7 +139,7 @@ public interface IUiScrollable extends IUiCollection {
      * @param instance     int number representing the occurance of
      *                     a <code>childPattern</code> match
      *
-     * @return {@link UiObject} representing the child element that matches the search conditions
+     * @return boolean
      *
      * @since API Level 16
      */
@@ -157,19 +150,15 @@ public interface IUiScrollable extends IUiCollection {
      * Searches for a child element in the present scrollable
      * container. The search first looks for a child element that matches the
      * selector you provided, then looks for the text in its children elements.
-     * If both search conditions are fulfilled, the method returns a {
-     *
-     * @ link UiObject}
+     * If both search conditions are fulfilled, the method returns a UiObject
      * representing the element matching the selector (not the child element in its
      * subhierarchy containing the text). By default, this method performs a
      * scroll search.
-     * See {@link #getChildByText(UiSelector, String, boolean)}
      *
      * @param childPattern {@link UiSelector} selector for a child in a scrollable layout element
      * @param text         String to find in the children of the <code>childPattern</code> match
      *
-     * @return {@link UiObject} representing the child element that matches the search conditions
-     *
+     * @return boolean
      * @since API Level 16
      */
     @Override
@@ -179,9 +168,7 @@ public interface IUiScrollable extends IUiCollection {
      * Searches for a child element in the present scrollable container. The
      * search first looks for a child element that matches the
      * selector you provided, then looks for the text in its children elements.
-     * If both search conditions are fulfilled, the method returns a {
-     *
-     * @ link UiObject}
+     * If both search conditions are fulfilled, the method returns a IUiObject
      * representing the element matching the selector (not the child element in its
      * subhierarchy containing the text).
      *
@@ -189,7 +176,7 @@ public interface IUiScrollable extends IUiCollection {
      * @param text              String to find in the children of the <code>childPattern</code> match
      * @param allowScrollSearch set to true if scrolling is allowed
      *
-     * @return {@link UiObject} representing the child element that matches the search conditions
+     * @return boolean
      *
      * @since API Level 16
      */
@@ -198,8 +185,6 @@ public interface IUiScrollable extends IUiCollection {
     /**
      * Gets the maximum number of scrolls allowed when performing a
      * scroll action in search of a child element.
-     * See {@link #getChildByDescription(UiSelector, String)} and
-     * {@link #getChildByText(UiSelector, String)}.
      *
      * @return max the number of search swipes to perform until giving up
      *
@@ -294,9 +279,9 @@ public interface IUiScrollable extends IUiCollection {
 
     /**
      * Perform a forward scroll action to move through the scrollable layout element until
-     * a visible item that matches the {@link UiObject} is found.
+     * a visible item that matches the {@link IUiObject} is found.
      *
-     * @param obj {@link UiObject}
+     * @param obj {@link IUiObject}
      *
      * @return true if the item was found and now is in view else false
      *
@@ -307,8 +292,6 @@ public interface IUiScrollable extends IUiCollection {
     /**
      * Perform a scroll forward action to move through the scrollable layout
      * element until a visible item that matches the selector is found.
-     *
-     * See {@link #scrollDescriptionIntoView(String)} and {@link #scrollTextIntoView(String)}.
      *
      * @param selector {@link UiSelector} selector
      *
@@ -321,7 +304,6 @@ public interface IUiScrollable extends IUiCollection {
     /**
      * Performs a forward scroll action on the scrollable layout element until
      * the text you provided is visible, or until swipe attempts have been exhausted.
-     * See {@link #setMaxSearchSwipes(int)}
      *
      * @param text test to look for
      *
@@ -337,7 +319,7 @@ public interface IUiScrollable extends IUiCollection {
      * left-most edge for horizontal controls. Make sure to take into account
      * devices configured with right-to-left languages like Arabic and Hebrew.
      *
-     * @param maxSwipes
+     * @param maxSwipes int
      * @param steps     use steps to control the speed, so that it may be a scroll, or fling
      *
      * @return true on scrolled else false
@@ -352,7 +334,7 @@ public interface IUiScrollable extends IUiCollection {
      * left-most edge for horizontal controls. Make sure to take into account
      * devices configured with right-to-left languages like Arabic and Hebrew.
      *
-     * @param maxSwipes
+     * @param maxSwipes int
      *
      * @return true on scrolled else false
      *
@@ -378,7 +360,7 @@ public interface IUiScrollable extends IUiCollection {
      * horizontal controls. Make sure to take into account devices configured with
      * right-to-left languages like Arabic and Hebrew.
      *
-     * @param maxSwipes
+     * @param maxSwipes int
      *
      * @return true on scrolled, else false
      *
@@ -399,7 +381,6 @@ public interface IUiScrollable extends IUiCollection {
     /**
      * Set the direction of swipes to be vertical when performing scroll actions.
      *
-     *
      * @since API Level 16
      */
     void setAsVerticalList();
@@ -407,8 +388,6 @@ public interface IUiScrollable extends IUiCollection {
     /**
      * Sets the maximum number of scrolls allowed when performing a
      * scroll action in search of a child element.
-     * See {@link #getChildByDescription(UiSelector, String)} and
-     * {@link #getChildByText(UiSelector, String)}.
      *
      * @param swipes the number of search swipes to perform until giving up
      *

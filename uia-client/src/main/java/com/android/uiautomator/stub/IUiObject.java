@@ -33,14 +33,14 @@ public interface IUiObject extends Serializable {
     /**
      * Gets and clears the existing UiObjectNotFoundException.
      *
-     * @return
+     * @return exception
      */
     UiObjectNotFoundException getUiObjectNotFoundException();
 
     /**
      * Checks if there is existing UiObjectNotFoundException (not null).
      *
-     * @return
+     * @return boolean
      */
     boolean hasUiObjectNotFoundException();
 
@@ -93,9 +93,11 @@ public interface IUiObject extends Serializable {
      *
      * This method differ from {@link UiObject#click()} only in that this method waits for a
      * a new window transition as a result of the click. Some examples of a window transition:
+     * <ul>
      * <li>launching a new activity</li>
      * <li>bringing up a pop-up menu</li>
      * <li>bringing up a dialog</li>
+     * </ul>
      *
      * @param timeout timeout before giving up on waiting for a new window
      *
@@ -182,7 +184,7 @@ public interface IUiObject extends Serializable {
      *
      * @param selector for child view to match
      *
-     * @return
+     * @return boolean
      *
      * @since API Level 16
      */
@@ -220,7 +222,8 @@ public interface IUiObject extends Serializable {
      * relative to the present UiObject.
      *
      * @param selector for a sibling view or children of the sibling view
-     * @return 
+     *
+     * @return boolean
      *
      * @since API Level 16
      */
@@ -250,9 +253,7 @@ public interface IUiObject extends Serializable {
      * If a portion of the view is visible, only the bounds of the visible portion are
      * reported.
      *
-     * @return Rect
-     *
-     * @see {@link #getBounds()}
+     * @return Rect rect
      * @since API Level 17
      */
     Rect getVisibleBounds();

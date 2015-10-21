@@ -18,7 +18,6 @@ package tascape.qa.th.demo;
 import tascape.qa.th.comm.Adb;
 import tascape.qa.th.driver.AndroidAdbDevice;
 import java.io.File;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,25 +38,12 @@ public class TouchablitityTests {
 
     public void testOne() throws Exception {
         int seconds = 10;
-
-        File log = this.adbDevice.logTouchEvents(seconds);
         String mp4 = this.adbDevice.recordScreen(seconds, 512000);
 
         LOG.info("Please interact with touch screen for {} seconds", seconds);
         Thread.sleep(seconds * 1100L);
-
         LOG.info("Done recording");
-
-        LOG.debug("{}", log);
-
-        List<Long> events = this.adbDevice.getTouchEvents(log);
-//        List<Long> updates = this.adbDevice.getScreenUpdates(mp4);
-
-        LOG.info("Touch Events: {}", events);
-//        LOG.info("Screen Updates: {}", updates);
-
-        // todo
-        // data presentation and analysis
+        File f = this.adbDevice.getScreenRecord(mp4);
     }
 
     public static void main(String[] args) {
@@ -65,7 +51,6 @@ public class TouchablitityTests {
             TouchablitityTests tests = new TouchablitityTests();
             tests.setup();
             tests.testOne();
-            System.exit(0);
         } catch (Throwable ex) {
             LOG.error("", ex);
         } finally {

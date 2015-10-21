@@ -200,6 +200,7 @@ public class UiSelector implements Serializable {
      * Set the search criteria to match the class property
      * for a widget (for example, "android.widget.Button").
      *
+     * @param <T>  type
      * @param type type
      *
      * @return UiSelector with the specified search criteria
@@ -572,7 +573,7 @@ public class UiSelector implements Serializable {
      * Use this selector to narrow the search scope to
      * child widgets under a specific parent widget.
      *
-     * @param selector
+     * @param selector selector
      *
      * @return UiSelector with this added search criterion
      *
@@ -597,7 +598,7 @@ public class UiSelector implements Serializable {
      * Use this selector to narrow the search scope to
      * sibling widgets as well all child widgets under a parent.
      *
-     * @param selector
+     * @param selector selector
      *
      * @return UiSelector with this added search criterion
      *

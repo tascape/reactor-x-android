@@ -115,7 +115,7 @@ public class AndroidAdbDevice extends EntityDriver {
     public void reset() throws Exception {
     }
 
-    private File getScreenRecord(String path) throws IOException {
+    public File getScreenRecord(String path) throws IOException {
         File mp4 = File.createTempFile("ScreenRecording", ".mp4");
         this.adb.pull(path, mp4);
         return mp4;

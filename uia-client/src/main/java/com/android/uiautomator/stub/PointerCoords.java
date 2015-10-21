@@ -21,10 +21,10 @@ import java.io.Serializable;
  * Transfer object for pointer coordinates.
  *
  * Objects of this type can be used to specify the pointer coordinates when
- * creating new {@link MotionEvent} objects and to query pointer coordinates
+ * creating new MotionEvent objects and to query pointer coordinates
  * in bulk.
  *
- * Refer to {@link InputDevice} for information about how different kinds of
+ * Refer to InputDevice for information about how different kinds of
  * input devices and sources represent pointer coordinates.
  *
  * @author linsong wang
@@ -32,12 +32,11 @@ import java.io.Serializable;
 public class PointerCoords implements Serializable {
     /**
      * Axis constant: X axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a touch screen, reports the absolute X screen position of the center of
      * the touch contact area. The units are display pixels.
      * <li>For a touch pad, reports the absolute X surface position of the center of the touch
-     * contact area. The units are device-dependent; use {@link InputDevice#getMotionRange(int)}
+     * contact area. The units are device-dependent; use InputDevice#getMotionRange(int)
      * to query the effective range of values.
      * <li>For a mouse, reports the absolute X screen position of the mouse pointer.
      * The units are display pixels.
@@ -46,23 +45,16 @@ public class PointerCoords implements Serializable {
      * <li>For a joystick, reports the absolute X position of the joystick.
      * The value is normalized to a range from -1.0 (left) to 1.0 (right).
      * </ul>
-     * </p>
-     *
-     * @see #getX(int)
-     * @see #getHistoricalX(int, int)
-     * @see MotionEvent.PointerCoords#x
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_X = 0;
 
     /**
      * Axis constant: Y axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a touch screen, reports the absolute Y screen position of the center of
      * the touch contact area. The units are display pixels.
      * <li>For a touch pad, reports the absolute Y surface position of the center of the touch
-     * contact area. The units are device-dependent; use {@link InputDevice#getMotionRange(int)}
+     * contact area. The units are device-dependent; use InputDevice#getMotionRange(int)
      * to query the effective range of values.
      * <li>For a mouse, reports the absolute Y screen position of the mouse pointer.
      * The units are display pixels.
@@ -71,18 +63,11 @@ public class PointerCoords implements Serializable {
      * <li>For a joystick, reports the absolute Y position of the joystick.
      * The value is normalized to a range from -1.0 (up or far) to 1.0 (down or near).
      * </ul>
-     * </p>
-     *
-     * @see #getY(int)
-     * @see #getHistoricalY(int, int)
-     * @see MotionEvent.PointerCoords#y
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_Y = 1;
 
     /**
      * Axis constant: Pressure axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a touch screen or touch pad, reports the approximate pressure applied to the surface
      * by a finger or other tool. The value is normalized to a range from
@@ -93,18 +78,11 @@ public class PointerCoords implements Serializable {
      * <li>For a mouse, the value is set to 1 if the primary mouse button is pressed
      * or 0 otherwise.
      * </ul>
-     * </p>
-     *
-     * @see #getPressure(int)
-     * @see #getHistoricalPressure(int, int)
-     * @see MotionEvent.PointerCoords#pressure
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_PRESSURE = 2;
 
     /**
      * Axis constant: Size axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a touch screen or touch pad, reports the approximate size of the contact area in
      * relation to the maximum detectable size for the device. The value is normalized
@@ -113,112 +91,72 @@ public class PointerCoords implements Serializable {
      * To obtain calibrated size information, use
      * {@link #AXIS_TOUCH_MAJOR} or {@link #AXIS_TOOL_MAJOR}.
      * </ul>
-     * </p>
-     *
-     * @see #getSize(int)
-     * @see #getHistoricalSize(int, int)
-     * @see MotionEvent.PointerCoords#size
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_SIZE = 3;
 
     /**
      * Axis constant: TouchMajor axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a touch screen, reports the length of the major axis of an ellipse that
      * represents the touch area at the point of contact.
      * The units are display pixels.
      * <li>For a touch pad, reports the length of the major axis of an ellipse that
      * represents the touch area at the point of contact.
-     * The units are device-dependent; use {@link InputDevice#getMotionRange(int)}
+     * The units are device-dependent; use InputDevice#getMotionRange(int)
      * to query the effective range of values.
      * </ul>
-     * </p>
-     *
-     * @see #getTouchMajor(int)
-     * @see #getHistoricalTouchMajor(int, int)
-     * @see MotionEvent.PointerCoords#touchMajor
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_TOUCH_MAJOR = 4;
 
     /**
      * Axis constant: TouchMinor axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a touch screen, reports the length of the minor axis of an ellipse that
      * represents the touch area at the point of contact.
      * The units are display pixels.
      * <li>For a touch pad, reports the length of the minor axis of an ellipse that
      * represents the touch area at the point of contact.
-     * The units are device-dependent; use {@link InputDevice#getMotionRange(int)}
+     * The units are device-dependent; use InputDevice#getMotionRange(int)
      * to query the effective range of values.
      * </ul>
-     * </p><p>
      * When the touch is circular, the major and minor axis lengths will be equal to one another.
-     * </p>
-     *
-     * @see #getTouchMinor(int)
-     * @see #getHistoricalTouchMinor(int, int)
-     * @see MotionEvent.PointerCoords#touchMinor
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_TOUCH_MINOR = 5;
 
     /**
      * Axis constant: ToolMajor axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a touch screen, reports the length of the major axis of an ellipse that
      * represents the size of the approaching finger or tool used to make contact.
      * <li>For a touch pad, reports the length of the major axis of an ellipse that
      * represents the size of the approaching finger or tool used to make contact.
-     * The units are device-dependent; use {@link InputDevice#getMotionRange(int)}
+     * The units are device-dependent; use InputDevice#getMotionRange(int)
      * to query the effective range of values.
      * </ul>
-     * </p><p>
      * When the touch is circular, the major and minor axis lengths will be equal to one another.
-     * </p><p>
      * The tool size may be larger than the touch size since the tool may not be fully
      * in contact with the touch sensor.
-     * </p>
-     *
-     * @see #getToolMajor(int)
-     * @see #getHistoricalToolMajor(int, int)
-     * @see MotionEvent.PointerCoords#toolMajor
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_TOOL_MAJOR = 6;
 
     /**
      * Axis constant: ToolMinor axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a touch screen, reports the length of the minor axis of an ellipse that
      * represents the size of the approaching finger or tool used to make contact.
      * <li>For a touch pad, reports the length of the minor axis of an ellipse that
      * represents the size of the approaching finger or tool used to make contact.
-     * The units are device-dependent; use {@link InputDevice#getMotionRange(int)}
+     * The units are device-dependent; use InputDevice#getMotionRange(int)
      * to query the effective range of values.
      * </ul>
-     * </p><p>
      * When the touch is circular, the major and minor axis lengths will be equal to one another.
-     * </p><p>
      * The tool size may be larger than the touch size since the tool may not be fully
      * in contact with the touch sensor.
-     * </p>
-     *
-     * @see #getToolMinor(int)
-     * @see #getHistoricalToolMinor(int, int)
-     * @see MotionEvent.PointerCoords#toolMinor
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_TOOL_MINOR = 7;
 
     /**
      * Axis constant: Orientation axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a touch screen or touch pad, reports the orientation of the finger
      * or tool in radians relative to the vertical plane of the device.
@@ -232,198 +170,113 @@ public class PointerCoords implements Serializable {
      * is pointing in relation to the vertical axis of the current orientation of the screen.
      * The range is from -PI radians to PI radians, where 0 is pointing up,
      * -PI/2 radians is pointing left, -PI or PI radians is pointing down, and PI/2 radians
-     * is pointing right. See also {@link #AXIS_TILT}.
+     * is pointing right.
      * </ul>
-     * </p>
-     *
-     * @see #getOrientation(int)
-     * @see #getHistoricalOrientation(int, int)
-     * @see MotionEvent.PointerCoords#orientation
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_ORIENTATION = 8;
 
     /**
      * Axis constant: Vertical Scroll axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a mouse, reports the relative movement of the vertical scroll wheel.
      * The value is normalized to a range from -1.0 (down) to 1.0 (up).
      * </ul>
-     * </p><p>
      * This axis should be used to scroll views vertically.
-     * </p>
-     *
-     * @see #getAxisValue(int, int)
-     * @see #getHistoricalAxisValue(int, int, int)
-     * @see MotionEvent.PointerCoords#getAxisValue(int)
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_VSCROLL = 9;
 
     /**
      * Axis constant: Horizontal Scroll axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a mouse, reports the relative movement of the horizontal scroll wheel.
      * The value is normalized to a range from -1.0 (left) to 1.0 (right).
      * </ul>
-     * </p><p>
      * This axis should be used to scroll views horizontally.
-     * </p>
-     *
-     * @see #getAxisValue(int, int)
-     * @see #getHistoricalAxisValue(int, int, int)
-     * @see MotionEvent.PointerCoords#getAxisValue(int)
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_HSCROLL = 10;
 
     /**
      * Axis constant: Z axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a joystick, reports the absolute Z position of the joystick.
      * The value is normalized to a range from -1.0 (high) to 1.0 (low).
      * <em>On game pads with two analog joysticks, this axis is often reinterpreted
      * to report the absolute X position of the second joystick instead.</em>
      * </ul>
-     * </p>
-     *
-     * @see #getAxisValue(int, int)
-     * @see #getHistoricalAxisValue(int, int, int)
-     * @see MotionEvent.PointerCoords#getAxisValue(int)
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_Z = 11;
 
     /**
      * Axis constant: X Rotation axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a joystick, reports the absolute rotation angle about the X axis.
      * The value is normalized to a range from -1.0 (counter-clockwise) to 1.0 (clockwise).
      * </ul>
-     * </p>
-     *
-     * @see #getAxisValue(int, int)
-     * @see #getHistoricalAxisValue(int, int, int)
-     * @see MotionEvent.PointerCoords#getAxisValue(int)
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_RX = 12;
 
     /**
      * Axis constant: Y Rotation axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a joystick, reports the absolute rotation angle about the Y axis.
      * The value is normalized to a range from -1.0 (counter-clockwise) to 1.0 (clockwise).
      * </ul>
-     * </p>
-     *
-     * @see #getAxisValue(int, int)
-     * @see #getHistoricalAxisValue(int, int, int)
-     * @see MotionEvent.PointerCoords#getAxisValue(int)
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_RY = 13;
 
     /**
      * Axis constant: Z Rotation axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a joystick, reports the absolute rotation angle about the Z axis.
      * The value is normalized to a range from -1.0 (counter-clockwise) to 1.0 (clockwise).
      * <em>On game pads with two analog joysticks, this axis is often reinterpreted
      * to report the absolute Y position of the second joystick instead.</em>
      * </ul>
-     * </p>
-     *
-     * @see #getAxisValue(int, int)
-     * @see #getHistoricalAxisValue(int, int, int)
-     * @see MotionEvent.PointerCoords#getAxisValue(int)
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_RZ = 14;
 
     /**
      * Axis constant: Hat X axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a joystick, reports the absolute X position of the directional hat control.
      * The value is normalized to a range from -1.0 (left) to 1.0 (right).
      * </ul>
-     * </p>
-     *
-     * @see #getAxisValue(int, int)
-     * @see #getHistoricalAxisValue(int, int, int)
-     * @see MotionEvent.PointerCoords#getAxisValue(int)
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_HAT_X = 15;
 
     /**
      * Axis constant: Hat Y axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a joystick, reports the absolute Y position of the directional hat control.
      * The value is normalized to a range from -1.0 (up) to 1.0 (down).
      * </ul>
-     * </p>
-     *
-     * @see #getAxisValue(int, int)
-     * @see #getHistoricalAxisValue(int, int, int)
-     * @see MotionEvent.PointerCoords#getAxisValue(int)
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_HAT_Y = 16;
 
     /**
      * Axis constant: Left Trigger axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a joystick, reports the absolute position of the left trigger control.
      * The value is normalized to a range from 0.0 (released) to 1.0 (fully pressed).
      * </ul>
-     * </p>
-     *
-     * @see #getAxisValue(int, int)
-     * @see #getHistoricalAxisValue(int, int, int)
-     * @see MotionEvent.PointerCoords#getAxisValue(int)
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_LTRIGGER = 17;
 
     /**
      * Axis constant: Right Trigger axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a joystick, reports the absolute position of the right trigger control.
      * The value is normalized to a range from 0.0 (released) to 1.0 (fully pressed).
      * </ul>
-     * </p>
-     *
-     * @see #getAxisValue(int, int)
-     * @see #getHistoricalAxisValue(int, int, int)
-     * @see MotionEvent.PointerCoords#getAxisValue(int)
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_RTRIGGER = 18;
 
     /**
      * Axis constant: Throttle axis of a motion event.
-     * <p>
      * <ul>
      * <li>For a joystick, reports the absolute position of the throttle control.
      * The value is normalized to a range from 0.0 (fully open) to 1.0 (fully closed).
      * </ul>
-     * </p>
-     *
-     * @see #getAxisValue(int, int)
-     * @see #getHistoricalAxisValue(int, int, int)
-     * @see MotionEvent.PointerCoords#getAxisValue(int)
-     * @see InputDevice#getMotionRange
      */
     public static final int AXIS_THROTTLE = 19;
 
@@ -449,9 +302,6 @@ public class PointerCoords implements Serializable {
         copyFrom(other);
     }
 
-    /**
-     * @hide
-     */
     public static PointerCoords[] createArray(int size) {
         PointerCoords[] array = new PointerCoords[size];
         for (int i = 0; i < size; i++) {
@@ -462,15 +312,11 @@ public class PointerCoords implements Serializable {
 
     /**
      * The X component of the pointer movement.
-     *
-     * @see MotionEvent#AXIS_X
      */
     public float x;
 
     /**
-     * The Y component of the pointer movement.
-     *
-     * @see MotionEvent#AXIS_Y
+     * The Y component of the pointer movement
      */
     public float y;
 
@@ -480,8 +326,6 @@ public class PointerCoords implements Serializable {
      * The pressure generally ranges from 0 (no pressure at all) to 1 (normal pressure),
      * although values higher than 1 may be generated depending on the calibration of
      * the input device.
-     *
-     * @see MotionEvent#AXIS_PRESSURE
      */
     public float pressure;
 
@@ -493,8 +337,6 @@ public class PointerCoords implements Serializable {
      * touch is normalized with the device specific range of values
      * and scaled to a value between 0 and 1. The value of size can be used to
      * determine fat touch events.
-     *
-     * @see MotionEvent#AXIS_SIZE
      */
     public float size;
 
@@ -503,8 +345,6 @@ public class PointerCoords implements Serializable {
      * the point of contact.
      * If the device is a touch screen, the length is reported in pixels, otherwise it is
      * reported in device-specific units.
-     *
-     * @see MotionEvent#AXIS_TOUCH_MAJOR
      */
     public float touchMajor;
 
@@ -513,8 +353,6 @@ public class PointerCoords implements Serializable {
      * the point of contact.
      * If the device is a touch screen, the length is reported in pixels, otherwise it is
      * reported in device-specific units.
-     *
-     * @see MotionEvent#AXIS_TOUCH_MINOR
      */
     public float touchMinor;
 
@@ -525,8 +363,6 @@ public class PointerCoords implements Serializable {
      * touching the device independent of its actual touch area at the point of contact.
      * If the device is a touch screen, the length is reported in pixels, otherwise it is
      * reported in device-specific units.
-     *
-     * @see MotionEvent#AXIS_TOOL_MAJOR
      */
     public float toolMajor;
 
@@ -537,8 +373,6 @@ public class PointerCoords implements Serializable {
      * touching the device independent of its actual touch area at the point of contact.
      * If the device is a touch screen, the length is reported in pixels, otherwise it is
      * reported in device-specific units.
-     *
-     * @see MotionEvent#AXIS_TOOL_MINOR
      */
     public float toolMinor;
 
@@ -551,7 +385,6 @@ public class PointerCoords implements Serializable {
      * The full range is from -PI/2 radians (finger pointing fully left) to PI/2 radians
      * (finger pointing fully right).
      *
-     * @see MotionEvent#AXIS_ORIENTATION
      */
     public float orientation;
 
@@ -609,9 +442,6 @@ public class PointerCoords implements Serializable {
      * @param axis The axis identifier for the axis value to retrieve.
      *
      * @return The value associated with the axis, or 0 if none.
-     *
-     * @see MotionEvent#AXIS_X
-     * @see MotionEvent#AXIS_Y
      */
     public float getAxisValue(int axis) {
         switch (axis) {
@@ -653,9 +483,6 @@ public class PointerCoords implements Serializable {
      *
      * @param axis  The axis identifier for the axis value to assign.
      * @param value The value to set.
-     *
-     * @see MotionEvent#AXIS_X
-     * @see MotionEvent#AXIS_Y
      */
     public void setAxisValue(int axis, float value) {
         switch (axis) {
