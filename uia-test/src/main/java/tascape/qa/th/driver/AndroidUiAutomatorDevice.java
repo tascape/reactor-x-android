@@ -96,6 +96,10 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
         throw new UnsupportedOperationException();
     }
 
+    public void home() {
+        uiDeviceStub.pressHome();;
+    }
+
     public IUiDevice getUiDeviceStub() {
         return uiDeviceStub;
     }
