@@ -80,7 +80,7 @@ public class UiAuotmatorRmiDemoTests {
             LOG.debug(app);
             this.uiDeviceStub.pressHome();
             this.uiObjectStub.useUiObjectSelector(
-                    new UiSelector().resourceId("com.miui.home:id/cell_layout"));
+                new UiSelector().resourceId("com.miui.home:id/cell_layout"));
             this.uiObjectStub.useUiObjectSelector(new UiSelector().text(app));
             Rect rect = this.uiObjectStub.getBounds();
             LOG.debug("{}", rect);
@@ -108,7 +108,7 @@ public class UiAuotmatorRmiDemoTests {
         uiDeviceStub.waitForIdle();
 
         this.uiCollectionStub.useUiCollectionSelector(new UiSelector().resourceId(
-                "com.amazon.kindle.otter:id/library_selector_layout"));
+            "com.amazon.kindle.otter:id/library_selector_layout"));
         int n = this.uiCollectionStub.getChildCount(new UiSelector().className("android.widget.Button"));
         LOG.debug("buttons {}", n);
         for (int i = 0; i < n; i++) {
@@ -125,7 +125,7 @@ public class UiAuotmatorRmiDemoTests {
         uiDeviceStub.waitForIdle();
 
         this.uiCollectionStub.useUiCollectionSelector(new UiSelector().resourceId(
-                "com.amazon.kindle.otter:id/library_selector_layout"));
+            "com.amazon.kindle.otter:id/library_selector_layout"));
         this.uiCollectionStub.swipeLeft(100);
 
         int n = this.uiCollectionStub.getChildCount(new UiSelector().className("android.widget.Button"));
@@ -143,7 +143,7 @@ public class UiAuotmatorRmiDemoTests {
         uiDeviceStub.pressHome();
         uiDeviceStub.waitForIdle();
         this.uiCollectionStub.useUiCollectionSelector(new UiSelector().resourceId(
-                "com.amazon.kindle.otter:id/library_selector_layout"));
+            "com.amazon.kindle.otter:id/library_selector_layout"));
         this.uiCollectionStub.swipeRight(100);
 
         this.uiObjectStub.useUiObjectSelector(new UiSelector().text("Books"));

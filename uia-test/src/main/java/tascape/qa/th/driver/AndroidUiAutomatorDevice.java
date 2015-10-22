@@ -19,7 +19,9 @@ import com.android.uiautomator.stub.IUiCollection;
 import com.android.uiautomator.stub.IUiDevice;
 import com.android.uiautomator.stub.IUiObject;
 import com.android.uiautomator.stub.IUiScrollable;
+import com.android.uiautomator.stub.UiSelector;
 import com.tascape.qa.th.SystemConfiguration;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +80,7 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
         this.adb.setupAdbPortForward(port, IUiDevice.UIAUTOMATOR_RMI_PORT);
 
         CallHandler callHandler = new CallHandler();
-        client = new Client(this.ip, this.port, callHandler);
+        this.client = new Client(this.ip, this.port, callHandler);
         this.uiDeviceStub = IUiDevice.class.cast(client.getGlobal(IUiDevice.class));
         this.uiObjectStub = IUiObject.class.cast(client.getGlobal(IUiObject.class));
         this.uiCollectionStub = IUiCollection.class.cast(client.getGlobal(IUiCollection.class));
@@ -96,10 +98,6 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
         throw new UnsupportedOperationException();
     }
 
-    public void home() {
-        uiDeviceStub.pressHome();;
-    }
-
     public IUiDevice getUiDeviceStub() {
         return uiDeviceStub;
     }
@@ -114,6 +112,51 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
 
     public IUiScrollable getUiScrollableStub() {
         return uiScrollableStub;
+    }
+
+    public void home() {
+        uiDeviceStub.pressHome();
+    }
+
+    public void back() {
+        uiDeviceStub.pressBack();
+    }
+
+    public void backToHome() {
+        for (int i = 0; i < 5; i++) {
+            uiDeviceStub.pressBack();
+        }
+        uiDeviceStub.pressHome();
+        uiDeviceStub.pressHome();
+    }
+
+    public boolean resourceIdExists(String resouceId) {
+        uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
+        return uiObjectStub.exists();
+    }
+
+    public void clickByResourceId(String resouceId) {
+        uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
+        uiObjectStub.click();
+    }
+
+    public void clickByText(String text) {
+        uiObjectStub.useUiObjectSelector(new UiSelector().text(text));
+        uiObjectStub.click();
+    }
+
+    public void setTextByResourceId(String resouceId, String text) {
+        uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
+        uiObjectStub.setText(text);
+    }
+
+    public File takeDeviceScreenshot() throws IOException {
+        String f = "/data/local/tmp/ff.png";
+        this.uiDeviceStub.takeScreenshot(new File(f));
+        File png = this.getLogPath().resolve("ss-" + System.currentTimeMillis() + ".png").toFile();
+        this.adb.pull(f, png);
+        LOG.debug("Save screenshot to {}", png.getAbsolutePath());
+        return png;
     }
 
     private void setupUiAutomatorRmiServer() throws IOException, InterruptedException {

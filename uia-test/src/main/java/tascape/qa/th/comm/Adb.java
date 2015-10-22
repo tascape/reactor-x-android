@@ -1,7 +1,3 @@
-package tascape.qa.th.comm;
-
-import com.tascape.qa.th.SystemConfiguration;
-import com.tascape.qa.th.comm.EntityCommunication;
 /*
  * Copyright 2015.
  *
@@ -17,6 +13,10 @@ import com.tascape.qa.th.comm.EntityCommunication;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package tascape.qa.th.comm;
+
+import com.tascape.qa.th.SystemConfiguration;
+import com.tascape.qa.th.comm.EntityCommunication;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public final class Adb extends EntityCommunication {
 
     static {
         LOG.debug("Please specify where adb executable is by setting system property {}={}",
-                SYSPROP_ADB_EXECUTABLE, "/path/to/your/sdk/platform-tools/adb");
+            SYSPROP_ADB_EXECUTABLE, "/path/to/your/sdk/platform-tools/adb");
     }
 
     private final static String ADB = SystemConfiguration.getInstance().getProperty(SYSPROP_ADB_EXECUTABLE, "adb");
@@ -192,7 +192,7 @@ public final class Adb extends EntityCommunication {
                 if (line == null) {
                     break;
                 }
-                LOG.error(line);
+                LOG.debug(line);
             } while (true);
         }
 
