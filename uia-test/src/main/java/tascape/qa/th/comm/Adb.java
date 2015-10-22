@@ -71,6 +71,26 @@ public final class Adb extends EntityCommunication {
         }
     }
 
+    public static List<String> getDeviceSerials() throws IOException {
+        CommandLine cmdLine = new CommandLine(ADB);
+        cmdLine.addArgument("devices");
+        LOG.debug("{}", cmdLine.toString());
+        List<String> output = new ArrayList<>();
+        Executor executor = new DefaultExecutor();
+        executor.setStreamHandler(new AdbStreamHandler(output));
+        if (executor.execute(cmdLine) != 0) {
+            throw new IOException(cmdLine + " failed");
+        }
+        List<String> serials = new ArrayList<>();
+        for (String line : output) {
+            if (line.endsWith("device")) {
+                serials.add(line.split("\\t")[0]);
+            }
+        }
+        LOG.debug("{}", serials);
+        return serials;
+    }
+
     public Adb() throws IOException {
         this("");
     }
@@ -107,7 +127,7 @@ public final class Adb extends EntityCommunication {
         for (Object arg : arguments) {
             cmdLine.addArgument(arg + "");
         }
-        LOG.debug("{}", cmdLine.toString());
+        LOG.trace("{}", cmdLine.toString());
         List<String> output = new ArrayList<>();
         Executor executor = new DefaultExecutor();
         executor.setStreamHandler(new AdbStreamHandler(output));
@@ -172,7 +192,7 @@ public final class Adb extends EntityCommunication {
         LOG.debug("Device of serial '{}' is at localhost:{}", this.serial, local);
     }
 
-    private class AdbStreamHandler implements ExecuteStreamHandler {
+    private static class AdbStreamHandler implements ExecuteStreamHandler {
         private final List<String> output;
 
         AdbStreamHandler(List<String> output) {
@@ -280,6 +300,6 @@ public final class Adb extends EntityCommunication {
     }
 
     public static void main(String[] args) throws Exception {
-        Adb adb = new Adb();
+        Adb.getDeviceSerials();
     }
 }
