@@ -145,9 +145,22 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
         uiObjectStub.click();
     }
 
+    public void clearTextByResourceId(String resouceId) {
+        uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
+        uiObjectStub.clearTextField();
+    }
+
     public void setTextByResourceId(String resouceId, String text) {
         uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         uiObjectStub.setText(text);
+    }
+
+    public String getTextByResourceId(String resouceId) {
+        if (resourceIdExists(resouceId)) {
+            uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
+            return uiObjectStub.getText();
+        }
+        return null;
     }
 
     public File takeDeviceScreenshot() throws IOException {

@@ -15,6 +15,7 @@
  */
 package tascape.qa.th.driver;
 
+import com.google.common.collect.Lists;
 import com.tascape.qa.th.driver.EntityDriver;
 import tascape.qa.th.comm.Adb;
 import java.awt.image.BufferedImage;
@@ -44,6 +45,17 @@ public class AndroidAdbDevice extends EntityDriver {
         this.adb = adb;
     }
 
+    public String getSystemLanguage() throws IOException {
+        List<String> res = this.getProp("persist.sys.language");
+        return res.stream().filter(s -> s.length() > 0).findFirst().get();
+    }
+
+    public List<String> getProp(String name) throws IOException {
+        List<String> res = this.adb.shell(Lists.newArrayList("getprop", name));
+        LOG.debug("{}", res);
+        return res;
+    }
+
     public File logTouchEvents(int seconds) throws IOException {
         File log = File.createTempFile("TouchEvents", ".log");
         this.adb.shellAsync(Arrays.asList(new Object[]{"getevent", "-lt", "/dev/input/event2"}), seconds * 1000L, log);
@@ -59,12 +71,12 @@ public class AndroidAdbDevice extends EntityDriver {
 
     /**
      *
-     * @param eventLogFile
+     * @param eventLogFile log
      *
-     * @return
+     * @return event timestamps
      *
-     * @throws java.io.FileNotFoundException
-     * @throws java.io.IOException
+     * @throws java.io.FileNotFoundException if no file found
+     * @throws java.io.IOException           if io issue
      */
     public List<Long> getTouchEvents(File eventLogFile) throws FileNotFoundException, IOException {
         List<Long> events = new ArrayList<>();
