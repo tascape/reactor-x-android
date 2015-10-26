@@ -15,8 +15,6 @@
  */
 package com.android.uiautomator.stub;
 
-import com.android.uiautomator.core.UiObject;
-import com.android.uiautomator.core.UiScrollable;
 import java.io.Serializable;
 
 /**
@@ -68,7 +66,7 @@ public interface IUiObject extends Serializable {
 
     /**
      * Performs a click at the center of the visible bounds of the UI element represented
-     * by this UiObject.
+     * by this IUiObject.
      *
      * @return true if successful else false
      *
@@ -89,9 +87,9 @@ public interface IUiObject extends Serializable {
 
     /**
      * Performs a click at the center of the visible bounds of the UI element represented
-     * by this UiObject and waits for window transitions.
+     * by this IUiObject and waits for window transitions.
      *
-     * This method differ from {@link UiObject#click()} only in that this method waits for a
+     * This method differ from {@link IUiObject#click()} only in that this method waits for a
      * a new window transition as a result of the click. Some examples of a window transition:
      * <ul>
      * <li>launching a new activity</li>
@@ -126,12 +124,12 @@ public interface IUiObject extends Serializable {
     boolean clickTopLeft();
 
     /**
-     * Drags this object to a destination UiObject. (not supported yet)
+     * Drags this object to a destination IUiObject. (not supported yet)
      * The number of steps specified in your input parameter can influence the
      * drag speed, and varying speeds may impact the results. Consider
      * evaluating different speeds when using this method in your tests.
      *
-     * @param destObj the destination UiObject.
+     * @param destObj the destination IUiObject.
      * @param steps   usually 40 steps. You can increase or decrease the steps to change the speed.
      *
      * @return true if successful
@@ -160,11 +158,11 @@ public interface IUiObject extends Serializable {
      * Check if view exists.
      *
      * This methods performs a {@link #waitForExists(long)} with zero timeout. This
-     * basically returns immediately whether the view represented by this UiObject
+     * basically returns immediately whether the view represented by this IUiObject
      * exists or not. If you need to wait longer for this view, then see
      * {@link #waitForExists(long)}.
      *
-     * @return true if the view represented by this UiObject does exist
+     * @return true if the view represented by this IUiObject does exist
      *
      * @since API Level 16
      */
@@ -180,7 +178,7 @@ public interface IUiObject extends Serializable {
     Rect getBounds();
 
     /**
-     * Creates a new UiObject for a child view that is under the present UiObject.
+     * Creates a new IUiObject for a child view that is under the present IUiObject.
      *
      * @param selector for child view to match
      *
@@ -191,7 +189,7 @@ public interface IUiObject extends Serializable {
     boolean selectChild(UiSelector selector);
 
     /**
-     * Counts the child views immediately under the present UiObject.
+     * Counts the child views immediately under the present IUiObject.
      *
      * @return the count of child views.
      *
@@ -202,7 +200,7 @@ public interface IUiObject extends Serializable {
     /**
      * Retrieves the <code>className</code> property of the UI element.
      *
-     * @return class name of the current node represented by this UiObject
+     * @return class name of the current node represented by this IUiObject
      *
      * @since API Level 18
      */
@@ -218,8 +216,8 @@ public interface IUiObject extends Serializable {
     String getContentDescription();
 
     /**
-     * Creates a new UiObject for a sibling view or a child of the sibling view,
-     * relative to the present UiObject.
+     * Creates a new IUiObject for a sibling view or a child of the sibling view,
+     * relative to the present IUiObject.
      *
      * @param selector for a sibling view or children of the sibling view
      *
@@ -241,7 +239,7 @@ public interface IUiObject extends Serializable {
     /**
      * Reads the <code>text</code> property of the UI element
      *
-     * @return text value of the current node represented by this UiObject
+     * @return text value of the current node represented by this IUiObject
      *
      * @since API Level 16
      */
@@ -412,7 +410,7 @@ public interface IUiObject extends Serializable {
 
     /**
      * Performs a two-pointer gesture, where each pointer moves diagonally
-     * toward the other, from the edges to the center of this UiObject .
+     * toward the other, from the edges to the center of this IUiObject .
      *
      * @param percent percentage of the object's diagonal length for the pinch gesture
      * @param steps   the number of steps for the gesture. Steps are injected
@@ -428,7 +426,7 @@ public interface IUiObject extends Serializable {
     /**
      * Performs a two-pointer gesture, where each pointer moves diagonally
      * opposite across the other, from the center out towards the edges of the
-     * this UiObject.
+     * this IUiObject.
      *
      * @param percent percentage of the object's diagonal length for the pinch gesture
      * @param steps   the number of steps for the gesture. Steps are injected
@@ -462,16 +460,9 @@ public interface IUiObject extends Serializable {
     boolean setText(String text);
 
     /**
-     * Performs the swipe down action on the UiObject.
+     * Performs the swipe down action on the IUiObject.
      * The swipe gesture can be performed over any surface. The targeted
      * UI element does not need to be scrollable.
-     * See also:
-     * <ul>
-     * <li>{@link UiScrollable#scrollToBeginning(int)}</li>
-     * <li>{@link UiScrollable#scrollToEnd(int)}</li>
-     * <li>{@link UiScrollable#scrollBackward()}</li>
-     * <li>{@link UiScrollable#scrollForward()}</li>
-     * </ul>
      *
      * @param steps indicates the number of injected move steps into the system. Steps are
      *              injected about 5ms apart. So a 100 steps may take about 1/2 second to complete.
@@ -483,16 +474,9 @@ public interface IUiObject extends Serializable {
     boolean swipeDown(int steps);
 
     /**
-     * Performs the swipe left action on the UiObject.
+     * Performs the swipe left action on the IUiObject.
      * The swipe gesture can be performed over any surface. The targeted
      * UI element does not need to be scrollable.
-     * See also:
-     * <ul>
-     * <li>{@link UiScrollable#scrollToBeginning(int)}</li>
-     * <li>{@link UiScrollable#scrollToEnd(int)}</li>
-     * <li>{@link UiScrollable#scrollBackward()}</li>
-     * <li>{@link UiScrollable#scrollForward()}</li>
-     * </ul>
      *
      * @param steps indicates the number of injected move steps into the system. Steps are
      *              injected about 5ms apart. So a 100 steps may take about 1/2 second to complete.
@@ -504,16 +488,9 @@ public interface IUiObject extends Serializable {
     boolean swipeLeft(int steps);
 
     /**
-     * Performs the swipe right action on the UiObject.
+     * Performs the swipe right action on the IUiObject.
      * The swipe gesture can be performed over any surface. The targeted
      * UI element does not need to be scrollable.
-     * See also:
-     * <ul>
-     * <li>{@link UiScrollable#scrollToBeginning(int)}</li>
-     * <li>{@link UiScrollable#scrollToEnd(int)}</li>
-     * <li>{@link UiScrollable#scrollBackward()}</li>
-     * <li>{@link UiScrollable#scrollForward()}</li>
-     * </ul>
      *
      * @param steps indicates the number of injected move steps into the system. Steps are
      *              injected about 5ms apart. So a 100 steps may take about 1/2 second to complete.
@@ -525,14 +502,7 @@ public interface IUiObject extends Serializable {
     boolean swipeRight(int steps);
 
     /**
-     * Performs the swipe up action on the UiObject.
-     * See also:
-     * <ul>
-     * <li>{@link UiScrollable#scrollToBeginning(int)}</li>
-     * <li>{@link UiScrollable#scrollToEnd(int)}</li>
-     * <li>{@link UiScrollable#scrollBackward()}</li>
-     * <li>{@link UiScrollable#scrollForward()}</li>
-     * </ul>
+     * Performs the swipe up action on the IUiObject.
      *
      * @param steps indicates the number of injected move steps into the system. Steps are
      *              injected about 5ms apart. So a 100 steps may take about 1/2 second to complete.
