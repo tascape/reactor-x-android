@@ -45,6 +45,8 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
 
     public static final String UIA_BUNDLE = "bundle.jar";
 
+    public static final long WAIT_FOR_EXISTS = 30000;
+
     static {
         LOG.debug("Please specify where uiautomator server jar is by setting system property {}={}",
             SYSPROP_UIA_SERVER, "/path/to/your/" + UIA_SERVER);
@@ -76,7 +78,6 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
 
     public void init() throws IOException, InterruptedException {
         this.setupUiAutomatorRmiServer();
-
         this.adb.setupAdbPortForward(port, IUiDevice.UIAUTOMATOR_RMI_PORT);
 
         CallHandler callHandler = new CallHandler();
@@ -135,6 +136,24 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
         return uiObjectStub.exists();
     }
 
+    public boolean waitForResourceId(String resouceId) {
+        uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
+        uiObjectStub.waitForExists(WAIT_FOR_EXISTS);
+        return uiObjectStub.exists();
+    }
+
+    public boolean waitForText(String text) {
+        uiObjectStub.useUiObjectSelector(new UiSelector().text(text));
+        uiObjectStub.waitForExists(WAIT_FOR_EXISTS);
+        return uiObjectStub.exists();
+    }
+
+    public boolean waitForTextContains(String text) {
+        uiObjectStub.useUiObjectSelector(new UiSelector().textContains(text));
+        uiObjectStub.waitForExists(WAIT_FOR_EXISTS);
+        return uiObjectStub.exists();
+    }
+
     public void clickByResourceId(String resouceId) {
         uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         uiObjectStub.click();
@@ -142,6 +161,11 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
 
     public void clickByText(String text) {
         uiObjectStub.useUiObjectSelector(new UiSelector().text(text));
+        uiObjectStub.click();
+    }
+
+    public void clickByTextContains(String text) {
+        uiObjectStub.useUiObjectSelector(new UiSelector().textContains(text));
         uiObjectStub.click();
     }
 
