@@ -17,6 +17,7 @@ package tascape.qa.th.comm;
 
 import com.tascape.qa.th.SystemConfiguration;
 import com.tascape.qa.th.comm.EntityCommunication;
+import com.tascape.qa.th.exception.EntityCommunicationException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +34,7 @@ import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteStreamHandler;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,12 +93,12 @@ public final class Adb extends EntityCommunication {
         return serials;
     }
 
-    public Adb() throws IOException {
+    public Adb() throws IOException, EntityCommunicationException {
         this("");
     }
 
-    public Adb(String serial) throws IOException {
-        if (serial == null || serial.isEmpty()) {
+    public Adb(String serial) throws IOException, EntityCommunicationException {
+        if (StringUtils.isEmpty(serial)) {
             List<String> output = this.adb(Arrays.asList(new Object[]{"devices"}));
             for (String line : output) {
                 if (line.endsWith("device")) {
@@ -107,7 +109,10 @@ public final class Adb extends EntityCommunication {
         } else {
             this.serial = serial;
         }
-        LOG.debug("serial number {}", this.serial);
+        LOG.debug("serial number '{}'", this.serial);
+        if (StringUtils.isEmpty(this.serial)) {
+            throw new EntityCommunicationException("Device serial number issue");
+        }
     }
 
     @Override
@@ -127,7 +132,7 @@ public final class Adb extends EntityCommunication {
         for (Object arg : arguments) {
             cmdLine.addArgument(arg + "");
         }
-        LOG.trace("{}", cmdLine.toString());
+        LOG.debug("{}", cmdLine.toString());
         List<String> output = new ArrayList<>();
         Executor executor = new DefaultExecutor();
         executor.setStreamHandler(new AdbStreamHandler(output));
