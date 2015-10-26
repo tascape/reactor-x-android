@@ -46,7 +46,7 @@ public class AndroidAdbDevice extends EntityDriver {
     }
 
     public String getSystemLanguage() throws IOException {
-        List<String> res = this.getProp("persist.sys.language");
+        List<String> res = this.getProp("ro.product.locale.language");
         return res.stream().filter(s -> s.length() > 0).findFirst().get();
     }
 
