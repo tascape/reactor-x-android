@@ -224,12 +224,14 @@ public final class Adb extends EntityCommunication {
         @Override
         public void setProcessOutputStream(InputStream in) throws IOException {
             BufferedReader bis = new BufferedReader(new InputStreamReader(in));
-            String line = "";
-            while (line != null) {
-                LOG.trace(line);
+            do {
+                String line = bis.readLine();
+                if (line == null) {
+                    break;
+                }
+                LOG.debug(line);
                 output.add(line);
-                line = bis.readLine();
-            }
+            } while (true);
         }
 
         @Override

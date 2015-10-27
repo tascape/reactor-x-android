@@ -17,6 +17,7 @@ package tascape.qa.th.driver;
 
 import com.google.common.collect.Lists;
 import com.tascape.qa.th.driver.EntityDriver;
+import com.tascape.qa.th.exception.EntityDriverException;
 import tascape.qa.th.comm.Adb;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -50,9 +51,16 @@ public class AndroidAdbDevice extends EntityDriver {
         });
     }
 
-    public String getSystemLanguage() throws IOException {
-        List<String> res = this.getProp("ro.product.locale.language");
-        return res.stream().filter(s -> s.length() > 0).findFirst().get();
+    public String getSystemLanguage() throws IOException, EntityDriverException {
+        List<String> res = this.getProp("persist.sys.language");
+        if (!res.isEmpty()) {
+            return res.get(0);            
+        }
+        res = this.getProp("ro.product.locale.language");
+        if (!res.isEmpty()) {
+            return res.get(0);            
+        }
+        throw new EntityDriverException("Cannot get system language");
     }
 
     public List<String> getProp(String name) throws IOException {
