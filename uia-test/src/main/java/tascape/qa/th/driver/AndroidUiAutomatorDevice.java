@@ -157,16 +157,19 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
     public void clickByResourceId(String resouceId) {
         uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         uiObjectStub.click();
+        uiDeviceStub.waitForIdle();
     }
 
     public void clickByText(String text) {
         uiObjectStub.useUiObjectSelector(new UiSelector().text(text));
         uiObjectStub.click();
+        uiDeviceStub.waitForIdle();
     }
 
     public void clickByTextContains(String text) {
         uiObjectStub.useUiObjectSelector(new UiSelector().textContains(text));
         uiObjectStub.click();
+        uiDeviceStub.waitForIdle();
     }
 
     public void clearTextByResourceId(String resouceId) {
