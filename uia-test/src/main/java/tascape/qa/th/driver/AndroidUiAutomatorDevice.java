@@ -116,19 +116,26 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
     }
 
     public void home() {
+        LOG.debug("press home");
         uiDeviceStub.pressHome();
     }
 
     public void back() {
+        LOG.debug("press back");
         uiDeviceStub.pressBack();
+    }
+
+    public void enter() {
+        LOG.debug("press enter");
+        uiDeviceStub.pressEnter();
     }
 
     public void backToHome() {
         for (int i = 0; i < 5; i++) {
-            uiDeviceStub.pressBack();
+            back();
         }
-        uiDeviceStub.pressHome();
-        uiDeviceStub.pressHome();
+        home();
+        home();
     }
 
     public boolean resourceIdExists(String resouceId) {
@@ -155,18 +162,21 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
     }
 
     public void clickByResourceId(String resouceId) {
+        LOG.debug("click {}", resouceId);
         uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         uiObjectStub.click();
         uiDeviceStub.waitForIdle();
     }
 
     public void clickByText(String text) {
+        LOG.debug("click {}", text);
         uiObjectStub.useUiObjectSelector(new UiSelector().text(text));
         uiObjectStub.click();
         uiDeviceStub.waitForIdle();
     }
 
     public void clickByTextContains(String text) {
+        LOG.debug("click {}", text);
         uiObjectStub.useUiObjectSelector(new UiSelector().textContains(text));
         uiObjectStub.click();
         uiDeviceStub.waitForIdle();
@@ -175,11 +185,21 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
     public void clearTextByResourceId(String resouceId) {
         uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         uiObjectStub.clearTextField();
+        String text = uiObjectStub.getText();
+        if (text.isEmpty()) {
+            return;
+        }
+        uiObjectStub.clickBottomRight();
+        for (int i=0;i<text.length();i++) {
+            uiDeviceStub.pressDelete();
+        }
     }
 
     public void setTextByResourceId(String resouceId, String text) {
         uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
+        clearTextByResourceId(resouceId);
         uiObjectStub.setText(text);
+        this.back();
     }
 
     public String getTextByResourceId(String resouceId) {
