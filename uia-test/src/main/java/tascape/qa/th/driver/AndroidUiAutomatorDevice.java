@@ -143,6 +143,11 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
         return uiObjectStub.exists();
     }
 
+    public boolean textExists(String text) {
+        uiObjectStub.useUiObjectSelector(new UiSelector().text(text));
+        return uiObjectStub.exists();
+    }
+
     public boolean waitForResourceId(String resouceId) {
         uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         uiObjectStub.waitForExists(WAIT_FOR_EXISTS);
