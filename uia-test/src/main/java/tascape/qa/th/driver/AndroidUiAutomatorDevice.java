@@ -139,28 +139,33 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
     }
 
     public boolean resourceIdExists(String resouceId) {
+        LOG.debug("look for {}", resouceId);
         uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         return uiObjectStub.exists();
     }
 
     public boolean textExists(String text) {
+        LOG.debug("look for {}", text);
         uiObjectStub.useUiObjectSelector(new UiSelector().text(text));
         return uiObjectStub.exists();
     }
 
     public boolean waitForResourceId(String resouceId) {
+        LOG.debug("wait for {}", resouceId);
         uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         uiObjectStub.waitForExists(WAIT_FOR_EXISTS);
         return uiObjectStub.exists();
     }
 
     public boolean waitForText(String text) {
+        LOG.debug("wait for {}", text);
         uiObjectStub.useUiObjectSelector(new UiSelector().text(text));
         uiObjectStub.waitForExists(WAIT_FOR_EXISTS);
         return uiObjectStub.exists();
     }
 
     public boolean waitForTextContains(String text) {
+        LOG.debug("wait for {}", text);
         uiObjectStub.useUiObjectSelector(new UiSelector().textContains(text));
         uiObjectStub.waitForExists(WAIT_FOR_EXISTS);
         return uiObjectStub.exists();
@@ -195,7 +200,7 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
             return;
         }
         uiObjectStub.clickBottomRight();
-        for (int i=0;i<text.length();i++) {
+        for (int i = 0; i < text.length(); i++) {
             uiDeviceStub.pressDelete();
         }
     }
