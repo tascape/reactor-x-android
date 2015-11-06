@@ -20,6 +20,7 @@ import com.android.uiautomator.stub.IUiDevice;
 import com.android.uiautomator.stub.IUiObject;
 import com.android.uiautomator.stub.IUiScrollable;
 import com.android.uiautomator.stub.UiSelector;
+import com.google.common.collect.Lists;
 import com.tascape.qa.th.SystemConfiguration;
 import java.io.File;
 import java.io.IOException;
@@ -139,12 +140,12 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
     }
 
     public File dumpWindowHierarchy() throws IOException {
-        String f = "/data/local/tmp/view.txt";
-        uiDeviceStub.dumpWindowHierarchy(f);
-        File txt = this.getLogPath().resolve("view-" + System.currentTimeMillis() + ".txt").toFile();
-        this.adb.pull(f, txt);
-        LOG.debug("Save WindowHierarchy to {}", txt.getAbsolutePath());
-        return txt;
+        String f = "/data/local/tmp/uidump.xml";
+        adb.shell(Lists.newArrayList("uiautomator", "dump", f));
+        File xml = this.getLogPath().resolve("ui-" + System.currentTimeMillis() + ".xml").toFile();
+        this.adb.pull(f, xml);
+        LOG.debug("Save WindowHierarchy to {}", xml.getAbsolutePath());
+        return xml;
     }
 
     public boolean resourceIdExists(String resouceId) {
