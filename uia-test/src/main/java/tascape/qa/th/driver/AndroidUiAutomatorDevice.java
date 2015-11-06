@@ -203,6 +203,7 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
     }
 
     public void clearTextByResourceId(String resouceId) {
+        LOG.debug("clear {}", resouceId);
         uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         uiObjectStub.clearTextField();
         String text = uiObjectStub.getText();
@@ -216,6 +217,7 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
     }
 
     public void setTextByResourceId(String resouceId, String text) {
+        LOG.debug("type {} into {}", text, resouceId);
         uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         clearTextByResourceId(resouceId);
         uiObjectStub.setText(text);
