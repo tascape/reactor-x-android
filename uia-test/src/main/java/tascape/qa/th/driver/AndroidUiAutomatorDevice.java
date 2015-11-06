@@ -138,6 +138,15 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
         home();
     }
 
+    public File dumpWindowHierarchy() throws IOException {
+        String f = "/data/local/tmp/view.txt";
+        uiDeviceStub.dumpWindowHierarchy(f);
+        File txt = this.getLogPath().resolve("view-" + System.currentTimeMillis() + ".txt").toFile();
+        this.adb.pull(f, txt);
+        LOG.debug("Save WindowHierarchy to {}", txt.getAbsolutePath());
+        return txt;
+    }
+
     public boolean resourceIdExists(String resouceId) {
         LOG.debug("look for {}", resouceId);
         uiObjectStub.useUiObjectSelector(new UiSelector().resourceId(resouceId));
