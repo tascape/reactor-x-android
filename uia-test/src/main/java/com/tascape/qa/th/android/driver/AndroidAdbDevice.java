@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tascape.qa.th.driver;
+package com.tascape.qa.th.android.driver;
 
 import com.google.common.collect.Lists;
 import com.tascape.qa.th.driver.EntityDriver;
-import tascape.qa.th.comm.Adb;
+import com.tascape.qa.th.android.comm.Adb;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;

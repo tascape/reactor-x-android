@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tascape.qa.th.demo;
+package com.tascape.qa.th.android.demo;
 
 import com.android.uiautomator.stub.IUiCollection;
 import com.android.uiautomator.stub.IUiDevice;
@@ -22,8 +22,8 @@ import com.android.uiautomator.stub.IUiScrollable;
 import com.android.uiautomator.stub.Point;
 import com.android.uiautomator.stub.Rect;
 import com.android.uiautomator.stub.UiSelector;
-import tascape.qa.th.comm.Adb;
-import tascape.qa.th.driver.AndroidUiAutomatorDevice;
+import com.tascape.qa.th.android.comm.Adb;
+import com.tascape.qa.th.android.driver.AndroidUiAutomatorDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

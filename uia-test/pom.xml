@@ -2,15 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.tascape.qa</groupId>
         <artifactId>thx-android</artifactId>
-        <version>1.0.2</version>  
+        <version>1.0.3</version>  
     </parent>
-    <modelVersion>4.0.0</modelVersion>
     <groupId>com.tascape.qa</groupId>
     <artifactId>thx-android-uiat</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
+    <name>thx-android-uiat</name>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -20,14 +21,14 @@
     <dependencies>
         <dependency>
             <groupId>com.tascape.qa</groupId>
-            <artifactId>thx-android-uiac</artifactId>
-            <version>1.0.1</version>
-            <type>jar</type>
+            <artifactId>testharness</artifactId>
+            <version>1.0.38</version>
         </dependency>
         <dependency>
             <groupId>com.tascape.qa</groupId>
-            <artifactId>testharness</artifactId>
-            <version>[1.0.38, 1.1.0)</version>
+            <artifactId>thx-android-uiac</artifactId>
+            <version>1.0.3</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -37,7 +38,6 @@
         </dependency>
     </dependencies>
 
-    <name>thx-android-uiat</name>
     <description>uiautomator test</description>
     <url>https://github.com/tascape/testharness</url>
     <licenses>
@@ -59,7 +59,7 @@
         <developerConnection>scm:git:git@github.com:tascape/thx-android.git</developerConnection>
         <url>git:git@github.com:juven/thx-android.git</url>
     </scm>
-    
+
     <build>
         <plugins>
             <plugin>

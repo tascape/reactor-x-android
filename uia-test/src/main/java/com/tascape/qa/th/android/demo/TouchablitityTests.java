@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tascape.qa.th.demo;
+package com.tascape.qa.th.android.demo;
 
-import tascape.qa.th.comm.Adb;
-import tascape.qa.th.driver.AndroidAdbDevice;
+import com.tascape.qa.th.android.comm.Adb;
+import com.tascape.qa.th.android.driver.AndroidAdbDevice;
 import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

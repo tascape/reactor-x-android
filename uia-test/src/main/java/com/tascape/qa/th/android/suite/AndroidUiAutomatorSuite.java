@@ -1,4 +1,4 @@
-package tascape.qa.th.suite;
+package com.tascape.qa.th.android.suite;
 
 import com.tascape.qa.th.suite.AbstractSuite;
 import org.slf4j.Logger;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tascape.qa.th.comm;
+package com.tascape.qa.th.android.comm;
 
 import com.tascape.qa.th.SystemConfiguration;
 import com.tascape.qa.th.comm.EntityCommunication;
