@@ -44,7 +44,11 @@ public class AndroidAdbDevice extends EntityDriver {
 
     public void setAdb(Adb adb) throws IOException {
         this.adb = adb;
-        this.adb.shell(Lists.newArrayList("getprop"));
+
+        List<String> props = this.adb.shell(Lists.newArrayList("getprop"));
+        props.forEach(p -> {
+            LOG.debug(p);
+        });
     }
 
     public String getSystemLanguage() throws IOException {
