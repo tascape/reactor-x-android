@@ -50,10 +50,10 @@ public class UiAuotmatorRmiDemoTests {
         uiad.setAdb(adb);
         uiad.init();
 
-        uiDeviceStub = uiad.getUiDeviceStub();
-        uiObjectStub = uiad.getUiObjectStub();
-        uiCollectionStub = uiad.getUiCollectionStub();
-        uiScrollableStub = uiad.getUiScrollableStub();
+        uiDeviceStub = uiad.getUiDevice();
+        uiObjectStub = uiad.getUiObject();
+        uiCollectionStub = uiad.getUiCollection();
+        uiScrollableStub = uiad.getUiScrollable();
     }
 
     public void testUiDevice() throws Exception {
