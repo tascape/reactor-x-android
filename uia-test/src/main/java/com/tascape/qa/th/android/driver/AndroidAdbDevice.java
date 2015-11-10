@@ -76,6 +76,15 @@ public class AndroidAdbDevice extends EntityDriver {
         return mp4;
     }
 
+    public File dumpWindowHierarchy() throws IOException {
+        String f = "/data/local/tmp/uidump.xml";
+        adb.shell(Lists.newArrayList("uiautomator", "dump", f));
+        File xml = this.getLogPath().resolve("ui-" + System.currentTimeMillis() + ".xml").toFile();
+        this.adb.pull(f, xml);
+        LOG.debug("Save WindowHierarchy to {}", xml.getAbsolutePath());
+        return xml;
+    }
+
     /**
      *
      * @param eventLogFile log

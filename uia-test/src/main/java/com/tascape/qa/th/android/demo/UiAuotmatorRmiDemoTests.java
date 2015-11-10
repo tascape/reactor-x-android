@@ -34,126 +34,123 @@ import org.slf4j.LoggerFactory;
 public class UiAuotmatorRmiDemoTests {
     private static final Logger LOG = LoggerFactory.getLogger(UiAuotmatorRmiDemoTests.class);
 
-    private AndroidUiAutomatorDevice uiad;
+    private AndroidUiAutomatorDevice device;
 
-    private IUiDevice uiDeviceStub;
+    private IUiObject uiObject;
 
-    private IUiObject uiObjectStub;
+    private IUiCollection uiCollection;
 
-    private IUiCollection uiCollectionStub;
-
-    private IUiScrollable uiScrollableStub;
+    private IUiScrollable uiScrollable;
 
     public void setup() throws Exception {
         Adb adb = new Adb();
-        uiad = new AndroidUiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
-        uiad.setAdb(adb);
-        uiad.init();
+        device = new AndroidUiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
+        device.setAdb(adb);
+        device.init();
 
-        uiDeviceStub = uiad.getUiDevice();
-        uiObjectStub = uiad.getUiObject();
-        uiCollectionStub = uiad.getUiCollection();
-        uiScrollableStub = uiad.getUiScrollable();
+        uiObject = device.getUiObject();
+        uiCollection = device.getUiCollection();
+        uiScrollable = device.getUiScrollable();
     }
 
     public void testUiDevice() throws Exception {
-        uiDeviceStub.pressHome();
-        uiDeviceStub.waitForIdle();
-        uiDeviceStub.click(500, 500);
+        device.pressHome();
+        device.waitForIdle();
+        device.click(500, 500);
 
-        LOG.debug(uiDeviceStub.getDisplayWidth() + "/" + uiDeviceStub.getDisplayHeight());
-        Point p = uiDeviceStub.getDisplaySizeDp();
+        LOG.debug(device.getDisplayWidth() + "/" + device.getDisplayHeight());
+        Point p = device.getDisplaySizeDp();
         LOG.debug(p.x + "/" + p.y);
-        uiDeviceStub.swipe(100, 0, 100, 500, 2);
-        LOG.debug(uiDeviceStub.getCurrentActivityName());
+        device.swipe(100, 0, 100, 500, 2);
+        LOG.debug(device.getCurrentActivityName());
 
-        uiDeviceStub.swipe(new Point[]{new Point(100, 500), new Point(100, 0)}, 2);
-        uiDeviceStub.swipe(100, 500, 100, 0, 2);
-        LOG.debug(uiDeviceStub.getCurrentActivityName());
+        device.swipe(new Point[]{new Point(100, 500), new Point(100, 0)}, 2);
+        device.swipe(100, 500, 100, 0, 2);
+        LOG.debug(device.getCurrentActivityName());
     }
 
     public void testUiObject() throws Exception {
-        uiDeviceStub.pressHome();
-        uiDeviceStub.waitForIdle();
+        device.pressHome();
+        device.waitForIdle();
 
         for (String app : new String[]{"电子邮件", "设置", "应用商店"}) {
             LOG.debug(app);
-            this.uiDeviceStub.pressHome();
-            this.uiObjectStub.useUiObjectSelector(
+            this.device.pressHome();
+            this.uiObject.useUiObjectSelector(
                 new UiSelector().resourceId("com.miui.home:id/cell_layout"));
-            this.uiObjectStub.useUiObjectSelector(new UiSelector().text(app));
-            Rect rect = this.uiObjectStub.getBounds();
+            this.uiObject.useUiObjectSelector(new UiSelector().text(app));
+            Rect rect = this.uiObject.getBounds();
             LOG.debug("{}", rect);
-            this.uiObjectStub.swipeLeft(10);
-            this.uiObjectStub.swipeRight(10);
-            this.uiObjectStub.click();
-            this.uiDeviceStub.waitForIdle();
+            this.uiObject.swipeLeft(10);
+            this.uiObject.swipeRight(10);
+            this.uiObject.click();
+            this.device.waitForIdle();
         }
     }
 
     public void testUiObjectNegative() throws Exception {
-        uiDeviceStub.pressHome();
-        uiDeviceStub.waitForIdle();
+        device.pressHome();
+        device.waitForIdle();
 
         LOG.debug("Book");
-        uiObjectStub.useUiObjectSelector(new UiSelector().text("Book"));
-        uiObjectStub.click();
-        LOG.debug("hasUiObjectNotFoundException = {}", uiObjectStub.hasUiObjectNotFoundException());
-        LOG.debug("Exception!", uiObjectStub.getUiObjectNotFoundException());
-        LOG.debug("hasUiObjectNotFoundException = {}", uiObjectStub.hasUiObjectNotFoundException());
+        uiObject.useUiObjectSelector(new UiSelector().text("Book"));
+        uiObject.click();
+        LOG.debug("hasUiObjectNotFoundException = {}", uiObject.hasUiObjectNotFoundException());
+        LOG.debug("Exception!", uiObject.getUiObjectNotFoundException());
+        LOG.debug("hasUiObjectNotFoundException = {}", uiObject.hasUiObjectNotFoundException());
     }
 
     public void testUiCollection() throws Exception {
-        uiDeviceStub.pressHome();
-        uiDeviceStub.waitForIdle();
+        device.pressHome();
+        device.waitForIdle();
 
-        this.uiCollectionStub.useUiCollectionSelector(new UiSelector().resourceId(
+        this.uiCollection.useUiCollectionSelector(new UiSelector().resourceId(
             "com.amazon.kindle.otter:id/library_selector_layout"));
-        int n = this.uiCollectionStub.getChildCount(new UiSelector().className("android.widget.Button"));
+        int n = this.uiCollection.getChildCount(new UiSelector().className("android.widget.Button"));
         LOG.debug("buttons {}", n);
         for (int i = 0; i < n; i++) {
-            uiDeviceStub.pressHome();
-            this.uiCollectionStub.selectChildByInstance(new UiSelector().className("android.widget.Button"), i);
-            LOG.debug("text {}, rect {}", this.uiCollectionStub.getText(), this.uiCollectionStub.getBounds());
-            this.uiCollectionStub.click();
-            uiDeviceStub.waitForIdle();
+            device.pressHome();
+            this.uiCollection.selectChildByInstance(new UiSelector().className("android.widget.Button"), i);
+            LOG.debug("text {}, rect {}", this.uiCollection.getText(), this.uiCollection.getBounds());
+            this.uiCollection.click();
+            device.waitForIdle();
         }
     }
 
     public void testUiCollection2() throws Exception {
-        uiDeviceStub.pressHome();
-        uiDeviceStub.waitForIdle();
+        device.pressHome();
+        device.waitForIdle();
 
-        this.uiCollectionStub.useUiCollectionSelector(new UiSelector().resourceId(
+        this.uiCollection.useUiCollectionSelector(new UiSelector().resourceId(
             "com.amazon.kindle.otter:id/library_selector_layout"));
-        this.uiCollectionStub.swipeLeft(100);
+        this.uiCollection.swipeLeft(100);
 
-        int n = this.uiCollectionStub.getChildCount(new UiSelector().className("android.widget.Button"));
+        int n = this.uiCollection.getChildCount(new UiSelector().className("android.widget.Button"));
         LOG.debug("buttons {}", n);
         for (int i = 0; i < n; i++) {
-            uiDeviceStub.pressHome();
-            this.uiCollectionStub.selectChildByInstance(new UiSelector().className("android.widget.Button"), i);
-            LOG.debug("text {}, rect {}", this.uiCollectionStub.getText(), this.uiCollectionStub.getBounds());
-            this.uiCollectionStub.click();
-            uiDeviceStub.waitForIdle();
+            device.pressHome();
+            this.uiCollection.selectChildByInstance(new UiSelector().className("android.widget.Button"), i);
+            LOG.debug("text {}, rect {}", this.uiCollection.getText(), this.uiCollection.getBounds());
+            this.uiCollection.click();
+            device.waitForIdle();
         }
     }
 
     public void testUiScrollable() throws Exception {
-        uiDeviceStub.pressHome();
-        uiDeviceStub.waitForIdle();
-        this.uiCollectionStub.useUiCollectionSelector(new UiSelector().resourceId(
+        device.pressHome();
+        device.waitForIdle();
+        this.uiCollection.useUiCollectionSelector(new UiSelector().resourceId(
             "com.amazon.kindle.otter:id/library_selector_layout"));
-        this.uiCollectionStub.swipeRight(100);
+        this.uiCollection.swipeRight(100);
 
-        this.uiObjectStub.useUiObjectSelector(new UiSelector().text("Books"));
-        this.uiObjectStub.click();
-        this.uiScrollableStub.useUiScrollableSelector(new UiSelector().scrollable(true));
-        this.uiScrollableStub.scrollToBeginning(100);
-        this.uiScrollableStub.scrollForward(100);
-        this.uiObjectStub.useUiObjectSelector(new UiSelector().descriptionStartsWith("The Blind Side"));
-        this.uiObjectStub.click();
-        this.uiDeviceStub.waitForIdle();
+        this.uiObject.useUiObjectSelector(new UiSelector().text("Books"));
+        this.uiObject.click();
+        this.uiScrollable.useUiScrollableSelector(new UiSelector().scrollable(true));
+        this.uiScrollable.scrollToBeginning(100);
+        this.uiScrollable.scrollForward(100);
+        this.uiObject.useUiObjectSelector(new UiSelector().descriptionStartsWith("The Blind Side"));
+        this.uiObject.click();
+        this.device.waitForIdle();
     }
 
     public static void main(String[] args) {
