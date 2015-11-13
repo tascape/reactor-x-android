@@ -21,6 +21,9 @@ import com.android.uiautomator.stub.IUiObject;
 import com.android.uiautomator.stub.IUiScrollable;
 import com.android.uiautomator.stub.Point;
 import com.android.uiautomator.stub.UiSelector;
+import com.google.common.collect.Lists;
+import com.tascape.qa.th.Utils;
+import com.tascape.qa.th.android.comm.Adb;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,6 +35,7 @@ import java.util.List;
 import net.sf.lipermi.exception.LipeRMIException;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
+import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,6 +136,25 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice implements IUiDev
 
     public IUiScrollable getUiScrollable() {
         return uiScrollable;
+    }
+
+    public void install(String apkPath) throws IOException, InterruptedException {
+        this.backToHome();
+        ExecuteWatchdog dog = adb.adbAsync(Lists.newArrayList("install", "-rg", apkPath), 60000, null);
+        Utils.sleep(10000, "wait for app push");
+        this.takeDeviceScreenshot();
+
+        String pkg = uiDevice.getCurrentPackageName();
+        if (pkg.equals("com.android.packageinstaller")) {
+            this.clickByResourceId("android:id/button1");
+        }
+        pkg = uiDevice.getCurrentPackageName();
+        if (pkg.equals("com.android.packageinstaller")) {
+            this.clickByResourceId("com.android.packageinstaller:id/ok_button");
+        }
+        if (dog.isWatching()) {
+            dog.killedProcess();
+        }
     }
 
     public Dimension getScreenDimension() {
@@ -507,7 +530,7 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice implements IUiDev
         cmdLine.add("/data/local/tmp/");
         adb.adb(cmdLine);
 
-        cmdLine = new ArrayList();
+        cmdLine = new ArrayList<>();
         cmdLine.add("uiautomator");
         cmdLine.add("runtest");
         cmdLine.add(UIA_SERVER);
@@ -517,5 +540,14 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice implements IUiDev
         this.adb.shellAsync(cmdLine, Long.MAX_VALUE);
 
         Thread.sleep(5000);
+    }
+
+    public static void main(String[] args) throws Exception {
+        Adb adb = new Adb();
+        AndroidUiAutomatorDevice device = new AndroidUiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
+        device.setAdb(adb);
+        device.init();
+
+        device.install("/opt/app-release.apk");
     }
 }
