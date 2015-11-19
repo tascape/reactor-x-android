@@ -45,7 +45,7 @@
         <developerConnection>scm:git:git@github.com:tascape/thx-android.git</developerConnection>
         <url>git:git@github.com:juven/thx-android.git</url>
     </scm>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -113,8 +113,3 @@
         </repository>
     </distributionManagement>
 </project>
-
-<!--
-mvn install:install-file -Dfile=uiautomator.jar -DgroupId=com.android -DartifactId=uiautomator -Dversion=23 -Dpackaging=jar
-mvn install:install-file -Dfile=android.jar -DgroupId=com.android -DartifactId=android -Dversion=23 -Dpackaging=jar
--->

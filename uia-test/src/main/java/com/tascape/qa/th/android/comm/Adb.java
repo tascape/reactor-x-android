@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,12 +48,28 @@ public final class Adb extends EntityCommunication {
 
     public static final String SYSPROP_ADB_EXECUTABLE = "qa.th.comm.ADB_EXECUTABLE";
 
-    static {
-        LOG.debug("Please specify where adb executable is by setting system property {}={}",
-            SYSPROP_ADB_EXECUTABLE, "/path/to/your/sdk/platform-tools/adb");
-    }
+    private final static String ADB = locateAdb();
 
-    private final static String ADB = SystemConfiguration.getInstance().getProperty(SYSPROP_ADB_EXECUTABLE, "adb");
+    private static String locateAdb() {
+        String sysAdb = SystemConfiguration.getInstance().getProperty(SYSPROP_ADB_EXECUTABLE);
+        if (sysAdb != null) {
+            return sysAdb;
+        } else {
+            String paths = System.getenv().get("PATH");
+            if (paths != null) {
+                String[] path = paths.split(System.getProperty("path.separator"));
+                for (String p : path) {
+                    LOG.debug("path {}", p);
+                    File f = Paths.get(p, "adb").toFile();
+                    if (f.exists()) {
+                        return f.getAbsolutePath();
+                    }
+                }
+            }
+        }
+        throw new RuntimeException("Cannot find adb based on system PATH. Please specify where adb executable is by"
+            + " setting system property " + SYSPROP_ADB_EXECUTABLE + "=/path/to/your/sdk/platform-tools/adb");
+    }
 
     private String serial = "";
 
@@ -265,7 +282,7 @@ public final class Adb extends EntityCommunication {
                 if (line == null) {
                     break;
                 }
-                LOG.error(line);
+                LOG.warn(line);
             } while (true);
         }
 

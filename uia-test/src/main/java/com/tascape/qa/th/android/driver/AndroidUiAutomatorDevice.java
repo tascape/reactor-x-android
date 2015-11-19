@@ -19,8 +19,11 @@ import com.android.uiautomator.stub.IUiCollection;
 import com.android.uiautomator.stub.IUiDevice;
 import com.android.uiautomator.stub.IUiObject;
 import com.android.uiautomator.stub.IUiScrollable;
+import com.android.uiautomator.stub.Point;
 import com.android.uiautomator.stub.UiSelector;
 import com.google.common.collect.Lists;
+import com.tascape.qa.th.Utils;
+import com.tascape.qa.th.android.comm.Adb;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,8 +32,10 @@ import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import net.sf.lipermi.exception.LipeRMIException;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
+import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +44,10 @@ import org.slf4j.LoggerFactory;
  *
  * @author linsong wang
  */
-public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
+public class AndroidUiAutomatorDevice extends AndroidAdbDevice implements IUiDevice {
     private static final Logger LOG = LoggerFactory.getLogger(AndroidUiAutomatorDevice.class);
+
+    private static final long serialVersionUID = 5043985021L;
 
     public static final String UIA_SERVER = "uia-server.jar";
 
@@ -119,10 +126,6 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
         throw new UnsupportedOperationException();
     }
 
-    public IUiDevice getUiDevice() {
-        return uiDevice;
-    }
-
     public IUiObject getUiObject() {
         return uiObject;
     }
@@ -133,6 +136,25 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
 
     public IUiScrollable getUiScrollable() {
         return uiScrollable;
+    }
+
+    public void install(String apkPath) throws IOException, InterruptedException {
+        this.backToHome();
+        ExecuteWatchdog dog = adb.adbAsync(Lists.newArrayList("install", "-rg", apkPath), 60000, null);
+        Utils.sleep(10000, "wait for app push");
+        this.takeDeviceScreenshot();
+
+        String pkg = uiDevice.getCurrentPackageName();
+        if (pkg.equals("com.android.packageinstaller")) {
+            this.clickByResourceId("android:id/button1");
+        }
+        pkg = uiDevice.getCurrentPackageName();
+        if (pkg.equals("com.android.packageinstaller")) {
+            this.clickByResourceId("com.android.packageinstaller:id/ok_button");
+        }
+        if (dog.isWatching()) {
+            dog.killedProcess();
+        }
     }
 
     public Dimension getScreenDimension() {
@@ -160,15 +182,6 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
         }
         home();
         home();
-    }
-
-    public File dumpWindowHierarchy() throws IOException {
-        String f = "/data/local/tmp/uidump.xml";
-        adb.shell(Lists.newArrayList("uiautomator", "dump", f));
-        File xml = this.getLogPath().resolve("ui-" + System.currentTimeMillis() + ".xml").toFile();
-        this.adb.pull(f, xml);
-        LOG.debug("Save WindowHierarchy to {}", xml.getAbsolutePath());
-        return xml;
     }
 
     public boolean resourceIdExists(String resouceId) {
@@ -264,6 +277,246 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
         return png;
     }
 
+    @Override
+    public void clearLastTraversedText() {
+        this.uiDevice.clearLastTraversedText();
+    }
+
+    @Override
+    public boolean click(int x, int y) {
+        return this.uiDevice.click(x, y);
+    }
+
+    @Override
+    public void dumpWindowHierarchy(String fileName) {
+        this.uiDevice.dumpWindowHierarchy(fileName);
+    }
+
+    @Override
+    public void freezeRotation() throws LipeRMIException {
+        this.uiDevice.freezeRotation();
+    }
+
+    @Override
+    public String getCurrentActivityName() {
+        return this.uiDevice.getCurrentActivityName();
+    }
+
+    @Override
+    public String getCurrentPackageName() {
+        return this.uiDevice.getCurrentPackageName();
+    }
+
+    @Override
+    public int getDisplayHeight() {
+        return this.uiDevice.getDisplayHeight();
+    }
+
+    @Override
+    public int getDisplayRotation() {
+        return this.uiDevice.getDisplayRotation();
+    }
+
+    @Override
+    public Point getDisplaySizeDp() {
+        return this.uiDevice.getDisplaySizeDp();
+    }
+
+    @Override
+    public int getDisplayWidthDp() {
+        return this.uiDevice.getDisplayWidthDp();
+    }
+
+    @Override
+    public int getDisplayHeightDp() {
+        return this.uiDevice.getDisplayHeightDp();
+    }
+
+    @Override
+    public int getDisplayWidth() {
+        return this.uiDevice.getDisplayWidth();
+    }
+
+    @Override
+    public String getLastTraversedText() {
+        return this.uiDevice.getLastTraversedText();
+    }
+
+    @Override
+    public String getProductName() {
+        return this.uiDevice.getProductName();
+    }
+
+    @Override
+    public boolean hasAnyWatcherTriggered() {
+        return this.uiDevice.hasAnyWatcherTriggered();
+    }
+
+    @Override
+    public boolean hasWatcherTriggered(String watcherName) {
+        return this.uiDevice.hasWatcherTriggered(watcherName);
+    }
+
+    @Override
+    public boolean isNaturalOrientation() {
+        return this.uiDevice.isNaturalOrientation();
+    }
+
+    @Override
+    public boolean isScreenOn() throws LipeRMIException {
+        return this.uiDevice.isScreenOn();
+    }
+
+    @Override
+    public boolean pressBack() {
+        return this.uiDevice.pressBack();
+    }
+
+    @Override
+    public boolean pressDPadCenter() {
+        return this.uiDevice.pressDPadCenter();
+    }
+
+    @Override
+    public boolean pressDPadDown() {
+        return this.uiDevice.pressDPadDown();
+    }
+
+    @Override
+    public boolean pressDPadLeft() {
+        return this.uiDevice.pressDPadLeft();
+    }
+
+    @Override
+    public boolean pressDPadRight() {
+        return this.uiDevice.pressDPadRight();
+    }
+
+    @Override
+    public boolean pressDPadUp() {
+        return this.uiDevice.pressDPadUp();
+    }
+
+    @Override
+    public boolean pressDelete() {
+        return this.uiDevice.pressDelete();
+    }
+
+    @Override
+    public boolean pressEnter() {
+        return this.uiDevice.pressEnter();
+    }
+
+    @Override
+    public boolean pressHome() {
+        return this.uiDevice.pressHome();
+    }
+
+    @Override
+    public boolean pressKeyCode(int keyCode) {
+        return this.uiDevice.pressKeyCode(keyCode);
+    }
+
+    @Override
+    public boolean pressKeyCode(int keyCode, int metaState) {
+        return this.uiDevice.pressKeyCode(keyCode, metaState);
+    }
+
+    @Override
+    public boolean pressMenu() {
+        return this.uiDevice.pressMenu();
+    }
+
+    @Override
+    public boolean pressRecentApps() throws LipeRMIException {
+        return this.uiDevice.pressRecentApps();
+    }
+
+    @Override
+    public boolean pressSearch() {
+        return this.uiDevice.pressSearch();
+    }
+
+    @Override
+    public void removeWatcher(String name) {
+        this.uiDevice.removeWatcher(name);
+    }
+
+    @Override
+    public void resetWatcherTriggers() {
+        this.uiDevice.resetWatcherTriggers();
+    }
+
+    @Override
+    public void runWatchers() {
+        this.uiDevice.runWatchers();
+    }
+
+    @Override
+    public void setOrientationLeft() throws LipeRMIException {
+        this.uiDevice.setOrientationLeft();
+    }
+
+    @Override
+    public void setOrientationNatural() throws LipeRMIException {
+        this.uiDevice.setOrientationNatural();
+    }
+
+    @Override
+    public void setOrientationRight() throws LipeRMIException {
+        this.uiDevice.setOrientationRight();
+    }
+
+    @Override
+    public void sleep() throws LipeRMIException {
+        this.uiDevice.sleep();
+    }
+
+    @Override
+    public boolean swipe(int startX, int startY, int endX, int endY, int steps) {
+        return this.uiDevice.swipe(startX, startY, endX, endY, steps);
+    }
+
+    @Override
+    public boolean swipe(Point[] segments, int segmentSteps) {
+        return this.uiDevice.swipe(segments, segmentSteps);
+    }
+
+    @Override
+    public boolean takeScreenshot(File storePath) {
+        return this.uiDevice.takeScreenshot(storePath);
+    }
+
+    @Override
+    public boolean takeScreenshot(File storePath, float scale, int quality) {
+        return this.uiDevice.takeScreenshot(storePath, scale, quality);
+    }
+
+    @Override
+    public void unfreezeRotation() throws LipeRMIException {
+        this.uiDevice.unfreezeRotation();
+    }
+
+    @Override
+    public void waitForIdle() {
+        this.uiDevice.waitForIdle();
+    }
+
+    @Override
+    public void waitForIdle(long time) {
+        this.uiDevice.waitForIdle(time);
+    }
+
+    @Override
+    public boolean waitForWindowUpdate(String packageName, long timeout) {
+        return this.uiDevice.waitForWindowUpdate(packageName, timeout);
+    }
+
+    @Override
+    public void wakeUp() throws LipeRMIException {
+        this.uiDevice.wakeUp();
+    }
+
     private void setupUiAutomatorRmiServer() throws IOException, InterruptedException {
         List<Object> cmdLine = new ArrayList<>();
         cmdLine.add("push");
@@ -277,7 +530,7 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
         cmdLine.add("/data/local/tmp/");
         adb.adb(cmdLine);
 
-        cmdLine = new ArrayList();
+        cmdLine = new ArrayList<>();
         cmdLine.add("uiautomator");
         cmdLine.add("runtest");
         cmdLine.add(UIA_SERVER);
@@ -287,5 +540,14 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice {
         this.adb.shellAsync(cmdLine, Long.MAX_VALUE);
 
         Thread.sleep(5000);
+    }
+
+    public static void main(String[] args) throws Exception {
+        Adb adb = new Adb();
+        AndroidUiAutomatorDevice device = new AndroidUiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
+        device.setAdb(adb);
+        device.init();
+
+        device.install("/opt/app-release.apk");
     }
 }
