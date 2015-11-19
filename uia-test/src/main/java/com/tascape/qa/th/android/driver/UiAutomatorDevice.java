@@ -44,8 +44,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author linsong wang
  */
-public class AndroidUiAutomatorDevice extends AndroidAdbDevice implements IUiDevice {
-    private static final Logger LOG = LoggerFactory.getLogger(AndroidUiAutomatorDevice.class);
+public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
+    private static final Logger LOG = LoggerFactory.getLogger(UiAutomatorDevice.class);
 
     private static final long serialVersionUID = 5043985021L;
 
@@ -71,9 +71,9 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice implements IUiDev
             bundle.createNewFile();
 
             OutputStream out = new FileOutputStream(server);
-            IOUtils.copy(AndroidUiAutomatorDevice.class.getResourceAsStream("/uias/" + UIA_SERVER), out);
+            IOUtils.copy(UiAutomatorDevice.class.getResourceAsStream("/uias/" + UIA_SERVER), out);
             out = new FileOutputStream(bundle);
-            IOUtils.copy(AndroidUiAutomatorDevice.class.getResourceAsStream("/uias/" + UIA_BUNDLE), out);
+            IOUtils.copy(UiAutomatorDevice.class.getResourceAsStream("/uias/" + UIA_BUNDLE), out);
         } catch (IOException ex) {
             throw new RuntimeException("Cannot get uia server/bundle jar files", ex);
         }
@@ -95,7 +95,7 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice implements IUiDev
 
     private final Dimension screenDimension = new Dimension(0, 0);
 
-    public AndroidUiAutomatorDevice(int port) throws IOException, InterruptedException {
+    public UiAutomatorDevice(int port) throws IOException, InterruptedException {
         this.port = port;
     }
 
@@ -118,7 +118,7 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice implements IUiDev
 
     @Override
     public String getName() {
-        return AndroidUiAutomatorDevice.class.getSimpleName();
+        return UiAutomatorDevice.class.getSimpleName();
     }
 
     @Override
@@ -544,7 +544,7 @@ public class AndroidUiAutomatorDevice extends AndroidAdbDevice implements IUiDev
 
     public static void main(String[] args) throws Exception {
         Adb adb = new Adb();
-        AndroidUiAutomatorDevice device = new AndroidUiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
+        UiAutomatorDevice device = new UiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
         device.setAdb(adb);
         device.init();
 

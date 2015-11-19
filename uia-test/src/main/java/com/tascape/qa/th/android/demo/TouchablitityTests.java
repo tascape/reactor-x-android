@@ -16,7 +16,7 @@
 package com.tascape.qa.th.android.demo;
 
 import com.tascape.qa.th.android.comm.Adb;
-import com.tascape.qa.th.android.driver.AndroidAdbDevice;
+import com.tascape.qa.th.android.driver.AdbDevice;
 import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +28,11 @@ import org.slf4j.LoggerFactory;
 public class TouchablitityTests {
     private static final Logger LOG = LoggerFactory.getLogger(TouchablitityTests.class);
 
-    private AndroidAdbDevice adbDevice;
+    private AdbDevice adbDevice;
 
     public void setup() throws Exception {
         Adb adb = new Adb();
-        this.adbDevice = new AndroidAdbDevice();
+        this.adbDevice = new AdbDevice();
         this.adbDevice.setAdb(adb);
     }
 

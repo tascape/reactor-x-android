@@ -23,7 +23,7 @@ import com.android.uiautomator.stub.Point;
 import com.android.uiautomator.stub.Rect;
 import com.android.uiautomator.stub.UiSelector;
 import com.tascape.qa.th.android.comm.Adb;
-import com.tascape.qa.th.android.driver.AndroidUiAutomatorDevice;
+import com.tascape.qa.th.android.driver.UiAutomatorDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public class UiAuotmatorRmiDemoTests {
     private static final Logger LOG = LoggerFactory.getLogger(UiAuotmatorRmiDemoTests.class);
 
-    private AndroidUiAutomatorDevice device;
+    private UiAutomatorDevice device;
 
     private IUiObject uiObject;
 
@@ -46,7 +46,7 @@ public class UiAuotmatorRmiDemoTests {
 
     public void setup() throws Exception {
         Adb adb = new Adb();
-        device = new AndroidUiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
+        device = new UiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
         device.setAdb(adb);
         device.init();
 
