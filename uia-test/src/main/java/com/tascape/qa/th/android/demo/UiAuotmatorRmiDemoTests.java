@@ -42,6 +42,8 @@ public class UiAuotmatorRmiDemoTests {
 
     private IUiScrollable uiScrollable;
 
+    private IUiScrollable uiScrollableStub;
+
     public void setup() throws Exception {
         Adb adb = new Adb();
         device = new AndroidUiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
