@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.tascape.qa</groupId>
     <artifactId>thx-android-uiat</artifactId>
-    <version>1.0.14</version>
+    <version>1.0.15</version>
     <name>thx-android-uiat</name>
 
     <properties>
