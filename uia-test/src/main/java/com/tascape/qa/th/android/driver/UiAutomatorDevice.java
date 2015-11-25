@@ -101,7 +101,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     public void init() throws IOException, InterruptedException {
         this.setupUiAutomatorRmiServer();
-        this.adb.setupAdbPortForward(port, IUiDevice.UIAUTOMATOR_RMI_PORT);
+        this.getAdb().setupAdbPortForward(port, IUiDevice.UIAUTOMATOR_RMI_PORT);
 
         CallHandler callHandler = new CallHandler();
         this.client = new Client(this.ip, this.port, callHandler);
@@ -140,7 +140,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     public void install(String apkPath) throws IOException, InterruptedException {
         this.backToHome();
-        ExecuteWatchdog dog = adb.adbAsync(Lists.newArrayList("install", "-rg", apkPath), 60000, null);
+        ExecuteWatchdog dog = this.getAdb().adbAsync(Lists.newArrayList("install", "-rg", apkPath), 60000, null);
         Utils.sleep(10000, "wait for app push");
         this.takeDeviceScreenshot();
 
@@ -272,7 +272,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         String f = "/data/local/tmp/ff.png";
         this.uiDevice.takeScreenshot(new File(f));
         File png = this.getLogPath().resolve("ss-" + System.currentTimeMillis() + ".png").toFile();
-        this.adb.pull(f, png);
+        this.getAdb().pull(f, png);
         LOG.debug("Save screenshot to {}", png.getAbsolutePath());
         return png;
     }
@@ -522,13 +522,13 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         cmdLine.add("push");
         cmdLine.add(uiaServer);
         cmdLine.add("/data/local/tmp/");
-        adb.adb(cmdLine);
+        this.getAdb().adb(cmdLine);
 
         cmdLine = new ArrayList<>();
         cmdLine.add("push");
         cmdLine.add(uiaBundle);
         cmdLine.add("/data/local/tmp/");
-        adb.adb(cmdLine);
+        this.getAdb().adb(cmdLine);
 
         cmdLine = new ArrayList<>();
         cmdLine.add("uiautomator");
@@ -537,7 +537,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         cmdLine.add(UIA_BUNDLE);
         cmdLine.add("-c");
         cmdLine.add("com.android.uiautomator.stub.UiAutomatorRmiServer");
-        this.adb.shellAsync(cmdLine, Long.MAX_VALUE);
+        this.getAdb().shellAsync(cmdLine, Long.MAX_VALUE);
 
         Thread.sleep(5000);
     }

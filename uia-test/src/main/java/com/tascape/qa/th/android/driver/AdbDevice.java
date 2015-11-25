@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 public class AdbDevice extends EntityDriver {
     private static final Logger LOG = LoggerFactory.getLogger(AdbDevice.class);
 
-    protected Adb adb;
+    private Adb adb;
 
     public void setAdb(Adb adb) throws IOException {
         this.adb = adb;
@@ -49,6 +49,10 @@ public class AdbDevice extends EntityDriver {
         props.forEach(p -> {
             LOG.debug(p);
         });
+    }
+
+    public Adb getAdb() {
+        return adb;
     }
 
     public String getSystemLanguage() throws IOException {

@@ -246,7 +246,7 @@ public final class Adb extends EntityCommunication {
                 if (line == null) {
                     break;
                 }
-                LOG.debug(line);
+                LOG.trace(line);
                 output.add(line);
             } while (true);
         }
