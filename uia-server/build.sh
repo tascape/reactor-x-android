@@ -4,8 +4,9 @@ rm -fr libs || echo ""
 mkdir libs
 ls -l
 
-cp ../lipermi/target/thx-android-lipermi-1.0.1.jar libs
-cp ../uia-client/target/thx-android-uiac-1.0.0.jar libs
+# update this as needed
+cp ../lipermi/target/thx-android-lipermi-1.0.3.jar libs
+cp ../uia-client/target/thx-android-uiac-1.0.3.jar libs
 
 ant clean build
 
