@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>com.android</groupId>
-            <artifactId>platform</artifactId>
+            <artifactId>android</artifactId>
             <version>23</version>
             <type>jar</type>
         </dependency>
@@ -131,6 +131,6 @@
 </project>
 
 <!--
-mvn install:install-file -Dfile=/opt/android-sdk-macosx/platforms/android-23/android.jar -DgroupId=com.android -DartifactId=platform -Dversion=23 -Dpackaging=jar
+mvn install:install-file -Dfile=/opt/android-sdk-macosx/platforms/android-23/android.jar -DgroupId=com.android -DartifactId=android -Dversion=23 -Dpackaging=jar
 mvn install:install-file -Dfile=/opt/android-sdk-macosx/platforms/android-23/uiautomator.jar -DgroupId=com.android -DartifactId=uiautomator -Dversion=23 -Dpackaging=jar
 -->
