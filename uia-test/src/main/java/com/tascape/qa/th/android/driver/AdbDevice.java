@@ -18,6 +18,7 @@ package com.tascape.qa.th.android.driver;
 import com.google.common.collect.Lists;
 import com.tascape.qa.th.driver.EntityDriver;
 import com.tascape.qa.th.android.comm.Adb;
+import com.tascape.qa.th.exception.EntityDriverException;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -53,6 +54,28 @@ public class AdbDevice extends EntityDriver {
 
     public Adb getAdb() {
         return adb;
+    }
+
+    public String getAppVersion(String packageName) throws IOException, EntityDriverException {
+        List<String> res = this.adb.shell(Lists.newArrayList("dumpsys", "package", packageName));
+        res.forEach(l -> LOG.debug(l));
+        String versionName = "";
+        String versionCode = "";
+        for (int i = 0, j = res.size(); i < j; i++) {
+            String line = res.get(i);
+            if (line.contains("versionName")) {
+                versionName = line.trim().split("=")[1];
+            } else if (line.contains("versionCode")) {
+                versionCode = line.trim().split(" ")[0].split("=")[1];
+            }
+            if (!versionName.isEmpty() && !versionCode.isEmpty()) {
+                break;
+            }
+        }
+        if (versionName.isEmpty() || versionCode.isEmpty()) {
+            throw new EntityDriverException("Cannot find app version");
+        }
+        return versionName + "-" + versionCode;
     }
 
     public String getSystemLanguage() throws IOException {
