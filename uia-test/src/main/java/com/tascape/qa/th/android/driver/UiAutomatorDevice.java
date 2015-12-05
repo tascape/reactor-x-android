@@ -49,31 +49,31 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     private static final long serialVersionUID = 5043985021L;
 
-    public static final String UIA_SERVER = "uia-server.jar";
+    public static final String UIA_SERVER_JAR = "uia-server.jar";
 
-    public static final String UIA_BUNDLE = "bundle.jar";
+    public static final String UIA_BUNDLE_JAR = "bundle.jar";
 
-    public static final String uiaServer;
+    private static final String UIA_SERVER_PATH;
 
-    public static final String uiaBundle;
+    private static final String UIA_BUNDLE_PATH;
 
     public static final long WAIT_FOR_EXISTS = 30000;
 
     static {
         try {
-            File server = Paths.get(File.createTempFile("uias", ".jar").getParent(), UIA_SERVER).toFile();
-            File bundle = Paths.get(File.createTempFile("uias", ".jar").getParent(), UIA_BUNDLE).toFile();
-            uiaServer = server.getAbsolutePath();
-            uiaBundle = bundle.getAbsolutePath();
-            LOG.debug("uia server {}", uiaServer);
-            LOG.debug("uia bundle {}", uiaBundle);
+            File server = Paths.get(File.createTempFile("uias", ".jar").getParent(), UIA_SERVER_JAR).toFile();
+            File bundle = Paths.get(File.createTempFile("uias", ".jar").getParent(), UIA_BUNDLE_JAR).toFile();
+            UIA_SERVER_PATH = server.getAbsolutePath();
+            UIA_BUNDLE_PATH = bundle.getAbsolutePath();
+            LOG.debug("uia server {}", UIA_SERVER_PATH);
+            LOG.debug("uia bundle {}", UIA_BUNDLE_PATH);
             server.createNewFile();
             bundle.createNewFile();
 
             OutputStream out = new FileOutputStream(server);
-            IOUtils.copy(UiAutomatorDevice.class.getResourceAsStream("/uias/" + UIA_SERVER), out);
+            IOUtils.copy(UiAutomatorDevice.class.getResourceAsStream("/uias/" + UIA_SERVER_JAR), out);
             out = new FileOutputStream(bundle);
-            IOUtils.copy(UiAutomatorDevice.class.getResourceAsStream("/uias/" + UIA_BUNDLE), out);
+            IOUtils.copy(UiAutomatorDevice.class.getResourceAsStream("/uias/" + UIA_BUNDLE_JAR), out);
         } catch (IOException ex) {
             throw new RuntimeException("Cannot get uia server/bundle jar files", ex);
         }
@@ -520,21 +520,21 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     private void setupUiAutomatorRmiServer() throws IOException, InterruptedException {
         List<Object> cmdLine = new ArrayList<>();
         cmdLine.add("push");
-        cmdLine.add(uiaServer);
+        cmdLine.add(UIA_SERVER_PATH);
         cmdLine.add("/data/local/tmp/");
         this.getAdb().adb(cmdLine);
 
         cmdLine = new ArrayList<>();
         cmdLine.add("push");
-        cmdLine.add(uiaBundle);
+        cmdLine.add(UIA_BUNDLE_PATH);
         cmdLine.add("/data/local/tmp/");
         this.getAdb().adb(cmdLine);
 
         cmdLine = new ArrayList<>();
         cmdLine.add("uiautomator");
         cmdLine.add("runtest");
-        cmdLine.add(UIA_SERVER);
-        cmdLine.add(UIA_BUNDLE);
+        cmdLine.add(UIA_SERVER_JAR);
+        cmdLine.add(UIA_BUNDLE_JAR);
         cmdLine.add("-c");
         cmdLine.add("com.android.uiautomator.stub.UiAutomatorRmiServer");
         this.getAdb().shellAsync(cmdLine, Long.MAX_VALUE);

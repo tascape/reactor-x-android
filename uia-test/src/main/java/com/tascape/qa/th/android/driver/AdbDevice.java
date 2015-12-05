@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author linsong wang
  */
-public class AdbDevice extends EntityDriver {
+class AdbDevice extends EntityDriver {
     private static final Logger LOG = LoggerFactory.getLogger(AdbDevice.class);
 
     private Adb adb;

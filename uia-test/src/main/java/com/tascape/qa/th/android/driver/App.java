@@ -15,7 +15,13 @@
  */
 package com.tascape.qa.th.android.driver;
 
+import com.android.uiautomator.stub.IUiCollection;
+import com.android.uiautomator.stub.IUiObject;
+import com.android.uiautomator.stub.IUiScrollable;
+import com.tascape.qa.th.Utils;
 import com.tascape.qa.th.driver.EntityDriver;
+import com.tascape.qa.th.exception.EntityDriverException;
+import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +29,46 @@ import org.slf4j.LoggerFactory;
  *
  * @author linsong wang
  */
+@SuppressWarnings("ProtectedField")
 public abstract class App extends EntityDriver {
     private static final Logger LOG = LoggerFactory.getLogger(App.class);
 
-    abstract String getPackageName();
+    public static final int NUMBER_OF_HOME_PAGE = 10;
+
+    protected UiAutomatorDevice uiaDevice;
+
+    protected IUiObject uiObject;
+
+    protected IUiCollection uiCollection;
+
+    protected IUiScrollable uiScrollable;
+
+    public abstract String getPackageName();
+
+    public abstract String getAppName();
+
+    public void attachTo(UiAutomatorDevice device) {
+        uiaDevice = device;
+        uiObject = device.getUiObject();
+        uiCollection = device.getUiCollection();
+        uiScrollable = device.getUiScrollable();
+    }
+
+    public void launch() throws IOException, InterruptedException {
+        String name = getAppName();
+        for (int i = 0; i < NUMBER_OF_HOME_PAGE; i++) {
+            if (uiaDevice.textExists(name)) {
+                break;
+            } else {
+                LOG.debug("swipe to next screen");
+                int w = uiaDevice.getScreenDimension().width;
+                int h = uiaDevice.getScreenDimension().height;
+                uiaDevice.swipe(w / 2, h / 2, 0, h / 2, 5);
+                Utils.sleep(1000, "wait for next screen");
+                uiaDevice.takeDeviceScreenshot();
+            }
+        }
+        uiaDevice.clickByText(name);
+        uiaDevice.waitForIdle();
+    }
 }

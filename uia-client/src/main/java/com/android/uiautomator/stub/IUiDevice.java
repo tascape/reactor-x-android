@@ -307,9 +307,9 @@ public interface IUiDevice extends Serializable {
      * {@link #runWatchers()}
      *
      * @param name
-     *                to register the UiWatcher
+     * to register the UiWatcher
      * @param watcher
-     *                {@link UiWatcher}
+     * {@link UiWatcher}
      *
      * void registerWatcher(String name, UiWatcher watcher);
      */
