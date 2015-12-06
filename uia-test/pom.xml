@@ -12,6 +12,7 @@
     <groupId>com.tascape.qa</groupId>
     <artifactId>thx-android-uiat</artifactId>
     <version>1.0.16</version>
+
     <name>thx-android-uiat</name>
     <description>uiautomator test</description>
 

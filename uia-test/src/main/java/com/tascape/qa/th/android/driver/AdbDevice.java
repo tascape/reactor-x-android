@@ -1,5 +1,5 @@
 /*
- * Copyright 2015.
+ * Copyright 2015 tascape.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,26 @@ class AdbDevice extends EntityDriver {
         return adb;
     }
 
+    @Override
+    public String getName() {
+        try {
+            return getPropValue("ro.product.brand") + "-" + getPropValue("ro.product.model");
+        } catch (IOException ex) {
+            LOG.warn(ex.getMessage());
+            return "na";
+        }
+    }
+
+    @Override
+    public String getVersion() {
+        try {
+            return getPropValue("ro.build.version.release") + "-" + getPropValue("ro.build.version.sdk ");
+        } catch (IOException ex) {
+            LOG.warn(ex.getMessage());
+            return "na";
+        }
+    }
+
     public String getAppVersion(String packageName) throws IOException, EntityDriverException {
         List<String> res = this.adb.shell(Lists.newArrayList("dumpsys", "package", packageName));
         res.forEach(l -> LOG.debug(l));
@@ -88,6 +108,11 @@ class AdbDevice extends EntityDriver {
         List<String> res = this.adb.shell(Lists.newArrayList("getprop", name));
         LOG.debug("{}", res);
         return res;
+    }
+
+    public String getPropValue(String name) throws IOException {
+        List<String> res = this.getProp(name);
+        return res.stream().filter(s -> !(s.startsWith("*") && s.endsWith("*"))).findFirst().get();
     }
 
     public File logTouchEvents(int seconds) throws IOException {
@@ -290,11 +315,6 @@ class AdbDevice extends EntityDriver {
             events.remove(0);
         }
         return events;
-    }
-
-    @Override
-    public String getName() {
-        return this.getClass().getSimpleName();
     }
 
     @Override

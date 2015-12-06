@@ -1,5 +1,5 @@
 /*
- * Copyright 2015.
+ * Copyright 2015 tascape.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,8 @@ public final class Adb extends EntityCommunication {
 
     public static final String SYSPROP_ADB_EXECUTABLE = "qa.th.comm.ADB_EXECUTABLE";
 
+    private static final List<String> SERIALS = new ArrayList<>();
+
     private final static String ADB = locateAdb();
 
     private static String locateAdb() {
@@ -90,24 +92,35 @@ public final class Adb extends EntityCommunication {
         }
     }
 
-    public static List<String> getDeviceSerials() throws IOException {
+    public static synchronized List<String> getAllSerials() {
+        if (SERIALS.isEmpty()) {
+            loadAllSerials();
+        }
+        return SERIALS;
+    }
+
+    private static List<String> loadAllSerials() {
         CommandLine cmdLine = new CommandLine(ADB);
         cmdLine.addArgument("devices");
         LOG.debug("{}", cmdLine.toString());
         List<String> output = new ArrayList<>();
         Executor executor = new DefaultExecutor();
         executor.setStreamHandler(new AdbStreamHandler(output));
-        if (executor.execute(cmdLine) != 0) {
-            throw new IOException(cmdLine + " failed");
-        }
-        List<String> serials = new ArrayList<>();
-        for (String line : output) {
-            if (line.endsWith("device")) {
-                serials.add(line.split("\\t")[0]);
+        try {
+            if (executor.execute(cmdLine) != 0) {
+                throw new RuntimeException(cmdLine + " failed");
             }
+        } catch (IOException ex) {
+            throw new RuntimeException(cmdLine + " failed", ex);
         }
-        LOG.debug("{}", serials);
-        return serials;
+        output.stream().filter((line) -> (line.endsWith("device"))).forEach((line) -> {
+            SERIALS.add(line.split("\\t")[0]);
+        });
+        LOG.debug("{}", SERIALS);
+        if (SERIALS.isEmpty()) {
+            throw new RuntimeException("No device detected.");
+        }
+        return SERIALS;
     }
 
     public Adb() throws IOException, EntityCommunicationException {
@@ -324,6 +337,6 @@ public final class Adb extends EntityCommunication {
     }
 
     public static void main(String[] args) throws Exception {
-        Adb.getDeviceSerials();
+        Adb.getAllSerials();
     }
 }

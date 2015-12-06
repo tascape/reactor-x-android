@@ -45,7 +45,15 @@ public abstract class App extends EntityDriver {
 
     public abstract String getPackageName();
 
-    public abstract String getAppName();
+    @Override
+    public String getVersion() {
+        try {
+            return uiaDevice.getAppVersion(getPackageName());
+        } catch (IOException | EntityDriverException ex) {
+            LOG.warn(ex.getMessage());
+            return "na";
+        }
+    }
 
     public void attachTo(UiAutomatorDevice device) {
         uiaDevice = device;
@@ -55,7 +63,7 @@ public abstract class App extends EntityDriver {
     }
 
     public void launch() throws IOException, InterruptedException {
-        String name = getAppName();
+        String name = getName();
         for (int i = 0; i < NUMBER_OF_HOME_PAGE; i++) {
             if (uiaDevice.textExists(name)) {
                 break;

@@ -9,10 +9,13 @@
     <version>1.0.4</version>  
     <packaging>pom</packaging>
 
+    <name>thx-android</name>
+    <description>TestHarness Extension for Android</description>
+
     <modules>
         <module>lipermi</module>
         <module>uia-client</module>
-        <module>uia-server</module>    
+        <module>uia-server</module>
         <module>uia-test</module>
     </modules>
 
@@ -24,8 +27,6 @@
         <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
     </properties>
 
-    <name>thx-android</name>
-    <description>TestHarness Extension for Android</description>
     <url>https://github.com/tascape/thx-android</url>
     <licenses>
         <license>
