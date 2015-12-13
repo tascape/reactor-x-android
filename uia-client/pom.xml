@@ -7,11 +7,12 @@
     <parent>
         <groupId>com.tascape.qa</groupId>
         <artifactId>thx-android</artifactId>
-        <version>1.0.4</version>  
+        <version>1.0.5</version>  
     </parent>
     <groupId>com.tascape.qa</groupId>
     <artifactId>thx-android-uiac</artifactId>
     <version>1.0.3</version>
+    <packaging>jar</packaging>
 
     <name>thx-android-uiac</name>
     <description>uiautomator rmi client stub</description>
@@ -19,8 +20,9 @@
     <dependencies>
         <dependency>
             <groupId>com.tascape.qa</groupId>
-            <artifactId>thx-android-lipermi</artifactId>
-            <version>1.0.3</version>
+            <artifactId>th-lipermi</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 </project>
