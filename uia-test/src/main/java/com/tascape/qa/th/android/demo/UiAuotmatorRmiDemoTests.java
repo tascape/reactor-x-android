@@ -48,7 +48,7 @@ public class UiAuotmatorRmiDemoTests {
         Adb adb = new Adb();
         device = new UiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
         device.setAdb(adb);
-        device.init();
+        device.start();
 
         uiObject = device.getUiObject();
         uiCollection = device.getUiCollection();

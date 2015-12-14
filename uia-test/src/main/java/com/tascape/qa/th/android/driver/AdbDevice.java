@@ -76,6 +76,12 @@ class AdbDevice extends EntityDriver {
         }
     }
 
+    public boolean uninstall(String packageName) throws IOException {
+        List<String> res = this.adb.adb(Lists.newArrayList("uninstall", packageName));
+        LOG.debug("{}", res);
+        return res.stream().filter(l -> l.contains("Success")).findAny().isPresent();
+    }
+
     public String getAppVersion(String packageName) throws IOException, EntityDriverException {
         List<String> res = this.adb.shell(Lists.newArrayList("dumpsys", "package", packageName));
         res.forEach(l -> LOG.debug(l));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015.
+ * Copyright 2015 tascape.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import net.sf.lipermi.exception.LipeRMIException;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
@@ -99,7 +100,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         this.port = port;
     }
 
-    public void init() throws IOException, InterruptedException {
+    public void start() throws IOException, InterruptedException {
         this.setupUiAutomatorRmiServer();
         this.getAdb().setupAdbPortForward(port, IUiDevice.UIAUTOMATOR_RMI_PORT);
 
@@ -114,6 +115,13 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         screenDimension.width = uiDevice.getDisplayWidth();
         screenDimension.height = uiDevice.getDisplayHeight();
         LOG.debug("Device screen dimension '{}'", screenDimension);
+    }
+    
+    public void stop() {
+        try {
+            client.close();
+        } catch (IOException ex) {
+        }
     }
 
     @Override
@@ -146,6 +154,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
         String pkg = uiDevice.getCurrentPackageName();
         if (pkg.equals("com.android.packageinstaller")) {
+            Utils.sleep(10000, "wait for allow");
             this.clickByResourceId("android:id/button1");
         }
         pkg = uiDevice.getCurrentPackageName();
@@ -546,8 +555,10 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         Adb adb = new Adb();
         UiAutomatorDevice device = new UiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
         device.setAdb(adb);
-        device.init();
+        device.start();
 
-        device.install("/opt/app-release.apk");
+        device.uninstall("com.mykaishi.xinkaishi");
+        device.install("/opt/app-debug.apk");
+        device.stop();
     }
 }

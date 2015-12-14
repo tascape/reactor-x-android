@@ -43,7 +43,7 @@ public abstract class AbstractAndroidSuite extends AbstractSuite {
             Adb adb = new Adb(serial);
             UiAutomatorDevice device = new UiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
             device.setAdb(adb);
-            device.init();
+            device.start();
             return device;
         } finally {
             SERIALS.offer(serial);
