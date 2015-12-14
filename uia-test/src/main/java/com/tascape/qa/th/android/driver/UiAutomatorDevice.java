@@ -32,7 +32,6 @@ import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import net.sf.lipermi.exception.LipeRMIException;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
@@ -84,6 +83,8 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     private int port = IUiDevice.UIAUTOMATOR_RMI_PORT;
 
+    private ExecuteWatchdog uiautomatorDog;
+
     private Client client;
 
     private IUiDevice uiDevice;
@@ -96,13 +97,13 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     private final Dimension screenDimension = new Dimension(0, 0);
 
-    public UiAutomatorDevice(int port) throws IOException, InterruptedException {
+    public UiAutomatorDevice(int port) {
         this.port = port;
     }
 
     public void start() throws IOException, InterruptedException {
-        this.setupUiAutomatorRmiServer();
-        this.getAdb().setupAdbPortForward(port, IUiDevice.UIAUTOMATOR_RMI_PORT);
+        uiautomatorDog = this.setupUiAutomatorRmiServer();
+        this.getAdb().setupAdbPortForward();
 
         CallHandler callHandler = new CallHandler();
         this.client = new Client(this.ip, this.port, callHandler);
@@ -116,11 +117,16 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         screenDimension.height = uiDevice.getDisplayHeight();
         LOG.debug("Device screen dimension '{}'", screenDimension);
     }
-    
+
     public void stop() {
         try {
             client.close();
         } catch (IOException ex) {
+            LOG.warn("{}", ex.getMessage());
+        }
+        if (uiautomatorDog != null) {
+            uiautomatorDog.stop();
+            uiautomatorDog.killedProcess();
         }
     }
 
@@ -526,7 +532,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         this.uiDevice.wakeUp();
     }
 
-    private void setupUiAutomatorRmiServer() throws IOException, InterruptedException {
+    private ExecuteWatchdog setupUiAutomatorRmiServer() throws IOException, InterruptedException {
         List<Object> cmdLine = new ArrayList<>();
         cmdLine.add("push");
         cmdLine.add(UIA_SERVER_PATH);
@@ -546,9 +552,10 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         cmdLine.add(UIA_BUNDLE_JAR);
         cmdLine.add("-c");
         cmdLine.add("com.android.uiautomator.stub.UiAutomatorRmiServer");
-        this.getAdb().shellAsync(cmdLine, Long.MAX_VALUE);
+        ExecuteWatchdog dog = this.getAdb().shellAsync(cmdLine, Long.MAX_VALUE);
 
         Thread.sleep(5000);
+        return dog;
     }
 
     public static void main(String[] args) throws Exception {

@@ -19,25 +19,21 @@ import com.android.uiautomator.stub.IUiDevice;
 import com.tascape.qa.th.android.comm.Adb;
 import com.tascape.qa.th.android.driver.UiAutomatorDevice;
 import com.tascape.qa.th.exception.EntityCommunicationException;
-import com.tascape.qa.th.suite.AbstractSuite;
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author linsong wang
  */
-public abstract class AbstractAndroidSuite extends AbstractSuite {
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractAndroidSuite.class);
+public interface UiAutomatorTestSuite {
 
-    protected static final BlockingQueue<String> SERIALS
-        = new ArrayBlockingQueue<>(Adb.getAllSerials().size(), true, Adb.getAllSerials());
+    BlockingQueue<String> SERIALS = new ArrayBlockingQueue<>(Adb.getAllSerials().size(), true, Adb.getAllSerials());
 
-    public UiAutomatorDevice getAvailableDevice() throws InterruptedException, IOException, EntityCommunicationException {
+    default UiAutomatorDevice getAvailableDevice() throws IOException, InterruptedException,
+        EntityCommunicationException {
         String serial = SERIALS.poll(10, TimeUnit.SECONDS);
         try {
             Adb adb = new Adb(serial);
@@ -48,10 +44,5 @@ public abstract class AbstractAndroidSuite extends AbstractSuite {
         } finally {
             SERIALS.offer(serial);
         }
-    }
-
-    @Override
-    public int getNumberOfEnvs() {
-        return SERIALS.size();
     }
 }

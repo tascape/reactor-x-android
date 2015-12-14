@@ -15,6 +15,7 @@
  */
 package com.tascape.qa.th.android.comm;
 
+import com.android.uiautomator.stub.IUiDevice;
 import com.tascape.qa.th.SystemConfiguration;
 import com.tascape.qa.th.comm.EntityCommunication;
 import com.tascape.qa.th.exception.EntityCommunicationException;
@@ -28,7 +29,10 @@ import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
@@ -49,6 +53,8 @@ public final class Adb extends EntityCommunication {
     public static final String SYSPROP_ADB_EXECUTABLE = "qa.th.comm.ADB_EXECUTABLE";
 
     private static final List<String> SERIALS = new ArrayList<>();
+
+    private static Set<Integer> LOCAL_PORTS = Collections.synchronizedSet(new HashSet<>());
 
     private final static String ADB = locateAdb();
 
@@ -159,9 +165,9 @@ public final class Adb extends EntityCommunication {
             cmdLine.addArgument("-s");
             cmdLine.addArgument(serial);
         }
-        for (Object arg : arguments) {
+        arguments.forEach((arg) -> {
             cmdLine.addArgument(arg + "");
-        }
+        });
         LOG.debug("{}", cmdLine.toString());
         List<String> output = new ArrayList<>();
         Executor executor = new DefaultExecutor();
@@ -194,9 +200,9 @@ public final class Adb extends EntityCommunication {
             cmdLine.addArgument("-s");
             cmdLine.addArgument(serial);
         }
-        for (Object arg : arguments) {
+        arguments.forEach((arg) -> {
             cmdLine.addArgument(arg + "");
-        }
+        });
         LOG.debug("{}", cmdLine.toString());
         ExecuteWatchdog watchdog = new ExecuteWatchdog(timeoutMillis);
         Executor executor = new DefaultExecutor();
@@ -217,14 +223,21 @@ public final class Adb extends EntityCommunication {
         }
     }
 
-    public void setupAdbPortForward(int local, int remote) throws IOException, InterruptedException {
+    public synchronized int setupAdbPortForward() throws IOException, InterruptedException {
+        int local = IUiDevice.UIAUTOMATOR_RMI_PORT;
+        while (LOCAL_PORTS.contains(local)) {
+            local++;
+        }
+        int remote = IUiDevice.UIAUTOMATOR_RMI_PORT;
         List<Object> cmdLine = new ArrayList<>();
         cmdLine.add("forward");
         cmdLine.add("tcp:" + local);
         cmdLine.add("tcp:" + remote);
 
         this.adb(cmdLine);
+        LOCAL_PORTS.add(local);
         LOG.debug("Device of serial '{}' is at localhost:{}", this.serial, local);
+        return local;
     }
 
     private static class AdbStreamHandler implements ExecuteStreamHandler {
