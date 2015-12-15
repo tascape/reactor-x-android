@@ -25,6 +25,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * This test suite supports plug-n-play for multiple devices.
  *
  * @author linsong wang
  */
