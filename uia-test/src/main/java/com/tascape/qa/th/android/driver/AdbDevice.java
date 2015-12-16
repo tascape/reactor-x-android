@@ -121,10 +121,17 @@ class AdbDevice extends EntityDriver {
         return res.stream().filter(s -> !(s.startsWith("*") && s.endsWith("*"))).findFirst().get();
     }
 
-    public File logTouchEvents(int seconds) throws IOException {
-        File log = File.createTempFile("TouchEvents", ".log");
-        this.adb.shellAsync(Arrays.asList(new Object[]{"getevent", "-lt", "/dev/input/event2"}), seconds * 1000L, log);
-        return log;
+    /**
+     * Gets event output lines.
+     *
+     * @param device such as /dev/input/event0
+     *
+     * @return output event log lines
+     *
+     * @throws IOException in case of IO issue
+     */
+    public List<String> logTouchEvents(String device) throws IOException {
+        return this.adb.shell(Arrays.asList(new Object[]{"getevent", "-lt", device}));
     }
 
     public String recordScreen(int seconds, int bitRate) throws IOException {

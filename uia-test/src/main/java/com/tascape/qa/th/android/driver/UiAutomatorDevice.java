@@ -154,7 +154,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     public void install(String apkPath) throws IOException, InterruptedException {
         this.backToHome();
-        ExecuteWatchdog dog = this.getAdb().adbAsync(Lists.newArrayList("install", "-rg", apkPath), 60000, null);
+        ExecuteWatchdog dog = this.getAdb().adbAsync(Lists.newArrayList("install", "-rg", apkPath), 60000);
         Utils.sleep(10000, "wait for app push");
         this.takeDeviceScreenshot();
 

@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -111,7 +110,7 @@ public final class Adb extends EntityCommunication {
         LOG.debug("{}", cmdLine.toString());
         List<String> output = new ArrayList<>();
         Executor executor = new DefaultExecutor();
-        executor.setStreamHandler(new AdbStreamHandler(output));
+        executor.setStreamHandler(new ESH(output));
         try {
             if (executor.execute(cmdLine) != 0) {
                 throw new RuntimeException(cmdLine + " failed");
@@ -171,7 +170,7 @@ public final class Adb extends EntityCommunication {
         LOG.debug("{}", cmdLine.toString());
         List<String> output = new ArrayList<>();
         Executor executor = new DefaultExecutor();
-        executor.setStreamHandler(new AdbStreamHandler(output));
+        executor.setStreamHandler(new ESH(output));
         if (executor.execute(cmdLine) != 0) {
             throw new IOException(cmdLine + " failed");
         }
@@ -185,16 +184,12 @@ public final class Adb extends EntityCommunication {
     }
 
     public ExecuteWatchdog shellAsync(final List<Object> arguments, long timeoutMillis) throws IOException {
-        return shellAsync(arguments, timeoutMillis, null);
-    }
-
-    public ExecuteWatchdog shellAsync(final List<Object> arguments, long timeoutMillis, File output) throws IOException {
         List<Object> args = new ArrayList<>(arguments);
         args.add(0, "shell");
-        return adbAsync(args, timeoutMillis, output);
+        return adbAsync(args, timeoutMillis);
     }
 
-    public ExecuteWatchdog adbAsync(final List<Object> arguments, long timeoutMillis, File output) throws IOException {
+    public ExecuteWatchdog adbAsync(final List<Object> arguments, long timeoutMillis) throws IOException {
         CommandLine cmdLine = new CommandLine(ADB);
         if (!this.serial.isEmpty()) {
             cmdLine.addArgument("-s");
@@ -207,7 +202,7 @@ public final class Adb extends EntityCommunication {
         ExecuteWatchdog watchdog = new ExecuteWatchdog(timeoutMillis);
         Executor executor = new DefaultExecutor();
         executor.setWatchdog(watchdog);
-        executor.setStreamHandler(new AdbStreamToFileHandler(output));
+        executor.setStreamHandler(new ESH());
         executor.execute(cmdLine, new DefaultExecuteResultHandler());
 
         return watchdog;
@@ -240,11 +235,15 @@ public final class Adb extends EntityCommunication {
         return local;
     }
 
-    private static class AdbStreamHandler implements ExecuteStreamHandler {
-        private final List<String> output;
+    private static class ESH implements ExecuteStreamHandler {
+        private final List<String> list;
 
-        AdbStreamHandler(List<String> output) {
-            this.output = output;
+        ESH() {
+            this.list = null;
+        }
+
+        ESH(List<String> list) {
+            this.list = list;
         }
 
         @Override
@@ -255,85 +254,26 @@ public final class Adb extends EntityCommunication {
         @Override
         public void setProcessErrorStream(InputStream in) throws IOException {
             BufferedReader bis = new BufferedReader(new InputStreamReader(in));
-            do {
+            while (true) {
                 String line = bis.readLine();
                 if (line == null) {
                     break;
                 }
                 LOG.debug(line);
-            } while (true);
+            }
         }
 
         @Override
         public void setProcessOutputStream(InputStream in) throws IOException {
             BufferedReader bis = new BufferedReader(new InputStreamReader(in));
-            do {
+            while (true) {
                 String line = bis.readLine();
                 if (line == null) {
                     break;
                 }
                 LOG.trace(line);
-                output.add(line);
-            } while (true);
-        }
-
-        @Override
-        public void start() throws IOException {
-            LOG.trace("start");
-        }
-
-        @Override
-        public void stop() {
-            LOG.trace("stop");
-        }
-    }
-
-    private class AdbStreamToFileHandler implements ExecuteStreamHandler {
-        File output;
-
-        AdbStreamToFileHandler(File output) {
-            this.output = output;
-        }
-
-        @Override
-        public void setProcessInputStream(OutputStream out) throws IOException {
-            LOG.trace("setProcessInputStream");
-        }
-
-        @Override
-        public void setProcessErrorStream(InputStream in) throws IOException {
-            BufferedReader bis = new BufferedReader(new InputStreamReader(in));
-            do {
-                String line = bis.readLine();
-                if (line == null) {
-                    break;
-                }
-                LOG.warn(line);
-            } while (true);
-        }
-
-        @Override
-        public void setProcessOutputStream(InputStream in) throws IOException {
-            BufferedReader bis = new BufferedReader(new InputStreamReader(in));
-            if (this.output == null) {
-                String line = "";
-                while (line != null) {
-                    LOG.trace(line);
-                    line = bis.readLine();
-                }
-
-            } else {
-                PrintWriter pw = new PrintWriter(this.output);
-                LOG.debug("Log stdout to {}", this.output);
-                String line = "";
-                try {
-                    while (line != null) {
-                        pw.println(line);
-                        pw.flush();
-                        line = bis.readLine();
-                    }
-                } finally {
-                    pw.flush();
+                if (list != null) {
+                    list.add(line);
                 }
             }
         }
