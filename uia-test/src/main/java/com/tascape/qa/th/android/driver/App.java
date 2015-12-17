@@ -45,6 +45,8 @@ public abstract class App extends EntityDriver {
 
     public abstract String getPackageName();
 
+    public abstract int getLaunchDelayMillis();
+
     @Override
     public String getVersion() {
         try {
@@ -78,5 +80,6 @@ public abstract class App extends EntityDriver {
         }
         uiaDevice.clickByText(name);
         uiaDevice.waitForIdle();
+        Utils.sleep(this.getLaunchDelayMillis(), "wait for app to launch");
     }
 }
