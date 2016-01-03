@@ -1,5 +1,5 @@
 /*
- * Copyright 2015.
+ * Copyright 2016 tascape.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package com.android.uiautomator.stub;
  * @author linsong wang
  */
 public class UiObjectNotFoundException extends Exception {
+    private static final long serialVersionUID = 1L;
 
     public UiObjectNotFoundException(Throwable throwable) {
         super(throwable.toString());

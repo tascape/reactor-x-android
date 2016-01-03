@@ -1,5 +1,5 @@
 /*
- * Copyright 2015.
+ * Copyright 2016 tascape.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,7 @@ import com.android.uiautomator.core.UiScrollable;
  * @author linsong wang
  */
 public class UiScrollableStub extends UiCollectionStub implements IUiScrollable {
-
-    private static final long serialVersionUID = -8087456666495L;
+    private static final long serialVersionUID = 1L;
 
     protected UiScrollable uiScrollable;
 

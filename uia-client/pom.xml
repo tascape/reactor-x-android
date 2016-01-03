@@ -7,11 +7,11 @@
     <parent>
         <groupId>com.tascape.qa</groupId>
         <artifactId>thx-android</artifactId>
-        <version>1.0.5</version>  
+        <version>1.1.0</version>  
     </parent>
     <groupId>com.tascape.qa</groupId>
     <artifactId>thx-android-uiac</artifactId>
-    <version>1.0.3</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <name>thx-android-uiac</name>

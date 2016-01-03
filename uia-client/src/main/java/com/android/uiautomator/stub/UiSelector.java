@@ -30,7 +30,8 @@ import java.util.regex.Pattern;
  * @author linsong wang
  */
 public class UiSelector implements Serializable {
-    private static final long serialVersionUID = -973659764329185L;
+
+    private static final long serialVersionUID = 1L;
 
     static final int SELECTOR_NIL = 0;
 

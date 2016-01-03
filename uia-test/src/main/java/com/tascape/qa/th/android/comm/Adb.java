@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 tascape.
+ * Copyright 2016 tascape.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.tascape.qa.th.android.comm;
 
 import com.android.uiautomator.stub.IUiDevice;
+import com.google.common.collect.Lists;
 import com.tascape.qa.th.SystemConfiguration;
 import com.tascape.qa.th.comm.EntityCommunication;
 import com.tascape.qa.th.exception.EntityCommunicationException;
@@ -50,6 +51,8 @@ public final class Adb extends EntityCommunication {
     private static final Logger LOG = LoggerFactory.getLogger(Adb.class);
 
     public static final String SYSPROP_ADB_EXECUTABLE = "qa.th.comm.ADB_EXECUTABLE";
+
+    public static final String SYSPROP_SERIALS = "qa.th.comm.android.SERIALS";
 
     private static final List<String> SERIALS = new ArrayList<>();
 
@@ -104,28 +107,35 @@ public final class Adb extends EntityCommunication {
         return SERIALS;
     }
 
-    private static List<String> loadAllSerials() {
-        CommandLine cmdLine = new CommandLine(ADB);
-        cmdLine.addArgument("devices");
-        LOG.debug("{}", cmdLine.toString());
-        List<String> output = new ArrayList<>();
-        Executor executor = new DefaultExecutor();
-        executor.setStreamHandler(new ESH(output));
-        try {
-            if (executor.execute(cmdLine) != 0) {
-                throw new RuntimeException(cmdLine + " failed");
+    private static void loadAllSerials() {
+        SERIALS.clear();
+        String serials = SystemConfiguration.getInstance().getProperty(SYSPROP_SERIALS);
+        if (StringUtils.isNotBlank(serials)) {
+            LOG.info("Use specified devices from system property {}={}", SYSPROP_SERIALS, serials);
+            SERIALS.addAll(Lists.newArrayList(serials.split(",")));
+        } else {
+            CommandLine cmdLine = new CommandLine(ADB);
+            cmdLine.addArgument("devices");
+            LOG.debug("{}", cmdLine.toString());
+            List<String> output = new ArrayList<>();
+            Executor executor = new DefaultExecutor();
+            executor.setStreamHandler(new ESH(output));
+            try {
+                if (executor.execute(cmdLine) != 0) {
+                    throw new RuntimeException(cmdLine + " failed");
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException(cmdLine + " failed", ex);
             }
-        } catch (IOException ex) {
-            throw new RuntimeException(cmdLine + " failed", ex);
+            output.stream().filter((line) -> (line.endsWith("device"))).forEach((line) -> {
+                String s = line.split("\\t")[0];
+                LOG.info("serial {}", s);
+                SERIALS.add(s);
+            });
         }
-        output.stream().filter((line) -> (line.endsWith("device"))).forEach((line) -> {
-            SERIALS.add(line.split("\\t")[0]);
-        });
-        LOG.debug("{}", SERIALS);
         if (SERIALS.isEmpty()) {
             throw new RuntimeException("No device detected.");
         }
-        return SERIALS;
     }
 
     public Adb() throws IOException, EntityCommunicationException {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015.
+ * Copyright 2016 tascape.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -281,6 +281,8 @@ public class PointerCoords implements Serializable {
     public static final int AXIS_THROTTLE = 19;
 
     private static final int INITIAL_PACKED_AXIS_VALUES = 8;
+
+    private static final long serialVersionUID = 1L;
 
     private long mPackedAxisBits;
 

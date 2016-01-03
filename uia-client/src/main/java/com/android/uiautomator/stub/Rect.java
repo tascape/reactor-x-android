@@ -1,5 +1,5 @@
 /*
- * Copyright 2015.
+ * Copyright 2016 tascape.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  * @author linsong wang
  */
 public class Rect implements Serializable {
-    private static final long serialVersionUID = -873349586878L;
+    private static final long serialVersionUID = 1L;
 
     private static final Pattern FLATTENED_PATTERN = Pattern.compile("(-?\\d+) (-?\\d+) (-?\\d+) (-?\\d+)");
 

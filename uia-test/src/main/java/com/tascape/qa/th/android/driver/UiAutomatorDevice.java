@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 tascape.
+ * Copyright 2016 tascape.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     private static final Logger LOG = LoggerFactory.getLogger(UiAutomatorDevice.class);
 
-    private static final long serialVersionUID = 5043985021L;
+    private static final long serialVersionUID = 1L;
 
     public static final String UIA_SERVER_JAR = "uia-server.jar";
 
@@ -564,7 +564,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         device.setAdb(adb);
         device.start();
 
-        device.uninstall("com.mykaishi.xinkaishi");
+        device.uninstall("com.mycompany.app");
         device.install("/opt/app-debug.apk");
         device.stop();
     }
