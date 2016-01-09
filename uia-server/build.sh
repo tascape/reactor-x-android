@@ -8,12 +8,13 @@ mkdir bin
 mkdir libs
 
 # update this as needed
-cp ../lipermi/target/thx-android-lipermi-1.0.3.jar libs
-cp ../uia-client/target/thx-android-uiac-1.0.3.jar libs
+cp ../../th-lipermi/target/th-lipermi-1.0.0.jar libs/th-lipermi.jar
+cp ../uia-client/target/thx-android-uiac-1.1.0.jar libs/thx-android-uiac.jar
 
 ant clean build
 
-rm thx-android-*.jar
+rm th-lipermi-*.jar
+rm thx-android-uiac-*.jar
 
 ls -l
 pushd bin
