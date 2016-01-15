@@ -162,7 +162,9 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         String pkg = uiDevice.getCurrentPackageName();
         if (pkg.equals("com.android.packageinstaller")) {
             Utils.sleep(10000, "wait for allow");
-            this.clickByResourceId("android:id/button1");
+            if (this.resourceIdExists("android:id/button1")) {
+                this.clickByResourceId("android:id/button1");
+            }
         }
         pkg = uiDevice.getCurrentPackageName();
         if (pkg.equals("com.android.packageinstaller")) {
