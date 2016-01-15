@@ -19,7 +19,6 @@ import android.os.RemoteException;
 import java.io.File;
 
 import com.android.uiautomator.core.UiDevice;
-import com.android.uiautomator.core.UiWatcher;
 import net.sf.lipermi.exception.LipeRMIException;
 
 /**
@@ -204,9 +203,15 @@ public class UiDeviceStub implements IUiDevice {
         return this.uiDevice.pressSearch();
     }
 
-//    @Override
-    public void registerWatcher(String name, UiWatcher watcher) {
-        this.uiDevice.registerWatcher(name, watcher);
+    @Override
+    public void registerWatcher(String name, final UiWatcher watcher) {
+        com.android.uiautomator.core.UiWatcher w = new com.android.uiautomator.core.UiWatcher() {
+            @Override
+            public boolean checkForCondition() {
+                return watcher.checkForCondition();
+            }
+        };
+        this.uiDevice.registerWatcher(name, w);
     }
 
     @Override
@@ -397,5 +402,25 @@ public class UiDeviceStub implements IUiDevice {
             s = s.textStartsWith((String) selector.get(UiSelector.SELECTOR_START_TEXT));
         }
         return s;
+    }
+
+    @Override
+    public void setCompressedLayoutHeirarchy(boolean compressed) {
+        uiDevice.setCompressedLayoutHeirarchy(compressed);
+    }
+
+    @Override
+    public boolean openNotification() {
+        return uiDevice.openNotification();
+    }
+
+    @Override
+    public boolean openQuickSettings() {
+        return uiDevice.openQuickSettings();
+    }
+
+    @Override
+    public boolean drag(int startX, int startY, int endX, int endY, int steps) {
+        return uiDevice.drag(startX, startY, endX, endY, steps);
     }
 }

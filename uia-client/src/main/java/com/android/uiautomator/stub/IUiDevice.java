@@ -28,6 +28,20 @@ public interface IUiDevice extends Serializable {
     int UIAUTOMATOR_RMI_PORT = 8998;
 
     /**
+     * Enables or disables layout hierarchy compression.
+     *
+     * If compression is enabled, the layout hierarchy derived from the Acessibility
+     * framework will only contain nodes that are important for uiautomator
+     * testing. Any unnecessary surrounding layout nodes that make viewing
+     * and searching the hierarchy inefficient are removed.
+     *
+     * @param compressed true to enable compression; else, false to disable
+     *
+     * @since API Level 18
+     */
+    void setCompressedLayoutHeirarchy(boolean compressed);
+
+    /**
      * Clears the text from the last UI traversal event. See
      * {@link #getLastTraversedText()}.
      */
@@ -279,6 +293,24 @@ public interface IUiDevice extends Serializable {
     boolean pressKeyCode(int keyCode, int metaState);
 
     /**
+     * Opens the notification shade.
+     *
+     * @return true if successful, else return false
+     *
+     * @since API Level 18
+     */
+    boolean openNotification();
+
+    /**
+     * Opens the Quick Settings shade.
+     *
+     * @return true if successful, else return false
+     *
+     * @since API Level 18
+     */
+    boolean openQuickSettings();
+
+    /**
      * Simulates a short press on the MENU button.
      *
      * @return true if successful, else return false
@@ -310,9 +342,9 @@ public interface IUiDevice extends Serializable {
      * to register the UiWatcher
      * @param watcher
      * {@link UiWatcher}
-     *
-     * void registerWatcher(String name, UiWatcher watcher);
      */
+    void registerWatcher(String name, UiWatcher watcher);
+
     /**
      * Removes a previously registered UiWatcher.
      *
@@ -408,6 +440,25 @@ public interface IUiDevice extends Serializable {
      * @return true on success
      */
     boolean swipe(Point[] segments, int segmentSteps);
+
+    /**
+     * Performs a swipe from one coordinate to another coordinate. You can control
+     * the smoothness and speed of the swipe by specifying the number of steps.
+     * Each step execution is throttled to 5 milliseconds per step, so for a 100
+     * steps, the swipe will take around 0.5 seconds to complete.
+     *
+     * @param startX X-axis value for the starting coordinate
+     * @param startY Y-axis value for the starting coordinate
+     * @param endX   X-axis value for the ending coordinate
+     * @param endY   Y-axis value for the ending coordinate
+     * @param steps  is the number of steps for the swipe action
+     *
+     * @return true if swipe is performed, false if the operation fails
+     *         or the coordinates are invalid
+     *
+     * @since API Level 18
+     */
+    boolean drag(int startX, int startY, int endX, int endY, int steps);
 
     /**
      * Take a screenshot of current window and store it as PNG

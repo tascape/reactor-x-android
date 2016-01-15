@@ -76,6 +76,12 @@ class AdbDevice extends EntityDriver {
         }
     }
 
+    public boolean grantPermission(String packageName, String permission) throws IOException {
+        List<String> res = this.adb.shell(Lists.newArrayList("pm", packageName, permission));
+        LOG.debug("{}", res);
+        return res.stream().filter(l -> l.contains("Success")).findAny().isPresent();
+    }
+
     public boolean uninstall(String packageName) throws IOException {
         List<String> res = this.adb.adb(Lists.newArrayList("uninstall", packageName));
         LOG.debug("{}", res);

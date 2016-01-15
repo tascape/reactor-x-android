@@ -21,6 +21,7 @@ import com.android.uiautomator.stub.IUiObject;
 import com.android.uiautomator.stub.IUiScrollable;
 import com.android.uiautomator.stub.Point;
 import com.android.uiautomator.stub.UiSelector;
+import com.android.uiautomator.stub.UiWatcher;
 import com.google.common.collect.Lists;
 import com.tascape.qa.th.Utils;
 import com.tascape.qa.th.android.comm.Adb;
@@ -453,6 +454,11 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     }
 
     @Override
+    public void registerWatcher(String name, UiWatcher watcher) {
+        this.uiDevice.registerWatcher(name, watcher);
+    }
+
+    @Override
     public void removeWatcher(String name) {
         this.uiDevice.removeWatcher(name);
     }
@@ -530,6 +536,26 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     @Override
     public void wakeUp() throws LipeRMIException {
         this.uiDevice.wakeUp();
+    }
+
+    @Override
+    public void setCompressedLayoutHeirarchy(boolean compressed) {
+        uiDevice.setCompressedLayoutHeirarchy(compressed);
+    }
+
+    @Override
+    public boolean openNotification() {
+        return uiDevice.openNotification();
+    }
+
+    @Override
+    public boolean openQuickSettings() {
+        return uiDevice.openQuickSettings();
+    }
+
+    @Override
+    public boolean drag(int startX, int startY, int endX, int endY, int steps) {
+        return uiDevice.drag(startX, startY, endX, endY, steps);
     }
 
     private ExecuteWatchdog setupUiAutomatorRmiServer() throws IOException, InterruptedException {

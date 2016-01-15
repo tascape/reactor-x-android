@@ -9,7 +9,7 @@ mkdir libs
 
 # update this as needed
 cp ../../th-lipermi/target/th-lipermi-1.0.0.jar libs/th-lipermi.jar
-cp ../uia-client/target/thx-android-uiac-1.1.0.jar libs/thx-android-uiac.jar
+cp ../uia-client/target/thx-android-uiac-1.1.1.jar libs/thx-android-uiac.jar
 
 ant clean build
 
