@@ -15,6 +15,11 @@
  */
 package com.android.uiautomator.stub;
 
+import android.util.Log;
+import com.android.uiautomator.core.UiDevice;
+import com.android.uiautomator.core.UiObject;
+import com.android.uiautomator.core.UiSelector;
+import com.android.uiautomator.core.UiWatcher;
 import com.android.uiautomator.testrunner.UiAutomatorTestCase;
 import java.io.IOException;
 import net.sf.lipermi.exception.LipeRMIException;
@@ -52,9 +57,32 @@ public class UiAutomatorRmiServer extends UiAutomatorTestCase {
     }
 
     public void testRmiServer() throws Exception {
+        UiDevice.getInstance().registerWatcher("securityDialogWatcher", securityDialogWatcher);
+        UiDevice.getInstance().runWatchers();
+
         while (true) {
             System.out.println("UiAutomator RMI Server is running");
             Thread.sleep(60000);
         }
     }
+
+    private final UiWatcher securityDialogWatcher = new UiWatcher() {
+        public static final String ID = "securityDialogWatcher";
+
+        @Override
+        public boolean checkForCondition() {
+            UiObject warning = new UiObject(new UiSelector().textContains("Security warning"));
+            if (warning.exists()) {
+                Log.w("UIA", "Found security warning dialog");
+                UiObject allow = new UiObject(new UiSelector().className("android.widget.Button").text("Allow"));
+                try {
+                    allow.click();
+                } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
+                    Log.v("UIA", "Cannot click Allow button for secutiry warning");
+                }
+                return (warning.waitUntilGone(3000));
+            }
+            return false;
+        }
+    };
 }
