@@ -56,8 +56,6 @@ public final class Adb extends EntityCommunication {
 
     private static final List<String> SERIALS = new ArrayList<>();
 
-    private static Set<Integer> LOCAL_PORTS = Collections.synchronizedSet(new HashSet<>());
-
     private final static String ADB = locateAdb();
 
     private static String locateAdb() {
@@ -228,21 +226,13 @@ public final class Adb extends EntityCommunication {
         }
     }
 
-    public synchronized int setupAdbPortForward() throws IOException, InterruptedException {
-        int local = IUiDevice.UIAUTOMATOR_RMI_PORT;
-        while (LOCAL_PORTS.contains(local)) {
-            local++;
-        }
-        int remote = IUiDevice.UIAUTOMATOR_RMI_PORT;
+    public void setupAdbPortForward(int local, int remote) throws IOException, InterruptedException {
         List<Object> cmdLine = new ArrayList<>();
         cmdLine.add("forward");
         cmdLine.add("tcp:" + local);
         cmdLine.add("tcp:" + remote);
-
         this.adb(cmdLine);
-        LOCAL_PORTS.add(local);
         LOG.debug("Device of serial '{}' is at localhost:{}", this.serial, local);
-        return local;
     }
 
     private static class ESH implements ExecuteStreamHandler {

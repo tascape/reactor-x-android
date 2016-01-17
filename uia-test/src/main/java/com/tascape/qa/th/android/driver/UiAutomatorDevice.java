@@ -32,7 +32,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import net.sf.lipermi.exception.LipeRMIException;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
@@ -98,13 +101,11 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     private final Dimension screenDimension = new Dimension(0, 0);
 
-    public UiAutomatorDevice(int port) {
-        this.port = port;
-    }
+    private static Set<Integer> LOCAL_PORTS = Collections.synchronizedSet(new HashSet<>());
 
     public void start() throws IOException, InterruptedException {
         uiautomatorDog = this.setupUiAutomatorRmiServer();
-        this.getAdb().setupAdbPortForward();
+        this.port = this.setupRmiPortForward();
 
         CallHandler callHandler = new CallHandler();
         this.client = new Client(this.ip, this.port, callHandler);
@@ -129,6 +130,17 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
             uiautomatorDog.stop();
             uiautomatorDog.killedProcess();
         }
+    }
+
+    private synchronized int setupRmiPortForward() throws IOException, InterruptedException {
+        int remote = IUiDevice.UIAUTOMATOR_RMI_PORT;
+        int local = IUiDevice.UIAUTOMATOR_RMI_PORT;
+        while (LOCAL_PORTS.contains(local)) {
+            local++;
+        }
+        this.getAdb().setupAdbPortForward(local, remote);
+        LOCAL_PORTS.add(local);
+        return local;
     }
 
     @Override
@@ -588,7 +600,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     public static void main(String[] args) throws Exception {
         Adb adb = new Adb();
-        UiAutomatorDevice device = new UiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
+        UiAutomatorDevice device = new UiAutomatorDevice();
         device.setAdb(adb);
         device.start();
 

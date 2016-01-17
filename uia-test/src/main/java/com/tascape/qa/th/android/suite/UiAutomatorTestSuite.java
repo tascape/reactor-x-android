@@ -15,7 +15,6 @@
  */
 package com.tascape.qa.th.android.suite;
 
-import com.android.uiautomator.stub.IUiDevice;
 import com.tascape.qa.th.android.comm.Adb;
 import com.tascape.qa.th.android.driver.UiAutomatorDevice;
 import com.tascape.qa.th.exception.EntityCommunicationException;
@@ -38,7 +37,7 @@ public interface UiAutomatorTestSuite {
         String serial = SERIALS.poll(10, TimeUnit.SECONDS);
         try {
             Adb adb = new Adb(serial);
-            UiAutomatorDevice device = new UiAutomatorDevice(IUiDevice.UIAUTOMATOR_RMI_PORT);
+            UiAutomatorDevice device = new UiAutomatorDevice();
             device.setAdb(adb);
             device.start();
             return device;

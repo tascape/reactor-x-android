@@ -57,8 +57,9 @@ public class UiAutomatorRmiServer extends UiAutomatorTestCase {
     }
 
     public void testRmiServer() throws Exception {
-        UiDevice.getInstance().registerWatcher("securityDialogWatcher", securityDialogWatcher);
-        UiDevice.getInstance().runWatchers();
+        UiDevice device = UiDevice.getInstance();
+        device.registerWatcher("securityDialogWatcher", securityDialogWatcher);
+        device.runWatchers();
 
         while (true) {
             System.out.println("UiAutomator RMI Server is running");
