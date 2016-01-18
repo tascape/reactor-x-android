@@ -18,6 +18,7 @@ package com.tascape.qa.th.android.driver;
 import com.android.uiautomator.stub.IUiCollection;
 import com.android.uiautomator.stub.IUiObject;
 import com.android.uiautomator.stub.IUiScrollable;
+import com.google.common.collect.Lists;
 import com.tascape.qa.th.Utils;
 import com.tascape.qa.th.driver.EntityDriver;
 import com.tascape.qa.th.exception.EntityDriverException;
@@ -67,6 +68,13 @@ public abstract class App extends EntityDriver {
     }
 
     public void launch() throws IOException, InterruptedException {
+        this.launch(true);
+    }
+
+    public void launch(boolean killExisting) throws IOException, InterruptedException {
+        if (killExisting) {
+            uiaDevice.getAdb().shell(Lists.newArrayList("am", "force-stop", this.getPackageName()));
+        }
         String name = getName();
         for (int i = 0; i < NUMBER_OF_HOME_PAGE; i++) {
             if (uiaDevice.textExists(name)) {
