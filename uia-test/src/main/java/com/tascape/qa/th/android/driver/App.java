@@ -67,6 +67,10 @@ public abstract class App extends EntityDriver {
         uiScrollable = device.getUiScrollable();
     }
 
+    public UiAutomatorDevice getUiaDevice() {
+        return uiaDevice;
+    }
+
     public void launch() throws IOException, InterruptedException {
         this.launch(true);
     }
