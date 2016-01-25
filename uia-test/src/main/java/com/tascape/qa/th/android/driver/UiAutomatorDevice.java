@@ -214,6 +214,16 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         home();
     }
 
+    public void dragHalfScreenUp() {
+        Dimension dimension = this.getScreenDimension();
+        this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, 0, 10);
+    }
+
+    public void dragHalfScreenDown() {
+        Dimension dimension = this.getScreenDimension();
+        this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, dimension.height, 10);
+    }
+
     public boolean resourceIdExists(String resouceId) {
         LOG.debug("look for {}", resouceId);
         uiObject.useUiObjectSelector(new UiSelector().resourceId(resouceId));
