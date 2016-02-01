@@ -101,7 +101,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     private final Dimension screenDimension = new Dimension(0, 0);
 
-    private static Set<Integer> LOCAL_PORTS = Collections.synchronizedSet(new HashSet<>());
+    private static final Set<Integer> LOCAL_PORTS = Collections.synchronizedSet(new HashSet<>());
 
     public void start() throws IOException, InterruptedException {
         uiautomatorDog = this.setupUiAutomatorRmiServer();
