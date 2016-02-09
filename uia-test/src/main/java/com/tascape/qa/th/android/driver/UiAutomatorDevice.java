@@ -236,6 +236,12 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         return uiObject.exists();
     }
 
+    public boolean descriptionExists(String text) {
+        LOG.debug("look for {}", text);
+        uiObject.useUiObjectSelector(new UiSelector().description(text));
+        return uiObject.exists();
+    }
+
     public boolean waitForResourceId(String resouceId) {
         LOG.debug("wait for {}", resouceId);
         uiObject.useUiObjectSelector(new UiSelector().resourceId(resouceId));
@@ -274,6 +280,13 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     public void clickByTextContains(String text) {
         LOG.debug("click {}", text);
         uiObject.useUiObjectSelector(new UiSelector().textContains(text));
+        uiObject.click();
+        uiDevice.waitForIdle();
+    }
+
+    public void clickByDescription(String text) {
+        LOG.debug("click {}", text);
+        uiObject.useUiObjectSelector(new UiSelector().description(text));
         uiObject.click();
         uiDevice.waitForIdle();
     }

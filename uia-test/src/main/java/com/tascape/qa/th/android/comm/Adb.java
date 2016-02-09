@@ -15,7 +15,6 @@
  */
 package com.tascape.qa.th.android.comm;
 
-import com.android.uiautomator.stub.IUiDevice;
 import com.google.common.collect.Lists;
 import com.tascape.qa.th.SystemConfiguration;
 import com.tascape.qa.th.comm.EntityCommunication;
@@ -29,17 +28,13 @@ import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteStreamHandler;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,7 +103,7 @@ public final class Adb extends EntityCommunication {
     private static void loadAllSerials() {
         SERIALS.clear();
         String serials = SystemConfiguration.getInstance().getProperty(SYSPROP_SERIALS);
-        if (StringUtils.isNotBlank(serials)) {
+        if (null != serials) {
             LOG.info("Use specified devices from system property {}={}", SYSPROP_SERIALS, serials);
             SERIALS.addAll(Lists.newArrayList(serials.split(",")));
         } else {
@@ -141,21 +136,8 @@ public final class Adb extends EntityCommunication {
     }
 
     public Adb(String serial) throws IOException, EntityCommunicationException {
-        if (StringUtils.isEmpty(serial)) {
-            List<String> output = this.adb(Arrays.asList(new Object[]{"devices"}));
-            for (String line : output) {
-                if (line.endsWith("device")) {
-                    this.serial = line.split("\\t")[0];
-                    break;
-                }
-            }
-        } else {
-            this.serial = serial;
-        }
+        this.serial = serial;
         LOG.debug("serial number '{}'", this.serial);
-        if (StringUtils.isEmpty(this.serial)) {
-            throw new EntityCommunicationException("Device serial number issue");
-        }
     }
 
     @Override
