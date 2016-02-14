@@ -159,7 +159,7 @@ class AdbDevice extends EntityDriver {
     /**
      * The input macro can emulate all sort of events, as described in its documentation.
      * <pre>
-     * Usage: input [<source>] <command> [<arg>...]
+     * Usage: input [source] command [arg...]
      *
      * The sources are:
      *   trackball
@@ -174,12 +174,12 @@ class AdbDevice extends EntityDriver {
      *   touchscreen
      *
      * The commands and default sources are:
-     *   text <string> (Default: touchscreen) [delay]
-     *   keyevent [--longpress] <key code number or name> ... (Default: keyboard)
-     *   tap <x> <y> (Default: touchscreen)
-     *   swipe <x1> <y1> <x2> <y2> [duration(ms)] (Default: touchscreen)
+     *   text 'string' (Default: touchscreen) [delay]
+     *   keyevent [--longpress] 'key code number or name' ... (Default: keyboard)
+     *   tap x y (Default: touchscreen)
+     *   swipe x1 y1 x2 y2 [duration(ms)] (Default: touchscreen)
      *   press (Default: trackball)
-     *   roll <dx> <dy> (Default: trackball)
+     *   roll dx dy (Default: trackball)
      * </pre>
      *
      * @param arguments arguments
