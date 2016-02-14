@@ -15,19 +15,51 @@
  */
 package com.tascape.qa.th.android.model;
 
+import com.tascape.qa.th.android.driver.UiAutomatorDevice;
+import org.json.JSONObject;
+
 /**
  *
  * @author wangl
  */
 public class UiHierarchy {
 
-    private UiNode root;
+    public static final String TAG_NAME = "hierarchy";
+
+    public final UiNode root;
+
+    private String rotation;
+
+    UiHierarchy(UiNode root) {
+        this.root = root;
+    }
+
+    public void setUiAutomatorDevice(UiAutomatorDevice device) {
+        this.root.setUiAutomatorDevice(device);
+    }
+
+    public String getRotation() {
+        return rotation;
+    }
 
     public UiNode getRoot() {
         return root;
     }
 
-    void setRoot(UiNode root) {
-        this.root = root;
+    @Override
+    public String toString() {
+        return TAG_NAME + ", rotation=\"" + rotation + "\"";
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject()
+            .put(TAG_NAME, new JSONObject()
+                .put("rotation", rotation)
+                .put(UiNode.TAG_NAME, root.toJson()));
+        return json;
+    }
+
+    void setRotation(String rotation) {
+        this.rotation = rotation;
     }
 }

@@ -15,18 +15,24 @@
  */
 package com.tascape.qa.th.android.model;
 
+import com.tascape.qa.th.android.driver.UiAutomatorDevice;
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author linsong wang
  */
 public class UiNode {
+    private static final Logger LOG = LoggerFactory.getLogger(UIA.class);
+
+    public static final String TAG_NAME = "node";
 
     private int index = 0;
 
@@ -60,54 +66,15 @@ public class UiNode {
 
     private boolean selected;
 
+    private boolean naf;
+
     private Rectangle bounds;
 
-    private final List<UiNode> elements = new ArrayList<>();
+    private final List<UiNode> nodes = new ArrayList<>();
 
-    private UiNode parent;
+    private UiNode parent = null;
 
-    public int index() {
-        return index;
-    }
-
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject().put(this.getClass().getSimpleName(), new JSONObject()
-            .put("index", index)
-            .put("text", text)
-            .put("x", bounds.x)
-            .put("y", bounds.y)
-            .put("w", bounds.width)
-            .put("h", bounds.height));
-        if (!elements.isEmpty()) {
-            JSONArray jarr = new JSONArray();
-            json.put("elements", jarr);
-            elements.forEach(n -> {
-                jarr.put(n.toJson());
-            });
-        }
-        return json;
-    }
-
-    public List<String> logElement() {
-        List<String> lines = new ArrayList<>();
-        lines.add(String.format("%s %d \"%s\" [x=%s,y=%s,w=%s,h=%s]", getClass().getSimpleName(), index, text,
-            bounds.x, bounds.y, bounds.width, bounds.height));
-        if (!elements.isEmpty()) {
-            lines.add("elements: (" + elements.size() + ") {");
-            elements.forEach((e) -> {
-                e.logElement().forEach((l) -> {
-                    lines.add("    " + l);
-                });
-            });
-            lines.add("}");
-        }
-        return lines;
-    }
-
-    @Override
-    public String toString() {
-        return StringUtils.join(logElement(), "\n");
-    }
+    private UiAutomatorDevice device;
 
     public int getIndex() {
         return index;
@@ -157,6 +124,10 @@ public class UiNode {
         return focused;
     }
 
+    public boolean isScrollable() {
+        return scrollable;
+    }
+
     public boolean isLongClickable() {
         return longClickable;
     }
@@ -169,8 +140,155 @@ public class UiNode {
         return selected;
     }
 
+    public boolean isNaf() {
+        return naf;
+    }
+
     public Rectangle getBounds() {
         return bounds;
+    }
+
+    public UiNode getParent() {
+        return parent;
+    }
+
+    public UiNode[] nodes() {
+        return nodes.toArray(new UiNode[0]);
+    }
+
+    /**
+     * Clicks on the center of this node.
+     *
+     * @return adb stdout
+     *
+     * @throws IOException in case of ADB issue
+     */
+    public List<String> click() throws IOException {
+        int x = bounds.x + bounds.width / 2;
+        int y = bounds.y + bounds.height / 2;
+        return this.device.inputTap(x, y);
+    }
+
+    public UiNode findByResourceId(String resourceId) {
+        if (this.resourceId.equals(resourceId)) {
+            return this;
+        }
+        for (UiNode n : nodes) {
+            UiNode node = n.findByResourceId(resourceId);
+            if (node != null) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    public UiNode findByResourceText(String text) {
+        if (this.text.equals(text)) {
+            return this;
+        }
+        for (UiNode n : nodes) {
+            UiNode node = n.findByResourceText(text);
+            if (node != null) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    public JSONObject toJson() {
+        JSONObject node = new JSONObject()
+            .put("text", getText())
+            .put("resource-id", getResourceId())
+            .put("class", getKlass())
+            .put("package", getPakkage())
+            .put("content-desc", getContentDesc())
+            .put("checkable", isCheckable() + "")
+            .put("checked", isChecked() + "")
+            .put("clickable", isClickable() + "")
+            .put("enabled", isEnabled() + "")
+            .put("focusable", isFocusable() + "")
+            .put("focused", isFocused() + "")
+            .put("scrollable", isScrollable() + "")
+            .put("long-clickable", isLongClickable() + "")
+            .put("password", isPassword() + "")
+            .put("selected", isSelected() + "")
+            .put("NAF", isNaf() + "")
+            .put("bounds", String.format("[%d,%d][%d,%d]", bounds.x, bounds.y, bounds.width, bounds.height))
+            .put("index", getIndex());
+
+        if (!nodes.isEmpty()) {
+            JSONArray ns = new JSONArray();
+            nodes.forEach(n -> ns.put(n.toJson()));
+            node.put("nodes", ns);
+        }
+        return node;
+    }
+
+    void setUiAutomatorDevice(UiAutomatorDevice device) {
+        this.device = device;
+        this.nodes.forEach(node -> node.setUiAutomatorDevice(device));
+    }
+
+    UiNode setAttribute(String name, String value) throws UiException {
+        switch (name) {
+            case "text":
+                setText(value);
+                break;
+            case "resource-id":
+                setResourceId(value);
+                break;
+            case "class":
+                setKlass(value);
+                break;
+            case "package":
+                setPakkage(value);
+                break;
+            case "content-desc":
+                setContentDesc(value);
+                break;
+            case "checkable":
+                setCheckable(Boolean.parseBoolean(value));
+                break;
+            case "checked":
+                setChecked(Boolean.parseBoolean(value));
+                break;
+            case "clickable":
+                setClickable(Boolean.parseBoolean(value));
+                break;
+            case "enabled":
+                setEnabled(Boolean.parseBoolean(value));
+                break;
+            case "focusable":
+                setFocusable(Boolean.parseBoolean(value));
+                break;
+            case "focused":
+                setFocused(Boolean.parseBoolean(value));
+                break;
+            case "scrollable":
+                setScrollable(Boolean.parseBoolean(value));
+                break;
+            case "long-clickable":
+                setLongClickable(Boolean.parseBoolean(value));
+                break;
+            case "password":
+                setPassword(Boolean.parseBoolean(value));
+                break;
+            case "selected":
+                setSelected(Boolean.parseBoolean(value));
+                break;
+            case "bounds":
+                setBounds(UIA.parseBounds(value));
+                break;
+            case "index":
+                setIndex(Integer.parseInt(value));
+                break;
+            case "NAF":
+                setNaf(Boolean.parseBoolean(value));
+                break;
+            default:
+                throw new UiException("Unknown node attribute " + name);
+        }
+        return this;
     }
 
     void setText(String text) {
@@ -217,10 +335,6 @@ public class UiNode {
         this.focused = focused;
     }
 
-    public boolean isScrollable() {
-        return scrollable;
-    }
-
     void setScrollable(boolean scrollable) {
         this.scrollable = scrollable;
     }
@@ -237,6 +351,10 @@ public class UiNode {
         this.selected = selected;
     }
 
+    void setNaf(boolean naf) {
+        this.naf = naf;
+    }
+
     void setBounds(Rectangle bounds) {
         this.bounds = bounds;
     }
@@ -245,10 +363,9 @@ public class UiNode {
         this.index = index;
     }
 
-    void addElement(UiNode element) {
-        element.setIndex(elements.size());
-        element.setParent(this);
-        elements.add(element);
+    void addNode(UiNode node) {
+        node.setParent(this);
+        nodes.add(node);
     }
 
     void setParent(UiNode parent) {

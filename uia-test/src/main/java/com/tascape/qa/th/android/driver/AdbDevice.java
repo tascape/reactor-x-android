@@ -157,6 +157,46 @@ class AdbDevice extends EntityDriver {
     }
 
     /**
+     * The input macro can emulate all sort of events, as described in its documentation.
+     * <pre>
+     * Usage: input [<source>] <command> [<arg>...]
+     *
+     * The sources are:
+     *   trackball
+     *   joystick
+     *   touchnavigation
+     *   mouse
+     *   keyboard
+     *   gamepad
+     *   touchpad
+     *   dpad
+     *   stylus
+     *   touchscreen
+     *
+     * The commands and default sources are:
+     *   text <string> (Default: touchscreen) [delay]
+     *   keyevent [--longpress] <key code number or name> ... (Default: keyboard)
+     *   tap <x> <y> (Default: touchscreen)
+     *   swipe <x1> <y1> <x2> <y2> [duration(ms)] (Default: touchscreen)
+     *   press (Default: trackball)
+     *   roll <dx> <dy> (Default: trackball)
+     * </pre>
+     *
+     * @param arguments arguments
+     *
+     * @return adb stdout
+     *
+     * @throws IOException in case of any issue
+     */
+    public List<String> input(final List<Object> arguments) throws IOException {
+        List<Object> args = new ArrayList<>(arguments);
+        args.add(0, "input");
+        return adb.shell(args);
+    }
+
+    /**
+     * Sends keyboard key event to device. Shortcut to input(keyevent, ...).
+     *
      * 0 --- "KEYCODE_UNKNOWN"
      * 1 --- "KEYCODE_MENU"
      * 2 --- "KEYCODE_SOFT_RIGHT"
@@ -246,23 +286,44 @@ class AdbDevice extends EntityDriver {
      *
      * @param key key value
      *
-     * @throws IOException in case of any issue
-     */
-    public void inputKeyEvent(int key) throws IOException {
-        this.adb.shell(Lists.newArrayList("input", "keyevent", key + ""));
-    }
-
-    /**
-     * @param text text sent to device
+     * @return adb stdout
      *
      * @throws IOException in case of any issue
      */
-    public void inputText(String text) throws IOException {
-        this.adb.shell(Lists.newArrayList("input", "text", text));
+    public List<String> inputKeyEvent(int key) throws IOException {
+        return this.input(Lists.newArrayList("keyevent", key + ""));
+    }
+
+    /**
+     * Sends text to device. Shortcut to input(text, ...).
+     *
+     * @param text text sent to device
+     *
+     * @return adb stdout
+     *
+     * @throws IOException in case of any issue
+     */
+    public List<String> inputText(String text) throws IOException {
+        return this.input(Lists.newArrayList("text", text));
+    }
+
+    /**
+     * Sends touchscreen tap event to device. Shortcut to input(tap, ...).
+     *
+     * @param x x
+     * @param y y
+     *
+     * @return adb stdout
+     *
+     * @throws IOException in case of any issue
+     */
+    public List<String> inputTap(int x, int y) throws IOException {
+        return this.input(Lists.newArrayList("tap", x, y));
     }
 
     /**
      * Emulates touchscreen interaction with sendevent in Android.
+     *
      * http://ktnr74.blogspot.com/2013/06/emulating-touchscreen-interaction-with.html.
      * busybox usleep 50000: wait at least 50 milliseconds
      *
