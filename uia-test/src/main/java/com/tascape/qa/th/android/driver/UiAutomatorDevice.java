@@ -185,7 +185,10 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         }
         pkg = uiDevice.getCurrentPackageName();
         if (pkg.equals("com.android.packageinstaller")) {
-            this.clickByResourceId("com.android.packageinstaller:id/ok_button");
+            Utils.sleep(10000, "wait for OK");
+            if (this.resourceIdExists("com.android.packageinstaller:id/ok_button")) {
+                this.clickByResourceId("com.android.packageinstaller:id/ok_button");
+            }
         }
         if (dog.isWatching()) {
             dog.killedProcess();
