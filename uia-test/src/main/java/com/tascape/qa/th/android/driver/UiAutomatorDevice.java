@@ -25,6 +25,9 @@ import com.android.uiautomator.stub.UiWatcher;
 import com.google.common.collect.Lists;
 import com.tascape.qa.th.Utils;
 import com.tascape.qa.th.android.comm.Adb;
+import com.tascape.qa.th.android.model.UIA;
+import com.tascape.qa.th.android.model.UiException;
+import com.tascape.qa.th.android.model.UiHierarchy;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,6 +39,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.xml.parsers.ParserConfigurationException;
 import net.sf.lipermi.exception.LipeRMIException;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
@@ -43,6 +47,7 @@ import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -328,6 +333,23 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         this.getAdb().pull(f, png);
         LOG.debug("Save screenshot to {}", png.getAbsolutePath());
         return png;
+    }
+
+    /**
+     * Loads window hierarchy as an in-memory node tree.
+     *
+     * @return hierarchy node tree
+     *
+     * @throws IOException                  cannot dump window hierarchy
+     * @throws UiException                  parsing error
+     * @throws SAXException                 xml parsing error
+     * @throws ParserConfigurationException xml parsing error
+     */
+    public UiHierarchy loadWindowHierarchy() throws IOException, UiException, SAXException, ParserConfigurationException {
+        File xml = this.dumpWindowHierarchy();
+        UiHierarchy hierarchy = UIA.parseHierarchy(xml);
+        hierarchy.setUiAutomatorDevice(this);
+        return hierarchy;
     }
 
     @Override
