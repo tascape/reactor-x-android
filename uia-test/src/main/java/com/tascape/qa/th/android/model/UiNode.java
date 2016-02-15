@@ -170,6 +170,7 @@ public class UiNode {
     }
 
     public UiNode findByResourceId(String resourceId) {
+        LOG.debug("find node of resource id {}", resourceId);
         if (this.resourceId.equals(resourceId)) {
             return this;
         }
@@ -183,6 +184,7 @@ public class UiNode {
     }
 
     public UiNode findByResourceText(String text) {
+        LOG.debug("find node of text {}", text);
         if (this.text.equals(text)) {
             return this;
         }
