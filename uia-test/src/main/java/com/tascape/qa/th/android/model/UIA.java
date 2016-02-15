@@ -75,12 +75,13 @@ public class UIA {
             return null;
         }
 
-        UiNode un = new UiNode();
         NamedNodeMap map = node.getAttributes();
-        LOG.debug("{}", map.getLength());
+        String klass = map.getNamedItem("class").getNodeValue();
+        UiNode uiNode = newNode(klass);
+
         for (int i = 0, j = map.getLength(); i < j; i++) {
             Node attr = map.item(i);
-            un.setAttribute(attr.getNodeName(), attr.getNodeValue());
+            uiNode.setAttribute(attr.getNodeName(), attr.getNodeValue());
         }
 
         NodeList nl = node.getChildNodes();
@@ -89,10 +90,124 @@ public class UIA {
             if (n == null) {
                 continue;
             }
-            un.addNode(n);
+            uiNode.addNode(n);
         }
 
-        return un;
+        return uiNode;
+    }
+
+    private static UiNode newNode(String klass) {
+        switch (klass) {
+            case ActionMenuView.CLASS_ANME:
+                return new ActionMenuView();
+            case AutoCompleteTextView.CLASS_ANME:
+                return new AutoCompleteTextView();
+            case Button.CLASS_ANME:
+                return new Button();
+            case CalendarView.CLASS_ANME:
+                return new CalendarView();
+            case CheckBox.CLASS_ANME:
+                return new CheckBox();
+            case Chronometer.CLASS_ANME:
+                return new Chronometer();
+            case CompoundButton.CLASS_ANME:
+                return new CompoundButton();
+            case DatePicker.CLASS_ANME:
+                return new DatePicker();
+            case EditText.CLASS_ANME:
+                return new EditText();
+            case FrameLayout.CLASS_ANME:
+                return new FrameLayout();
+            case GridLayout.CLASS_ANME:
+                return new GridLayout();
+            case GridView.CLASS_ANME:
+                return new GridView();
+            case HorizontalScrollView.CLASS_ANME:
+                return new HorizontalScrollView();
+            case ImageButton.CLASS_ANME:
+                return new ImageButton();
+            case ImageView.CLASS_ANME:
+                return new ImageView();
+            case LinearLayout.CLASS_ANME:
+                return new LinearLayout();
+            case ListView.CLASS_ANME:
+                return new ListView();
+            case NumberPicker.CLASS_ANME:
+                return new NumberPicker();
+            case OverScroller.CLASS_ANME:
+                return new OverScroller();
+            case PopupMenu.CLASS_ANME:
+                return new PopupMenu();
+            case PopupWindow.CLASS_ANME:
+                return new PopupWindow();
+            case ProgressBar.CLASS_ANME:
+                return new ProgressBar();
+            case QuickContactBadge.CLASS_ANME:
+                return new QuickContactBadge();
+            case RadioButton.CLASS_ANME:
+                return new RadioButton();
+            case RadioGroup.CLASS_ANME:
+                return new RadioGroup();
+            case RatingBar.CLASS_ANME:
+                return new RatingBar();
+            case RelativeLayout.CLASS_ANME:
+                return new RelativeLayout();
+            case RemoteViews.CLASS_ANME:
+                return new RemoteViews();
+            case ScrollView.CLASS_ANME:
+                return new ScrollView();
+            case Scroller.CLASS_ANME:
+                return new Scroller();
+            case SearchView.CLASS_ANME:
+                return new SearchView();
+            case SeekBar.CLASS_ANME:
+                return new SeekBar();
+            case Space.CLASS_ANME:
+                return new Space();
+            case Spinner.CLASS_ANME:
+                return new Spinner();
+            case Switch.CLASS_ANME:
+                return new Switch();
+            case TabHost.CLASS_ANME:
+                return new TabHost();
+            case TabWidget.CLASS_ANME:
+                return new TabWidget();
+            case TableLayout.CLASS_ANME:
+                return new TableLayout();
+            case TableRow.CLASS_ANME:
+                return new TableRow();
+            case TextClock.CLASS_ANME:
+                return new TextClock();
+            case TextSwitcher.CLASS_ANME:
+                return new TextSwitcher();
+            case TextView.CLASS_ANME:
+                return new TextView();
+            case TimePicker.CLASS_ANME:
+                return new TimePicker();
+            case Toast.CLASS_ANME:
+                return new Toast();
+            case ToggleButton.CLASS_ANME:
+                return new ToggleButton();
+            case Toolbar.CLASS_ANME:
+                return new Toolbar();
+            case VideoView.CLASS_ANME:
+                return new VideoView();
+            case View.CLASS_ANME:
+                return new View();
+            case ViewAnimator.CLASS_ANME:
+                return new ViewAnimator();
+            case ViewFlipper.CLASS_ANME:
+                return new ViewFlipper();
+            case ViewGroup.CLASS_ANME:
+                return new ViewGroup();
+            case ViewSwitcher.CLASS_ANME:
+                return new ViewSwitcher();
+            case ZoomControls.CLASS_ANME:
+                return new ZoomControls();
+            default:
+                LOG.warn("Unkown node type {}, use UiNode", klass);
+                return new UiNode();
+        }
     }
 
     public static Rectangle parseBounds(String bounds) throws UiException {
