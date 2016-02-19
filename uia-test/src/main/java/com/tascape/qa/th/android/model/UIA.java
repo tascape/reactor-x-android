@@ -15,6 +15,7 @@
  */
 package com.tascape.qa.th.android.model;
 
+import com.tascape.qa.th.android.driver.UiAutomatorDevice;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -41,14 +42,16 @@ import org.xml.sax.SAXException;
 public class UIA {
     private static final Logger LOG = LoggerFactory.getLogger(UIA.class);
 
-    public static UiHierarchy parseHierarchy(File file) throws UiException, IOException, SAXException,
+    public static ViewHierarchy parseHierarchy(File file, UiAutomatorDevice device) throws UiException, IOException,
+        SAXException,
         ParserConfigurationException {
         try (InputStream in = FileUtils.openInputStream(file)) {
-            return parseHierarchy(in);
+            return parseHierarchy(in, device);
         }
     }
 
-    public static UiHierarchy parseHierarchy(InputStream in) throws UiException, SAXException,
+    public static ViewHierarchy parseHierarchy(InputStream in, UiAutomatorDevice device) throws UiException,
+        SAXException,
         ParserConfigurationException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -61,9 +64,10 @@ public class UIA {
             LOG.debug("{} {}", node.getNodeName(), node.getNodeValue());
             UiNode uiNode = parseNode(node);
             if (uiNode != null) {
-                UiHierarchy hierarchy = new UiHierarchy(uiNode);
+                ViewHierarchy hierarchy = new ViewHierarchy(uiNode);
                 hierarchy.setRotation(doc.getAttribute("rotation"));
                 LOG.debug("{}", hierarchy);
+                hierarchy.setUiAutomatorDevice(device);
                 return hierarchy;
             }
         }
@@ -231,7 +235,7 @@ public class UIA {
         InputStream in = UIA.class.getResourceAsStream("hierarchy.xml");
         LOG.debug("{}", in);
 
-        UiHierarchy hierarchy = parseHierarchy(in);
+        ViewHierarchy hierarchy = parseHierarchy(in, null);
         LOG.debug("{}", hierarchy.toString());
         LOG.debug("\n{}", hierarchy.toJson().toString(2));
     }

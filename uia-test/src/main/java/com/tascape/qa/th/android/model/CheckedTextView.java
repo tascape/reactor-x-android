@@ -21,6 +21,6 @@ package com.tascape.qa.th.android.model;
  */
 public class CheckedTextView extends TextView {
 
-    final String CLASS_ANME = "android.widget.CheckedTextView";
+    static final String CLASS_ANME = "android.widget.CheckedTextView";
 
 }

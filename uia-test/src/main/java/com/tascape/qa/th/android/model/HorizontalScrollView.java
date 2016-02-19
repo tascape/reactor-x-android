@@ -21,7 +21,6 @@ package com.tascape.qa.th.android.model;
  */
 public class HorizontalScrollView extends FrameLayout {
 
-    public static final String CLASS_ANME = "android.widget.HorizontalScrollView";
+    static final String CLASS_ANME = "android.widget.HorizontalScrollView";
 
-    
 }

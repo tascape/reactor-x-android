@@ -21,7 +21,6 @@ package com.tascape.qa.th.android.model;
  */
 public class GridLayout extends ViewGroup {
 
-    public static final String CLASS_ANME = "android.widget.GridLayout";
+    static final String CLASS_ANME = "android.widget.GridLayout";
 
-    
 }

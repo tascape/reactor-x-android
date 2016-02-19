@@ -22,7 +22,7 @@ import org.json.JSONObject;
  *
  * @author wangl
  */
-public class UiHierarchy {
+public class ViewHierarchy {
 
     public static final String TAG_NAME = "hierarchy";
 
@@ -30,12 +30,8 @@ public class UiHierarchy {
 
     private String rotation;
 
-    UiHierarchy(UiNode root) {
+    ViewHierarchy(UiNode root) {
         this.root = root;
-    }
-
-    public void setUiAutomatorDevice(UiAutomatorDevice device) {
-        this.root.setUiAutomatorDevice(device);
     }
 
     public String getRotation() {
@@ -57,6 +53,10 @@ public class UiHierarchy {
                 .put("rotation", rotation)
                 .put(UiNode.TAG_NAME, root.toJson()));
         return json;
+    }
+
+    void setUiAutomatorDevice(UiAutomatorDevice device) {
+        this.root.setUiAutomatorDevice(device);
     }
 
     void setRotation(String rotation) {

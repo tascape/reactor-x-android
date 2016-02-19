@@ -20,6 +20,7 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -202,17 +203,17 @@ public class UiNode {
             .put("class", getKlass())
             .put("package", getPakkage())
             .put("content-desc", getContentDesc())
-            .put("checkable", isCheckable() + "")
-            .put("checked", isChecked() + "")
-            .put("clickable", isClickable() + "")
-            .put("enabled", isEnabled() + "")
-            .put("focusable", isFocusable() + "")
-            .put("focused", isFocused() + "")
-            .put("scrollable", isScrollable() + "")
-            .put("long-clickable", isLongClickable() + "")
-            .put("password", isPassword() + "")
-            .put("selected", isSelected() + "")
-            .put("NAF", isNaf() + "")
+            .put("checkable", isCheckable())
+            .put("checked", isChecked())
+            .put("clickable", isClickable())
+            .put("enabled", isEnabled())
+            .put("focusable", isFocusable())
+            .put("focused", isFocused())
+            .put("scrollable", isScrollable())
+            .put("long-clickable", isLongClickable())
+            .put("password", isPassword())
+            .put("selected", isSelected())
+            .put("NAF", isNaf())
             .put("bounds", String.format("[%d,%d][%d,%d]", bounds.x, bounds.y, bounds.width, bounds.height))
             .put("index", getIndex());
 
@@ -222,6 +223,112 @@ public class UiNode {
             node.put("nodes", ns);
         }
         return node;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + this.index;
+        hash = 41 * hash + Objects.hashCode(this.text);
+        hash = 41 * hash + Objects.hashCode(this.resourceId);
+        hash = 41 * hash + Objects.hashCode(this.klass);
+        hash = 41 * hash + Objects.hashCode(this.pakkage);
+        hash = 41 * hash + Objects.hashCode(this.contentDesc);
+        hash = 41 * hash + (this.checkable ? 1 : 0);
+        hash = 41 * hash + (this.checked ? 1 : 0);
+        hash = 41 * hash + (this.clickable ? 1 : 0);
+        hash = 41 * hash + (this.enabled ? 1 : 0);
+        hash = 41 * hash + (this.focusable ? 1 : 0);
+        hash = 41 * hash + (this.focused ? 1 : 0);
+        hash = 41 * hash + (this.scrollable ? 1 : 0);
+        hash = 41 * hash + (this.longClickable ? 1 : 0);
+        hash = 41 * hash + (this.password ? 1 : 0);
+        hash = 41 * hash + (this.selected ? 1 : 0);
+        hash = 41 * hash + (this.naf ? 1 : 0);
+        hash = 41 * hash + Objects.hashCode(this.bounds);
+        hash = 41 * hash + Objects.hashCode(this.nodes);
+        hash = 41 * hash + Objects.hashCode(this.parent);
+        hash = 41 * hash + Objects.hashCode(this.device);
+        return hash;
+    }
+
+    @Override
+    @SuppressWarnings("AccessingNonPublicFieldOfAnotherObject")
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final UiNode other = (UiNode) obj;
+        if (this.index != other.index) {
+            return false;
+        }
+        if (this.checkable != other.checkable) {
+            return false;
+        }
+        if (this.checked != other.checked) {
+            return false;
+        }
+        if (this.clickable != other.clickable) {
+            return false;
+        }
+        if (this.enabled != other.enabled) {
+            return false;
+        }
+        if (this.focusable != other.focusable) {
+            return false;
+        }
+        if (this.focused != other.focused) {
+            return false;
+        }
+        if (this.scrollable != other.scrollable) {
+            return false;
+        }
+        if (this.longClickable != other.longClickable) {
+            return false;
+        }
+        if (this.password != other.password) {
+            return false;
+        }
+        if (this.selected != other.selected) {
+            return false;
+        }
+        if (this.naf != other.naf) {
+            return false;
+        }
+        if (!Objects.equals(this.text, other.text)) {
+            return false;
+        }
+        if (!Objects.equals(this.resourceId, other.resourceId)) {
+            return false;
+        }
+        if (!Objects.equals(this.klass, other.klass)) {
+            return false;
+        }
+        if (!Objects.equals(this.pakkage, other.pakkage)) {
+            return false;
+        }
+        if (!Objects.equals(this.contentDesc, other.contentDesc)) {
+            return false;
+        }
+//        if (!Objects.equals(this.bounds, other.bounds)) {
+//            return false;
+//        }
+//        if (!Objects.equals(this.nodes, other.nodes)) {
+//            return false;
+//        }
+//        if (!Objects.equals(this.parent, other.parent)) {
+//            return false;
+//        }
+//        if (!Objects.equals(this.device, other.device)) {
+//            return false;
+//        }
+        return true;
     }
 
     void setUiAutomatorDevice(UiAutomatorDevice device) {

@@ -22,6 +22,5 @@ package com.tascape.qa.th.android.model;
 public class GridView extends ViewGroup {
 
     public static final String CLASS_ANME = "android.widget.GridView";
-
     
 }

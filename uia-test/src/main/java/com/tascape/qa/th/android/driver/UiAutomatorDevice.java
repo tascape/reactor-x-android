@@ -27,7 +27,7 @@ import com.tascape.qa.th.Utils;
 import com.tascape.qa.th.android.comm.Adb;
 import com.tascape.qa.th.android.model.UIA;
 import com.tascape.qa.th.android.model.UiException;
-import com.tascape.qa.th.android.model.UiHierarchy;
+import com.tascape.qa.th.android.model.ViewHierarchy;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -223,11 +223,13 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     }
 
     public void dragHalfScreenUp() {
+        LOG.debug("drag, from enter, half screen up");
         Dimension dimension = this.getScreenDimension();
         this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, 0, 10);
     }
 
     public void dragHalfScreenDown() {
+        LOG.debug("drag, from enter, half screen down");
         Dimension dimension = this.getScreenDimension();
         this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, dimension.height, 10);
     }
@@ -251,21 +253,21 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     }
 
     public boolean waitForResourceId(String resouceId) {
-        LOG.debug("wait for {}", resouceId);
+        LOG.debug("wait {} for {} ms", resouceId, WAIT_FOR_EXISTS);
         uiObject.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         uiObject.waitForExists(WAIT_FOR_EXISTS);
         return uiObject.exists();
     }
 
     public boolean waitForText(String text) {
-        LOG.debug("wait for {}", text);
+        LOG.debug("wait {} for {} ms", text, WAIT_FOR_EXISTS);
         uiObject.useUiObjectSelector(new UiSelector().text(text));
         uiObject.waitForExists(WAIT_FOR_EXISTS);
         return uiObject.exists();
     }
 
     public boolean waitForTextContains(String text) {
-        LOG.debug("wait for {}", text);
+        LOG.debug("wait {} for {} ms", text, WAIT_FOR_EXISTS);
         uiObject.useUiObjectSelector(new UiSelector().textContains(text));
         uiObject.waitForExists(WAIT_FOR_EXISTS);
         return uiObject.exists();
@@ -341,17 +343,17 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     /**
      * Loads window hierarchy as an in-memory node tree.
      *
-     * @return hierarchy node tree
+     * @return UI view hierarchy node tree
      *
      * @throws IOException                  cannot dump window hierarchy
      * @throws UiException                  parsing error
      * @throws SAXException                 xml parsing error
      * @throws ParserConfigurationException xml parsing error
      */
-    public UiHierarchy loadWindowHierarchy() throws IOException, UiException, SAXException, ParserConfigurationException {
+    public ViewHierarchy loadWindowHierarchy() throws IOException, UiException, SAXException,
+        ParserConfigurationException {
         File xml = this.dumpWindowHierarchy();
-        UiHierarchy hierarchy = UIA.parseHierarchy(xml);
-        hierarchy.setUiAutomatorDevice(this);
+        ViewHierarchy hierarchy = UIA.parseHierarchy(xml, this);
         return hierarchy;
     }
 
