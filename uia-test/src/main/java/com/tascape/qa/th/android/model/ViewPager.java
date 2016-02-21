@@ -19,7 +19,7 @@ package com.tascape.qa.th.android.model;
  *
  * @author linsong wang
  */
-public class ViewPager extends LinearLayout {
+public class ViewPager extends ViewGroup {
 
     static final String CLASS_ANME = "android.support.v4.view.ViewPager";
 

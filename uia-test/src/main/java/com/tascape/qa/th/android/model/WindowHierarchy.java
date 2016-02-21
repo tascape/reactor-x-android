@@ -22,7 +22,7 @@ import org.json.JSONObject;
  *
  * @author wangl
  */
-public class ViewHierarchy {
+public class WindowHierarchy {
 
     public static final String TAG_NAME = "hierarchy";
 
@@ -30,7 +30,7 @@ public class ViewHierarchy {
 
     private String rotation;
 
-    ViewHierarchy(UiNode root) {
+    WindowHierarchy(UiNode root) {
         this.root = root;
     }
 

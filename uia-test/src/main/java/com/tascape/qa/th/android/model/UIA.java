@@ -42,7 +42,7 @@ import org.xml.sax.SAXException;
 public class UIA {
     private static final Logger LOG = LoggerFactory.getLogger(UIA.class);
 
-    public static ViewHierarchy parseHierarchy(File file, UiAutomatorDevice device) throws UiException, IOException,
+    public static WindowHierarchy parseHierarchy(File file, UiAutomatorDevice device) throws UiException, IOException,
         SAXException,
         ParserConfigurationException {
         try (InputStream in = FileUtils.openInputStream(file)) {
@@ -50,7 +50,7 @@ public class UIA {
         }
     }
 
-    public static ViewHierarchy parseHierarchy(InputStream in, UiAutomatorDevice device) throws UiException,
+    public static WindowHierarchy parseHierarchy(InputStream in, UiAutomatorDevice device) throws UiException,
         SAXException,
         ParserConfigurationException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -61,10 +61,9 @@ public class UIA {
         NodeList nl = doc.getChildNodes();
         for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
-            LOG.debug("{} {}", node.getNodeName(), node.getNodeValue());
             UiNode uiNode = parseNode(node);
             if (uiNode != null) {
-                ViewHierarchy hierarchy = new ViewHierarchy(uiNode);
+                WindowHierarchy hierarchy = new WindowHierarchy(uiNode);
                 hierarchy.setRotation(doc.getAttribute("rotation"));
                 LOG.debug("{}", hierarchy);
                 hierarchy.setUiAutomatorDevice(device);
@@ -154,6 +153,8 @@ public class UIA {
                 return new RadioGroup();
             case RatingBar.CLASS_ANME:
                 return new RatingBar();
+            case RecyclerView.CLASS_ANME:
+                return new RecyclerView();
             case RelativeLayout.CLASS_ANME:
                 return new RelativeLayout();
             case RemoteViews.CLASS_ANME:
@@ -204,6 +205,8 @@ public class UIA {
                 return new ViewFlipper();
             case ViewGroup.CLASS_ANME:
                 return new ViewGroup();
+            case ViewPager.CLASS_ANME:
+                return new ViewPager();
             case ViewSwitcher.CLASS_ANME:
                 return new ViewSwitcher();
             case ZoomControls.CLASS_ANME:
@@ -235,7 +238,7 @@ public class UIA {
         InputStream in = UIA.class.getResourceAsStream("hierarchy.xml");
         LOG.debug("{}", in);
 
-        ViewHierarchy hierarchy = parseHierarchy(in, null);
+        WindowHierarchy hierarchy = parseHierarchy(in, null);
         LOG.debug("{}", hierarchy.toString());
         LOG.debug("\n{}", hierarchy.toJson().toString(2));
     }

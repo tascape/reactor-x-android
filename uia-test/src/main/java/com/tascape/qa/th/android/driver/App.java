@@ -23,6 +23,7 @@ import com.tascape.qa.th.Utils;
 import com.tascape.qa.th.driver.EntityDriver;
 import com.tascape.qa.th.exception.EntityDriverException;
 import java.io.IOException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,18 +47,23 @@ public abstract class App extends EntityDriver {
 
     protected IUiScrollable uiScrollable;
 
+    protected String version;
+
     public abstract String getPackageName();
 
     public abstract int getLaunchDelayMillis();
 
     @Override
     public String getVersion() {
-        try {
-            return uiaDevice.getAppVersion(getPackageName());
-        } catch (IOException | EntityDriverException ex) {
-            LOG.warn(ex.getMessage());
-            return "na";
+        if (StringUtils.isBlank(version)) {
+            try {
+                version = uiaDevice.getAppVersion(getPackageName());
+            } catch (IOException | EntityDriverException ex) {
+                LOG.warn(ex.getMessage());
+                version = "";
+            }
         }
+        return version;
     }
 
     public void attachTo(UiAutomatorDevice device) {

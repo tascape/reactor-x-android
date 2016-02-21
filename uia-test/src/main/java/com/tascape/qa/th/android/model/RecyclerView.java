@@ -19,8 +19,8 @@ package com.tascape.qa.th.android.model;
  *
  * @author linsong wang
  */
-public class RecyclerView extends LinearLayout {
+public class RecyclerView extends ViewGroup {
 
-    static final String CLASS_ANME = " android.support.v7.widget.RecyclerView";
+    static final String CLASS_ANME = "android.support.v7.widget.RecyclerView";
 
 }

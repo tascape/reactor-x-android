@@ -43,6 +43,8 @@ class AdbDevice extends EntityDriver {
 
     private Adb adb;
 
+    private String version;
+
     public void setAdb(Adb adb) throws IOException {
         this.adb = adb;
 
@@ -68,12 +70,15 @@ class AdbDevice extends EntityDriver {
 
     @Override
     public String getVersion() {
-        try {
-            return getPropValue("ro.build.version.release") + "-" + getPropValue("ro.build.version.sdk ");
-        } catch (IOException ex) {
-            LOG.warn(ex.getMessage());
-            return "na";
+        if (StringUtils.isBlank(version)) {
+            try {
+                return getPropValue("ro.build.version.release") + "-" + getPropValue("ro.build.version.sdk ");
+            } catch (IOException ex) {
+                LOG.warn(ex.getMessage());
+                version = "";
+            }
         }
+        return version;
     }
 
     public boolean grantPermission(String packageName, String permission) throws IOException {
@@ -147,12 +152,20 @@ class AdbDevice extends EntityDriver {
         return mp4;
     }
 
+    /**
+     * Dumps window hierarchy into xml file. This does not work when 'uiautomator' process is running on device.
+     *
+     * @return the hierarchy xml file
+     *
+     * @throws IOException any error
+     */
     public File dumpWindowHierarchy() throws IOException {
         String f = "/data/local/tmp/uidump.xml";
-        adb.shell(Lists.newArrayList("uiautomator", "dump", f));
+        adb.shell(Lists.newArrayList("rm", f)).forEach(l -> LOG.debug(l));
+        adb.shell(Lists.newArrayList("uiautomator", "dump", f)).forEach(l -> LOG.debug(l));
         File xml = this.getLogPath().resolve("ui-" + System.currentTimeMillis() + ".xml").toFile();
         this.adb.pull(f, xml);
-        LOG.debug("Save WindowHierarchy to {}", xml.getAbsolutePath());
+        LOG.debug("Save WindowHierarchy into {}", xml.getAbsolutePath());
         return xml;
     }
 

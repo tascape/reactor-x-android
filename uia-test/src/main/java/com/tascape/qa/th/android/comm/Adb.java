@@ -142,10 +142,12 @@ public final class Adb extends EntityCommunication {
 
     @Override
     public void connect() throws Exception {
+        LOG.debug("NA'");
     }
 
     @Override
     public void disconnect() throws Exception {
+        LOG.debug("NA'");
     }
 
     public List<String> adb(final List<Object> arguments) throws IOException {
@@ -241,7 +243,7 @@ public final class Adb extends EntityCommunication {
                 if (line == null) {
                     break;
                 }
-                LOG.debug(line);
+                LOG.warn(line);
             }
         }
 

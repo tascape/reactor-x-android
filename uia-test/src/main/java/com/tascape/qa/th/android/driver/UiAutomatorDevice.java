@@ -26,8 +26,7 @@ import com.google.common.collect.Lists;
 import com.tascape.qa.th.Utils;
 import com.tascape.qa.th.android.comm.Adb;
 import com.tascape.qa.th.android.model.UIA;
-import com.tascape.qa.th.android.model.UiException;
-import com.tascape.qa.th.android.model.ViewHierarchy;
+import com.tascape.qa.th.android.model.WindowHierarchy;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,16 +37,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import javax.xml.parsers.ParserConfigurationException;
 import net.sf.lipermi.exception.LipeRMIException;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 /**
  *
@@ -125,7 +124,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         LOG.debug("Device screen dimension '{}'", screenDimension);
     }
 
-    public void stop() {
+    public void stop() throws IOException {
         try {
             client.close();
         } catch (IOException ex) {
@@ -134,6 +133,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         if (uiautomatorDog != null) {
             uiautomatorDog.stop();
             uiautomatorDog.killedProcess();
+            this.killUiAutomatorProcess();
         }
     }
 
@@ -345,16 +345,17 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
      *
      * @return UI view hierarchy node tree
      *
-     * @throws IOException                  cannot dump window hierarchy
-     * @throws UiException                  parsing error
-     * @throws SAXException                 xml parsing error
-     * @throws ParserConfigurationException xml parsing error
+     * @throws Exception cannot dump window hierarchy
      */
-    public ViewHierarchy loadWindowHierarchy() throws IOException, UiException, SAXException,
-        ParserConfigurationException {
-        File xml = this.dumpWindowHierarchy();
-        ViewHierarchy hierarchy = UIA.parseHierarchy(xml, this);
-        return hierarchy;
+    public WindowHierarchy loadWindowHierarchy() throws Exception {
+        this.stop();
+        try {
+            File xml = this.dumpWindowHierarchy();
+            WindowHierarchy hierarchy = UIA.parseHierarchy(xml, this);
+            return hierarchy;
+        } finally {
+            this.start();
+        }
     }
 
     @Override
@@ -648,14 +649,29 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         return dog;
     }
 
+    private void killUiAutomatorProcess() throws IOException {
+        Optional<String> line = getAdb().shell(Lists.newArrayList("ps")).stream()
+            .filter(l -> (l.startsWith("shell") && l.endsWith("uiautomator"))).findFirst();
+        if (line.isPresent()) {
+            String[] ss = StringUtils.split(line.get(), " ");
+            getAdb().shell(Lists.newArrayList("kill", ss[1]));
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         Adb adb = new Adb();
         UiAutomatorDevice device = new UiAutomatorDevice();
         device.setAdb(adb);
         device.start();
 
-        device.uninstall("com.mycompany.app");
-        device.install("/opt/app-debug.apk");
-        device.stop();
+        try {
+            device.uninstall("com.mycompany.app");
+            device.install("/opt/app-debug.apk");
+
+            device.loadWindowHierarchy();
+        } finally {
+            device.stop();
+            System.exit(0);
+        }
     }
 }
