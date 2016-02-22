@@ -103,6 +103,8 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     private IUiScrollable uiScrollable;
 
+    private final Set<App> apps = new HashSet<>();
+
     private final Dimension screenDimension = new Dimension(0, 0);
 
     private static final Set<Integer> LOCAL_PORTS = Collections.synchronizedSet(new HashSet<>());
@@ -122,6 +124,8 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         screenDimension.width = uiDevice.getDisplayWidth();
         screenDimension.height = uiDevice.getDisplayHeight();
         LOG.debug("Device screen dimension '{}'", screenDimension);
+
+        apps.forEach(app -> app.fetchUiaStubs());
     }
 
     public void stop() throws IOException {
@@ -137,15 +141,10 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         }
     }
 
-    private synchronized int setupRmiPortForward() throws IOException, InterruptedException {
-        int remote = IUiDevice.UIAUTOMATOR_RMI_PORT;
-        int local = IUiDevice.UIAUTOMATOR_RMI_PORT;
-        while (LOCAL_PORTS.contains(local)) {
-            local++;
-        }
-        this.getAdb().setupAdbPortForward(local, remote);
-        LOCAL_PORTS.add(local);
-        return local;
+    public void install(App app) {
+        app.setDevice(this);
+        apps.add(app);
+        app.fetchUiaStubs();
     }
 
     @Override
@@ -153,6 +152,9 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         return UiAutomatorDevice.class.getSimpleName();
     }
 
+    /**
+     * Throws UnsupportedOperationException.
+     */
     @Override
     public void reset() {
         throw new UnsupportedOperationException();
@@ -647,6 +649,17 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
         Thread.sleep(5000);
         return dog;
+    }
+
+    private synchronized int setupRmiPortForward() throws IOException, InterruptedException {
+        int remote = IUiDevice.UIAUTOMATOR_RMI_PORT;
+        int local = IUiDevice.UIAUTOMATOR_RMI_PORT + 10000;
+        while (LOCAL_PORTS.contains(local)) {
+            local++;
+        }
+        this.getAdb().setupAdbPortForward(local, remote);
+        LOCAL_PORTS.add(local);
+        return local;
     }
 
     private void killUiAutomatorProcess() throws IOException {

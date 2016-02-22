@@ -39,7 +39,7 @@ public abstract class App extends EntityDriver {
 
     public static final int NUMBER_OF_HOME_PAGE = 10;
 
-    protected UiAutomatorDevice uiaDevice;
+    protected UiAutomatorDevice device;
 
     protected IUiObject uiObject;
 
@@ -57,7 +57,7 @@ public abstract class App extends EntityDriver {
     public String getVersion() {
         if (StringUtils.isBlank(version)) {
             try {
-                version = uiaDevice.getAppVersion(getPackageName());
+                version = device.getAppVersion(getPackageName());
             } catch (IOException | EntityDriverException ex) {
                 LOG.warn(ex.getMessage());
                 version = "";
@@ -66,15 +66,18 @@ public abstract class App extends EntityDriver {
         return version;
     }
 
-    public void attachTo(UiAutomatorDevice device) {
-        uiaDevice = device;
+    public UiAutomatorDevice getDevice() {
+        return device;
+    }
+
+    public void setDevice(UiAutomatorDevice device) {
+        this.device = device;
+    }
+
+    public void fetchUiaStubs() {
         uiObject = device.getUiObject();
         uiCollection = device.getUiCollection();
         uiScrollable = device.getUiScrollable();
-    }
-
-    public UiAutomatorDevice getUiaDevice() {
-        return uiaDevice;
     }
 
     public void launch() throws IOException, InterruptedException {
@@ -83,29 +86,29 @@ public abstract class App extends EntityDriver {
 
     public void launch(boolean killExisting) throws IOException, InterruptedException {
         if (killExisting) {
-            uiaDevice.getAdb().shell(Lists.newArrayList("am", "force-stop", this.getPackageName()));
+            device.getAdb().shell(Lists.newArrayList("am", "force-stop", this.getPackageName()));
         }
-        int w = uiaDevice.getScreenDimension().width;
-        int h = uiaDevice.getScreenDimension().height;
-        if (uiaDevice.descriptionExists("Apps")) {
-            uiaDevice.clickByDescription("Apps");
+        int w = device.getScreenDimension().width;
+        int h = device.getScreenDimension().height;
+        if (device.descriptionExists("Apps")) {
+            device.clickByDescription("Apps");
             for (int i = 0; i < NUMBER_OF_HOME_PAGE; i++) {
-                uiaDevice.swipe(0, h / 2, w / 2, h / 2, 5);
+                device.swipe(0, h / 2, w / 2, h / 2, 5);
             }
         }
         String name = getName();
         for (int i = 0; i < NUMBER_OF_HOME_PAGE; i++) {
-            if (uiaDevice.textExists(name)) {
+            if (device.textExists(name)) {
                 break;
             } else {
                 LOG.debug("swipe to next screen");
-                uiaDevice.swipe(w / 2, h / 2, 0, h / 2, 5);
+                device.swipe(w / 2, h / 2, 0, h / 2, 5);
                 Utils.sleep(1000, "wait for next screen");
-                uiaDevice.takeDeviceScreenshot();
+                device.takeDeviceScreenshot();
             }
         }
-        uiaDevice.clickByText(name);
-        uiaDevice.waitForIdle();
+        device.clickByText(name);
+        device.waitForIdle();
         Utils.sleep(this.getLaunchDelayMillis(), "wait for app to launch");
     }
 }
