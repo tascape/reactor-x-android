@@ -322,6 +322,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         uiObject.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         clearTextByResourceId(resouceId);
         uiObject.setText(text);
+        uiObject.click();
         this.back();
     }
 
