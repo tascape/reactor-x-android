@@ -108,7 +108,7 @@ public abstract class App extends EntityDriver {
             }
         }
         device.clickByText(name);
-        device.waitForIdle();
         Utils.sleep(this.getLaunchDelayMillis(), "wait for app to launch");
+        device.waitForIdle();
     }
 }

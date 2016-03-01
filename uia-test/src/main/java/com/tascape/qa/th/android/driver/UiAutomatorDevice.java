@@ -320,7 +320,6 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     public void setTextByResourceId(String resouceId, String text) {
         LOG.debug("type {} into {}", text, resouceId);
         uiObject.useUiObjectSelector(new UiSelector().resourceId(resouceId));
-        clearTextByResourceId(resouceId);
         uiObject.setText(text);
         uiObject.click();
         this.back();
