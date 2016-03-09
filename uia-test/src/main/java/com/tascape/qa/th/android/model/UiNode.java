@@ -531,7 +531,7 @@ public class UiNode implements IUiObject {
     UiNode setAttribute(String name, String value) throws UiException {
         switch (name) {
             case "text":
-                setText(value);
+                setTextOf(value);
                 break;
             case "resource-id":
                 setResourceId(value);
