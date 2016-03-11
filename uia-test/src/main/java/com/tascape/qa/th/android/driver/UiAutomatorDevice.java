@@ -224,14 +224,38 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         home();
     }
 
+    /**
+     * Drags screen vertically from center.
+     *
+     * @param size positive to drag down, negative to drag up
+     */
+    public void dragVertically(int size) {
+        LOG.debug("drag, from center, vertically");
+        Dimension dimension = this.getScreenDimension();
+        this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, dimension.height / 2 + size,
+            Math.abs(size / 10 + 1));
+    }
+
+    /**
+     * Drags screen horizontally from center.
+     *
+     * @param size positive to drag right, negative to drag left
+     */
+    public void dragHorizontally(int size) {
+        LOG.debug("drag, from center, horizontally");
+        Dimension dimension = this.getScreenDimension();
+        this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2 + size, dimension.height / 2,
+            Math.abs(size / 10 + 1));
+    }
+
     public void dragHalfScreenUp() {
-        LOG.debug("drag, from enter, half screen up");
+        LOG.debug("drag, from center, half screen up");
         Dimension dimension = this.getScreenDimension();
         this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, 0, 10);
     }
 
     public void dragHalfScreenDown() {
-        LOG.debug("drag, from enter, half screen down");
+        LOG.debug("drag, from center, half screen down");
         Dimension dimension = this.getScreenDimension();
         this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, dimension.height, 10);
     }
@@ -678,8 +702,9 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         device.start();
 
         try {
-            device.uninstall("com.mycompany.app");
-            device.install("/opt/app-debug.apk");
+
+            device.dragVertically(-4000);
+            device.dragVertically(4000);
 
             device.loadWindowHierarchy();
         } finally {

@@ -37,7 +37,9 @@ public class UiDeviceStub implements IUiDevice {
 
     @Override
     public boolean click(int x, int y) {
-        return this.uiDevice.click(x, y);
+        boolean ok = this.uiDevice.click(x, y);
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
@@ -131,68 +133,94 @@ public class UiDeviceStub implements IUiDevice {
 
     @Override
     public boolean pressBack() {
-        return this.uiDevice.pressBack();
+        boolean ok = this.uiDevice.pressBack();
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
     public boolean pressDPadCenter() {
-        return this.uiDevice.pressDPadCenter();
+        boolean ok = this.uiDevice.pressDPadCenter();
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
     public boolean pressDPadDown() {
-        return this.uiDevice.pressDPadDown();
+        boolean ok = this.uiDevice.pressDPadDown();
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
     public boolean pressDPadLeft() {
-        return this.uiDevice.pressDPadLeft();
+        boolean ok = this.uiDevice.pressDPadLeft();
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
     public boolean pressDPadRight() {
-        return this.uiDevice.pressDPadRight();
+        boolean ok = this.uiDevice.pressDPadRight();
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
     public boolean pressDPadUp() {
-        return this.uiDevice.pressDPadUp();
+        boolean ok = this.uiDevice.pressDPadUp();
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
     public boolean pressDelete() {
-        return this.uiDevice.pressDelete();
+        boolean ok = this.uiDevice.pressDelete();
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
     public boolean pressEnter() {
-        return this.uiDevice.pressEnter();
+        boolean ok = this.uiDevice.pressEnter();
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
     public boolean pressHome() {
-        return this.uiDevice.pressHome();
+        boolean ok = this.uiDevice.pressHome();
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
     public boolean pressKeyCode(int keyCode) {
-        return this.uiDevice.pressKeyCode(keyCode);
+        boolean ok = this.uiDevice.pressKeyCode(keyCode);
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
     public boolean pressKeyCode(int keyCode, int metaState) {
-        return this.uiDevice.pressKeyCode(keyCode, metaState);
+        boolean ok = this.uiDevice.pressKeyCode(keyCode, metaState);
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
     public boolean pressMenu() {
-        return this.uiDevice.pressMenu();
+        boolean ok = this.uiDevice.pressMenu();
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
     public boolean pressRecentApps() throws LipeRMIException {
         try {
-            return this.uiDevice.pressRecentApps();
+            boolean ok = this.uiDevice.pressRecentApps();
+            this.waitForIdle0();
+            return ok;
         } catch (RemoteException ex) {
             throw new LipeRMIException(ex);
         }
@@ -200,7 +228,9 @@ public class UiDeviceStub implements IUiDevice {
 
     @Override
     public boolean pressSearch() {
-        return this.uiDevice.pressSearch();
+        boolean ok = this.uiDevice.pressSearch();
+        this.waitForIdle0();
+        return ok;
     }
 
     @Override
@@ -422,5 +452,9 @@ public class UiDeviceStub implements IUiDevice {
     @Override
     public boolean drag(int startX, int startY, int endX, int endY, int steps) {
         return uiDevice.drag(startX, startY, endX, endY, steps);
+    }
+
+    private void waitForIdle0() {
+        this.uiDevice.waitForIdle();
     }
 }

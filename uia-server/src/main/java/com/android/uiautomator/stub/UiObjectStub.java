@@ -17,6 +17,7 @@ package com.android.uiautomator.stub;
 
 import android.util.Log;
 import android.view.MotionEvent;
+import com.android.uiautomator.core.UiDevice;
 import com.android.uiautomator.core.UiObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ import java.util.List;
  */
 public class UiObjectStub implements IUiObject {
     private static final long serialVersionUID = 1L;
+
+    private final UiDevice uiDevice = UiDevice.getInstance();
 
     protected UiObject uiObject;
 
@@ -100,7 +103,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean dragTo(int destX, int destY, int steps) {
         try {
-            return this.uiObject.dragTo(destX, destY, steps);
+            boolean ok = this.uiObject.dragTo(destX, destY, steps);
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -110,7 +115,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean swipeUp(int steps) {
         try {
-            return this.uiObject.swipeUp(steps);
+            boolean ok = this.uiObject.swipeUp(steps);
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -120,7 +127,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean swipeDown(int steps) {
         try {
-            return this.uiObject.swipeDown(steps);
+            boolean ok = this.uiObject.swipeDown(steps);
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -130,7 +139,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean swipeLeft(int steps) {
         try {
-            return this.uiObject.swipeLeft(steps);
+            boolean ok = this.uiObject.swipeLeft(steps);
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -140,7 +151,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean swipeRight(int steps) {
         try {
-            return this.uiObject.swipeRight(steps);
+            boolean ok = this.uiObject.swipeRight(steps);
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -150,7 +163,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean click() {
         try {
-            return this.uiObject.click();
+            boolean ok = this.uiObject.click();
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -180,7 +195,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean clickTopLeft() {
         try {
-            return this.uiObject.clickTopLeft();
+            boolean ok = this.uiObject.clickTopLeft();
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -190,7 +207,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean longClickBottomRight() {
         try {
-            return this.uiObject.longClickBottomRight();
+            boolean ok = this.uiObject.longClickBottomRight();
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -200,7 +219,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean clickBottomRight() {
         try {
-            return this.uiObject.clickBottomRight();
+            boolean ok = this.uiObject.clickBottomRight();
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -210,7 +231,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean longClick() {
         try {
-            return this.uiObject.longClick();
+            boolean ok = this.uiObject.longClick();
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -220,7 +243,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean longClickTopLeft() {
         try {
-            return this.uiObject.longClickTopLeft();
+            boolean ok = this.uiObject.longClickTopLeft();
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -416,7 +441,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean pinchOut(int percent, int steps) {
         try {
-            return this.uiObject.pinchOut(percent, steps);
+            boolean ok = this.uiObject.pinchOut(percent, steps);
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -426,7 +453,9 @@ public class UiObjectStub implements IUiObject {
     @Override
     public boolean pinchIn(int percent, int steps) {
         try {
-            return this.uiObject.pinchIn(percent, steps);
+            boolean ok = this.uiObject.pinchIn(percent, steps);
+            this.waitForIdle0();
+            return ok;
         } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
             this.setUiObjectNotFoundException(ex);
         }
@@ -435,7 +464,7 @@ public class UiObjectStub implements IUiObject {
 
     @Override
     public boolean performTwoPointerGesture(Point startPoint1, Point startPoint2, Point endPoint1,
-            Point endPoint2, int steps) {
+        Point endPoint2, int steps) {
         android.graphics.Point sp1 = new android.graphics.Point(startPoint1.x, startPoint1.y);
         android.graphics.Point sp2 = new android.graphics.Point(startPoint2.x, startPoint2.y);
 
@@ -477,5 +506,9 @@ public class UiObjectStub implements IUiObject {
         mepcs.touchMajor = pcs.touchMajor;
         mepcs.touchMinor = pcs.touchMinor;
         return mepcs;
+    }
+
+    private void waitForIdle0() {
+        this.uiDevice.waitForIdle();
     }
 }

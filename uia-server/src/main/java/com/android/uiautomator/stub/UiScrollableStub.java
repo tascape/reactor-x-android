@@ -128,6 +128,12 @@ public class UiScrollableStub extends UiCollectionStub implements IUiScrollable 
 
     @Override
     public boolean scrollIntoView(UiSelector selector) {
+        com.android.uiautomator.core.UiSelector s = UiDeviceStub.convert(selector);
+        try {
+            return this.uiScrollable.scrollIntoView(s);
+        } catch (com.android.uiautomator.core.UiObjectNotFoundException ex) {
+            this.setUiObjectNotFoundException(ex);
+        }
         return false;
     }
 
