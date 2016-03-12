@@ -13,8 +13,8 @@
     <description>TestHarness Extension for Android</description>
 
     <modules>
-        <module>uia-client</module>
-        <module>uia-server</module>
+        <module>uia-client</module><!--
+        <module>uia-server</module>-->
         <module>uia-test</module>
     </modules>
 
