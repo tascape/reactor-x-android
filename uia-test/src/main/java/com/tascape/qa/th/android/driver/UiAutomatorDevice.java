@@ -39,12 +39,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import net.sf.lipermi.exception.LipeRMIException;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -374,14 +376,14 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
      * @throws Exception cannot dump window hierarchy
      */
     public WindowHierarchy loadWindowHierarchy() throws Exception {
-        this.stop();
-        try {
-            File xml = this.dumpWindowHierarchy();
-            WindowHierarchy hierarchy = UIA.parseHierarchy(xml, this);
-            return hierarchy;
-        } finally {
-            this.start();
-        }
+        String name = "uidump-" + UUID.randomUUID() + ".xml";
+        uiDevice.dumpWindowHierarchy(name);
+        File xml = this.getLogPath().resolve(name).toFile();
+        this.getAdb().pull(IUiDevice.TMP_DIR + name, xml);
+        LOG.debug("Save WindowHierarchy into {}", xml.getAbsolutePath());
+
+        WindowHierarchy hierarchy = UIA.parseHierarchy(xml, this);
+        return hierarchy;
     }
 
     @Override
@@ -696,17 +698,17 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     }
 
     public static void main(String[] args) throws Exception {
-        Adb adb = new Adb();
+        Adb adb = new Adb(Adb.getAllSerials().get(0));
         UiAutomatorDevice device = new UiAutomatorDevice();
         device.setAdb(adb);
         device.start();
+        StopWatch sw = new StopWatch();
 
         try {
-
-            device.dragVertically(-4000);
-            device.dragVertically(4000);
-
+            sw.start();
             device.loadWindowHierarchy();
+            sw.stop();
+            LOG.debug("{}", sw.getTime());
         } finally {
             device.stop();
             System.exit(0);

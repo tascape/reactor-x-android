@@ -208,6 +208,7 @@ public final class Adb extends EntityCommunication {
         if (!local.exists()) {
             throw new IOException("Cannot pull file from device to local");
         }
+        this.shell(Arrays.asList("rm", device));
     }
 
     public void setupAdbPortForward(int local, int remote) throws IOException, InterruptedException {

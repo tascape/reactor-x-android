@@ -27,6 +27,8 @@ public interface IUiDevice extends Serializable {
 
     int UIAUTOMATOR_RMI_PORT = 8998;
 
+    String TMP_DIR = "/data/local/tmp/local/tmp/";
+
     /**
      * Enables or disables layout hierarchy compression.
      *

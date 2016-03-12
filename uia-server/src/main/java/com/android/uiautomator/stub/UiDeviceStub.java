@@ -44,6 +44,8 @@ public class UiDeviceStub implements IUiDevice {
 
     @Override
     public void dumpWindowHierarchy(String fileName) {
+        File f = new File(IUiDevice.TMP_DIR);
+        f.mkdirs();
         this.uiDevice.dumpWindowHierarchy(fileName);
     }
 
