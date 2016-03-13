@@ -313,13 +313,15 @@ public class UiDeviceStub implements IUiDevice {
     }
 
     @Override
-    public boolean takeScreenshot(File storePath) {
-        return this.uiDevice.takeScreenshot(storePath);
+    public boolean takeScreenshot(String name) {
+        return this.takeScreenshot(name, 1.0f, 90);
     }
 
     @Override
-    public boolean takeScreenshot(File storePath, float scale, int quality) {
-        return this.uiDevice.takeScreenshot(storePath, scale, quality);
+    public boolean takeScreenshot(String name, float scale, int quality) {
+        File f = new File(IUiDevice.TMP_DIR);
+        f.mkdirs();
+        return this.uiDevice.takeScreenshot(new File(f, name), scale, quality);
     }
 
     @Override

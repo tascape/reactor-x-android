@@ -463,32 +463,28 @@ public interface IUiDevice extends Serializable {
     boolean drag(int startX, int startY, int endX, int endY, int steps);
 
     /**
-     * Take a screenshot of current window and store it as PNG
+     * Takes a screenshot of current window and store it as PNG
      *
      * Default scale of 1.0f (original size) and 90% quality is used
      *
-     * @param storePath
-     *                  where the PNG should be written to
+     * @param name name of the PNG, in default data directory
      *
      * @return boolean
      */
-    boolean takeScreenshot(File storePath);
+    boolean takeScreenshot(String name);
 
     /**
-     * Take a screenshot of current window and store it as PNG
+     * Takes a screenshot of current window and store it as PNG
      *
      * The screenshot is adjusted per screen rotation;
      *
-     * @param storePath
-     *                  where the PNG should be written to
-     * @param scale
-     *                  scale the screenshot down if needed; 1.0f for original size
-     * @param quality
-     *                  quality of the PNG compression; range: 0-100
+     * @param name    name of the PNG, in default data directory
+     * @param scale   scale the screenshot down if needed; 1.0f for original size
+     * @param quality quality of the PNG compression; range: 0-100
      *
      * @return boolean
      */
-    boolean takeScreenshot(File storePath, float scale, int quality);
+    boolean takeScreenshot(String name, float scale, int quality);
 
     /**
      * Re-enables the sensors and un-freezes the device rotation allowing its
@@ -501,8 +497,7 @@ public interface IUiDevice extends Serializable {
     void unfreezeRotation() throws LipeRMIException;
 
     /**
-     * Waits for the current application to idle. Default wait timeout is 10
-     * seconds
+     * Waits for the current application to idle. Default wait timeout is 10 seconds
      */
     void waitForIdle();
 

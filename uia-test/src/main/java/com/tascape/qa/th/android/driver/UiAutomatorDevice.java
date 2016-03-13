@@ -339,6 +339,9 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         }
         uiObject.clickBottomRight();
         for (int i = 0; i < text.length(); i++) {
+            uiDevice.pressDPadRight();
+        }
+        for (int i = 0; i < text.length(); i++) {
             uiDevice.pressDelete();
         }
     }
@@ -360,11 +363,11 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     }
 
     public File takeDeviceScreenshot() throws IOException {
-        String f = "/data/local/tmp/ff.png";
-        this.uiDevice.takeScreenshot(new File(f));
-        File png = this.getLogPath().resolve("ss-" + System.currentTimeMillis() + ".png").toFile();
-        this.getAdb().pull(f, png);
-        LOG.debug("Save screenshot to {}", png.getAbsolutePath());
+        String name = "ss-" + UUID.randomUUID() + ".png";
+        this.uiDevice.takeScreenshot(name);
+        File png = this.getLogPath().resolve(name).toFile();
+        this.getAdb().pull(IUiDevice.TMP_DIR + name, png);
+        LOG.debug("Save screenshot as {}", png.getAbsolutePath());
         return png;
     }
 
@@ -380,7 +383,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         uiDevice.dumpWindowHierarchy(name);
         File xml = this.getLogPath().resolve(name).toFile();
         this.getAdb().pull(IUiDevice.TMP_DIR + name, xml);
-        LOG.debug("Save WindowHierarchy into {}", xml.getAbsolutePath());
+        LOG.debug("Save WindowHierarchy as {}", xml.getAbsolutePath());
 
         WindowHierarchy hierarchy = UIA.parseHierarchy(xml, this);
         return hierarchy;
@@ -597,13 +600,13 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     }
 
     @Override
-    public boolean takeScreenshot(File storePath) {
-        return this.uiDevice.takeScreenshot(storePath);
+    public boolean takeScreenshot(String name) {
+        return this.uiDevice.takeScreenshot(name);
     }
 
     @Override
-    public boolean takeScreenshot(File storePath, float scale, int quality) {
-        return this.uiDevice.takeScreenshot(storePath, scale, quality);
+    public boolean takeScreenshot(String name, float scale, int quality) {
+        return this.uiDevice.takeScreenshot(name, scale, quality);
     }
 
     @Override
