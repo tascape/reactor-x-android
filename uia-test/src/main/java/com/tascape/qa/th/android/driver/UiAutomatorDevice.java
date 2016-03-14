@@ -43,6 +43,7 @@ import java.util.UUID;
 import net.sf.lipermi.exception.LipeRMIException;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
+import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -363,12 +364,12 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     }
 
     public File takeDeviceScreenshot() throws IOException {
-        String name = "ss-" + UUID.randomUUID() + ".png";
-        this.uiDevice.takeScreenshot(name);
-        File png = this.getLogPath().resolve(name).toFile();
-        this.getAdb().pull(IUiDevice.TMP_DIR + name, png);
-        LOG.debug("Save screenshot as {}", png.getAbsolutePath());
-        return png;
+        try {
+            return ss();
+        } catch (ExecuteException ex) {
+            LOG.warn(ex.getMessage());
+            return ss();
+        }
     }
 
     /**
@@ -652,6 +653,15 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     @Override
     public boolean drag(int startX, int startY, int endX, int endY, int steps) {
         return uiDevice.drag(startX, startY, endX, endY, steps);
+    }
+
+    private File ss() throws IOException {
+        String name = "ss-" + UUID.randomUUID() + ".png";
+        this.uiDevice.takeScreenshot(name);
+        File png = this.getLogPath().resolve(name).toFile();
+        this.getAdb().pull(IUiDevice.TMP_DIR + name, png);
+        LOG.debug("Save screenshot as {}", png.getAbsolutePath());
+        return png;
     }
 
     private ExecuteWatchdog setupUiAutomatorRmiServer() throws IOException, InterruptedException {

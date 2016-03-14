@@ -92,9 +92,7 @@ public abstract class App extends EntityDriver {
         int h = device.getScreenDimension().height;
         if (device.descriptionExists("Apps")) {
             device.clickByDescription("Apps");
-            for (int i = 0; i < NUMBER_OF_HOME_PAGE; i++) {
-                device.swipe(0, h / 2, w / 2, h / 2, 5);
-            }
+            device.dragHorizontally(w * NUMBER_OF_HOME_PAGE);
         }
         String name = getName();
         for (int i = 0; i < NUMBER_OF_HOME_PAGE; i++) {
