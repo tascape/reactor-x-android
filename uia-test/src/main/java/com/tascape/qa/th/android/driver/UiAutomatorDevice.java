@@ -163,6 +163,10 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         throw new UnsupportedOperationException();
     }
 
+    public IUiDevice getUiDevice() {
+        return uiDevice;
+    }
+
     public IUiObject getUiObject() {
         return uiObject;
     }

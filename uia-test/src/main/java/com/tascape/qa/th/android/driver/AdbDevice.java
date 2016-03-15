@@ -15,6 +15,7 @@
  */
 package com.tascape.qa.th.android.driver;
 
+import com.android.uiautomator.stub.IUiDevice;
 import com.google.common.collect.Lists;
 import com.tascape.qa.th.driver.EntityDriver;
 import com.tascape.qa.th.android.comm.Adb;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
@@ -146,9 +148,15 @@ class AdbDevice extends EntityDriver {
     }
 
     public String recordScreen(int seconds, int bitRate) throws IOException {
-        String mp4 = "/sdcard/ScreenRecording.mp4";
-        this.adb.shellAsync(Arrays.asList(new Object[]{"screenrecord", "--time-limit", seconds, mp4, "--bit-rate",
-            bitRate}), seconds * 1000L);
+        String mp4 = "sr-" + UUID.randomUUID() + ".mp4";
+        this.adb.shellAsync(Arrays.asList(new Object[]{"screenrecord", "--time-limit", seconds, IUiDevice.TMP_DIR + mp4,
+            "--bit-rate", bitRate}), seconds * 1000L);
+        return mp4;
+    }
+
+    public File getScreenRecord(String name) throws IOException {
+        File mp4 = this.getLogPath().resolve(name).toFile();
+        this.getAdb().pull(IUiDevice.TMP_DIR + name, mp4);
         return mp4;
     }
 
@@ -325,12 +333,6 @@ class AdbDevice extends EntityDriver {
 
     @Override
     public void reset() throws Exception {
-    }
-
-    public File getScreenRecord(String path) throws IOException {
-        File mp4 = File.createTempFile("ScreenRecording", ".mp4");
-        this.adb.pull(path, mp4);
-        return mp4;
     }
 
     private boolean bufferedImagesEqual(BufferedImage img1, BufferedImage img2) {

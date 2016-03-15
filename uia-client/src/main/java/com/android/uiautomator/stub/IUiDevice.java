@@ -16,7 +16,6 @@
 package com.android.uiautomator.stub;
 
 import java.io.Serializable;
-import java.io.File;
 import net.sf.lipermi.exception.LipeRMIException;
 
 /**

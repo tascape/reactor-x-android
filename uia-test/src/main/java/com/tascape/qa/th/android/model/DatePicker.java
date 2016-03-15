@@ -19,7 +19,7 @@ package com.tascape.qa.th.android.model;
  *
  * @author linsong wang
  */
-public class DatePicker extends UiNode {
+public class DatePicker extends UIANode {
 
     static final String CLASS_ANME = "android.widget.DatePicker";
 

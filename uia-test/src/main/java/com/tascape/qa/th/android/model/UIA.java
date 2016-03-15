@@ -15,8 +15,8 @@
  */
 package com.tascape.qa.th.android.model;
 
+import com.android.uiautomator.stub.Rect;
 import com.tascape.qa.th.android.driver.UiAutomatorDevice;
-import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,7 +61,7 @@ public class UIA {
         NodeList nl = doc.getChildNodes();
         for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
-            UiNode uiNode = parseNode(node);
+            UIANode uiNode = parseNode(node);
             if (uiNode != null) {
                 WindowHierarchy hierarchy = new WindowHierarchy(uiNode);
                 hierarchy.setRotation(doc.getAttribute("rotation"));
@@ -73,14 +73,14 @@ public class UIA {
         throw new UiException("Cannot parse view hierarchy");
     }
 
-    public static UiNode parseNode(Node node) throws UiException {
-        if (!node.getNodeName().equals(UiNode.TAG_NAME)) {
+    public static UIANode parseNode(Node node) throws UiException {
+        if (!node.getNodeName().equals(UIANode.TAG_NAME)) {
             return null;
         }
 
         NamedNodeMap map = node.getAttributes();
         String klass = map.getNamedItem("class").getNodeValue();
-        UiNode uiNode = newNode(klass);
+        UIANode uiNode = newNode(klass);
 
         for (int i = 0, j = map.getLength(); i < j; i++) {
             Node attr = map.item(i);
@@ -89,7 +89,7 @@ public class UIA {
 
         NodeList nl = node.getChildNodes();
         for (int i = 0; i < nl.getLength(); i++) {
-            UiNode n = parseNode(nl.item(i));
+            UIANode n = parseNode(nl.item(i));
             if (n == null) {
                 continue;
             }
@@ -99,7 +99,7 @@ public class UIA {
         return uiNode;
     }
 
-    private static UiNode newNode(String klass) {
+    private static UIANode newNode(String klass) {
         switch (klass) {
             case ActionMenuView.CLASS_ANME:
                 return new ActionMenuView();
@@ -213,19 +213,19 @@ public class UIA {
                 return new ZoomControls();
             default:
                 LOG.warn("Unkown node type {}, use UiNode", klass);
-                return new UiNode();
+                return new UIANode();
         }
     }
 
-    public static Rectangle parseBounds(String bounds) throws UiException {
+    public static Rect parseBounds(String bounds) throws UiException {
         Pattern pattern = Pattern.compile("\\[(\\d+?),(\\d+?)\\]\\[(\\d+?),(\\d+?)\\]");
         Matcher matcher = pattern.matcher(bounds);
         if (matcher.matches()) {
-            Rectangle rect = new Rectangle();
-            rect.x = Integer.parseInt(matcher.group(1));
-            rect.y = Integer.parseInt(matcher.group(2));
-            rect.width = Integer.parseInt(matcher.group(3));
-            rect.height = Integer.parseInt(matcher.group(4));
+            Rect rect = new Rect();
+            rect.left = Integer.parseInt(matcher.group(1));
+            rect.top = Integer.parseInt(matcher.group(2));
+            rect.right = Integer.parseInt(matcher.group(3));
+            rect.bottom = Integer.parseInt(matcher.group(4));
 
             return rect;
         }
@@ -233,7 +233,7 @@ public class UIA {
     }
 
     public static void main(String[] args) throws Exception {
-        Rectangle r = UIA.parseBounds("[0,0][1080,1812]");
+        Rect r = UIA.parseBounds("[0,0][1080,1812]");
         LOG.debug("{}", r);
         InputStream in = UIA.class.getResourceAsStream("hierarchy.xml");
         LOG.debug("{}", in);

@@ -26,11 +26,11 @@ public class WindowHierarchy {
 
     public static final String TAG_NAME = "hierarchy";
 
-    public final UiNode root;
+    public final UIANode root;
 
     private String rotation;
 
-    WindowHierarchy(UiNode root) {
+    WindowHierarchy(UIANode root) {
         this.root = root;
     }
 
@@ -38,7 +38,7 @@ public class WindowHierarchy {
         return rotation;
     }
 
-    public UiNode getRoot() {
+    public UIANode getRoot() {
         return root;
     }
 
@@ -51,7 +51,7 @@ public class WindowHierarchy {
         JSONObject json = new JSONObject()
             .put(TAG_NAME, new JSONObject()
                 .put("rotation", rotation)
-                .put(UiNode.TAG_NAME, root.toJson()));
+                .put(UIANode.TAG_NAME, root.toJson()));
         return json;
     }
 

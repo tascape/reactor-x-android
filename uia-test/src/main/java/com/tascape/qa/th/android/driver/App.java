@@ -16,6 +16,7 @@
 package com.tascape.qa.th.android.driver;
 
 import com.android.uiautomator.stub.IUiCollection;
+import com.android.uiautomator.stub.IUiDevice;
 import com.android.uiautomator.stub.IUiObject;
 import com.android.uiautomator.stub.IUiScrollable;
 import com.google.common.collect.Lists;
@@ -40,6 +41,8 @@ public abstract class App extends EntityDriver {
     public static final int NUMBER_OF_HOME_PAGE = 10;
 
     protected UiAutomatorDevice device;
+
+    protected IUiDevice uiDevice;
 
     protected IUiObject uiObject;
 
@@ -75,6 +78,7 @@ public abstract class App extends EntityDriver {
     }
 
     public void fetchUiaStubs() {
+        uiDevice = device.getUiDevice();
         uiObject = device.getUiObject();
         uiCollection = device.getUiCollection();
         uiScrollable = device.getUiScrollable();

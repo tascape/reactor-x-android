@@ -19,7 +19,7 @@ package com.tascape.qa.th.android.model;
  *
  * @author linsong wang
  */
-public class Toast extends UiNode {
+public class Toast extends UIANode {
 
     static final String CLASS_ANME = "android.widget.Toast";
 

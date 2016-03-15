@@ -22,8 +22,6 @@ import com.android.uiautomator.stub.Rect;
 import com.android.uiautomator.stub.UiObjectNotFoundException;
 import com.android.uiautomator.stub.UiSelector;
 import com.tascape.qa.th.android.driver.UiAutomatorDevice;
-import java.awt.Rectangle;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +34,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author linsong wang
  */
-public class UiNode implements IUiObject {
+public class UIANode implements IUiObject {
     private static final Logger LOG = LoggerFactory.getLogger(UIA.class);
 
     public static final String TAG_NAME = "node";
@@ -73,13 +71,11 @@ public class UiNode implements IUiObject {
 
     private boolean selected;
 
-    private boolean naf;
+    private Rect bounds;
 
-    private Rectangle bounds;
+    private final List<UIANode> nodes = new ArrayList<>();
 
-    private final List<UiNode> nodes = new ArrayList<>();
-
-    private UiNode parent = null;
+    private UIANode parent = null;
 
     private UiAutomatorDevice device;
 
@@ -157,41 +153,20 @@ public class UiNode implements IUiObject {
         return selected;
     }
 
-    public boolean isNaf() {
-        return naf;
-    }
-
-    public Rectangle getBoundsOf() {
-        return bounds;
-    }
-
-    public UiNode getParent() {
+    public UIANode getParent() {
         return parent;
     }
 
-    public UiNode[] nodes() {
-        return nodes.toArray(new UiNode[0]);
+    public UIANode[] nodes() {
+        return nodes.toArray(new UIANode[0]);
     }
 
-    /**
-     * Clicks on the center of this node.
-     *
-     * @return adb stdout
-     *
-     * @throws IOException in case of ADB issue
-     */
-    public List<String> clickOn() throws IOException {
-        int x = bounds.x + bounds.width / 2;
-        int y = bounds.y + bounds.height / 2;
-        return this.device.inputTap(x, y);
-    }
-
-    public UiNode findByResourceId(String resourceId) {
+    public UIANode findByResourceId(String resourceId) {
         if (this.resourceId.equals(resourceId)) {
             return this;
         }
-        for (UiNode n : nodes) {
-            UiNode node = n.findByResourceId(resourceId);
+        for (UIANode n : nodes) {
+            UIANode node = n.findByResourceId(resourceId);
             if (node != null) {
                 return node;
             }
@@ -199,12 +174,12 @@ public class UiNode implements IUiObject {
         return null;
     }
 
-    public UiNode findByResourceText(String text) {
+    public UIANode findByResourceText(String text) {
         if (this.text.equals(text)) {
             return this;
         }
-        for (UiNode n : nodes) {
-            UiNode node = n.findByResourceText(text);
+        for (UIANode n : nodes) {
+            UIANode node = n.findByResourceText(text);
             if (node != null) {
                 return node;
             }
@@ -229,8 +204,7 @@ public class UiNode implements IUiObject {
             .put("long-clickable", isLongClickable())
             .put("password", isPassword())
             .put("selected", isSelected())
-            .put("NAF", isNaf())
-            .put("bounds", String.format("[%d,%d][%d,%d]", bounds.x, bounds.y, bounds.width, bounds.height))
+            .put("bounds", String.format("[%d,%d][%d,%d]", bounds.left, bounds.top, bounds.right, bounds.bottom))
             .put("index", getIndex());
 
         if (!nodes.isEmpty()) {
@@ -260,7 +234,6 @@ public class UiNode implements IUiObject {
         hash = 41 * hash + (this.longClickable ? 1 : 0);
         hash = 41 * hash + (this.password ? 1 : 0);
         hash = 41 * hash + (this.selected ? 1 : 0);
-        hash = 41 * hash + (this.naf ? 1 : 0);
         hash = 41 * hash + Objects.hashCode(this.bounds);
         hash = 41 * hash + Objects.hashCode(this.nodes);
         hash = 41 * hash + Objects.hashCode(this.parent);
@@ -280,7 +253,7 @@ public class UiNode implements IUiObject {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final UiNode other = (UiNode) obj;
+        final UIANode other = (UIANode) obj;
         if (this.index != other.index) {
             return false;
         }
@@ -314,9 +287,6 @@ public class UiNode implements IUiObject {
         if (this.selected != other.selected) {
             return false;
         }
-        if (this.naf != other.naf) {
-            return false;
-        }
         if (!Objects.equals(this.text, other.text)) {
             return false;
         }
@@ -332,195 +302,270 @@ public class UiNode implements IUiObject {
         if (!Objects.equals(this.contentDesc, other.contentDesc)) {
             return false;
         }
-//        if (!Objects.equals(this.bounds, other.bounds)) {
-//            return false;
-//        }
-//        if (!Objects.equals(this.nodes, other.nodes)) {
-//            return false;
-//        }
-//        if (!Objects.equals(this.parent, other.parent)) {
-//            return false;
-//        }
-//        if (!Objects.equals(this.device, other.device)) {
-//            return false;
-//        }
-        return true;
+        return Objects.equals(this.bounds, other.bounds);
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public void clearUiObjectNotFoundException() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public UiObjectNotFoundException getUiObjectNotFoundException() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean hasUiObjectNotFoundException() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public void useUiObjectSelector(UiSelector selector) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public void clearTextField() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean clickAndWaitForNewWindow() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean clickAndWaitForNewWindow(long timeout) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean clickBottomRight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean clickTopLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean dragTo(IUiObject destObj, int steps) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean dragTo(int destX, int destY, int steps) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean exists() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean selectChild(UiSelector selector) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public int getChildCount() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return nodes.size();
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public String getClassName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return klass;
     }
 
     @Override
     public String getContentDescription() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contentDesc;
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean selectFromParent(UiSelector selector) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public String getPackageName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return pakkage;
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public Rect getVisibleBounds() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean longClick() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean longClickBottomRight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean longClickTopLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean performMultiPointerGesture(PointerCoords[]... touches) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean performTwoPointerGesture(Point startPoint1, Point startPoint2, Point endPoint1, Point endPoint2,
         int steps) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean pinchIn(int percent, int steps) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean pinchOut(int percent, int steps) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean swipeDown(int steps) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean swipeLeft(int steps) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean swipeRight(int steps) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean swipeUp(int steps) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean waitForExists(long timeout) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean waitUntilGone(long timeout) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean click() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return device.click(bounds.centerX(), bounds.centerY());
     }
 
     @Override
     public Rect getBounds() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return bounds;
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean setText(String text) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     void setUiAutomatorDevice(UiAutomatorDevice device) {
@@ -528,7 +573,7 @@ public class UiNode implements IUiObject {
         this.nodes.forEach(node -> node.setUiAutomatorDevice(device));
     }
 
-    UiNode setAttribute(String name, String value) throws UiException {
+    UIANode setAttribute(String name, String value) throws UiException {
         switch (name) {
             case "text":
                 setTextOf(value);
@@ -581,11 +626,8 @@ public class UiNode implements IUiObject {
             case "index":
                 setIndex(Integer.parseInt(value));
                 break;
-            case "NAF":
-                setNaf(Boolean.parseBoolean(value));
-                break;
             default:
-                throw new UiException("Unknown node attribute " + name);
+                LOG.warn("Unknown node attribute {}", name);
         }
         return this;
     }
@@ -650,11 +692,7 @@ public class UiNode implements IUiObject {
         this.selected = selected;
     }
 
-    void setNaf(boolean naf) {
-        this.naf = naf;
-    }
-
-    void setBounds(Rectangle bounds) {
+    void setBounds(Rect bounds) {
         this.bounds = bounds;
     }
 
@@ -662,12 +700,12 @@ public class UiNode implements IUiObject {
         this.index = index;
     }
 
-    void addNode(UiNode node) {
+    void addNode(UIANode node) {
         node.setParent(this);
         nodes.add(node);
     }
 
-    void setParent(UiNode parent) {
+    void setParent(UIANode parent) {
         this.parent = parent;
     }
 }

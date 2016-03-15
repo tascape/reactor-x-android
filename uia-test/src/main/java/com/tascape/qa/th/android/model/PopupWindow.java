@@ -19,7 +19,7 @@ package com.tascape.qa.th.android.model;
  *
  * @author linsong wang
  */
-public class PopupWindow extends UiNode {
+public class PopupWindow extends UIANode {
 
     static final String CLASS_ANME = "android.widget.PopupWindow";
 

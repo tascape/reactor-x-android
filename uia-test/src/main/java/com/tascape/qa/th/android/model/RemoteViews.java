@@ -19,7 +19,7 @@ package com.tascape.qa.th.android.model;
  *
  * @author linsong wang
  */
-public class RemoteViews extends UiNode {
+public class RemoteViews extends UIANode {
 
     static final String CLASS_ANME = "android.widget.RemoteViews";
 

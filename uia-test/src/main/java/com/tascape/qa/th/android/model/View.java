@@ -19,7 +19,7 @@ package com.tascape.qa.th.android.model;
  *
  * @author linsong wang
  */
-public class View extends UiNode {
+public class View extends UIANode {
 
     static final String CLASS_ANME = "android.view.View";
 

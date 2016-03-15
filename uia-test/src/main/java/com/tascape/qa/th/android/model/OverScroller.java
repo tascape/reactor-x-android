@@ -19,7 +19,7 @@ package com.tascape.qa.th.android.model;
  *
  * @author linsong wang
  */
-public class OverScroller extends UiNode {
+public class OverScroller extends UIANode {
 
     static final String CLASS_ANME = "android.widget.OverScroller";
 
