@@ -28,13 +28,16 @@ import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteStreamHandler;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +53,8 @@ public final class Adb extends EntityCommunication {
     public static final String SYSPROP_SERIALS = "qa.th.comm.android.SERIALS";
 
     private static final List<String> SERIALS = new ArrayList<>();
+
+    private static final Map<String, String> SERIAL_PRODUCT = new HashMap<>();
 
     private final static String ADB = locateAdb();
 
@@ -100,6 +105,13 @@ public final class Adb extends EntityCommunication {
         return SERIALS;
     }
 
+    public static synchronized Map<String, String> getSerialProduct() {
+        if (SERIAL_PRODUCT.isEmpty()) {
+            loadSerialProductMap();
+        }
+        return SERIAL_PRODUCT;
+    }
+
     private static void loadAllSerials() {
         SERIALS.clear();
         String serials = SystemConfiguration.getInstance().getProperty(SYSPROP_SERIALS);
@@ -129,6 +141,41 @@ public final class Adb extends EntityCommunication {
         if (SERIALS.isEmpty()) {
             throw new RuntimeException("No device detected.");
         }
+    }
+
+    private static void loadSerialProductMap() {
+        SERIAL_PRODUCT.clear();
+        String serials = SystemConfiguration.getInstance().getProperty(SYSPROP_SERIALS);
+        if (null != serials) {
+            LOG.info("Use specified devices from system property {}={}", SYSPROP_SERIALS, serials);
+            Lists.newArrayList(serials.split(",")).forEach(s -> SERIAL_PRODUCT.put(s, "na"));
+        } else {
+            CommandLine cmdLine = new CommandLine(ADB);
+            cmdLine.addArgument("devices");
+            cmdLine.addArgument("-l");
+            LOG.debug("{}", cmdLine.toString());
+            List<String> output = new ArrayList<>();
+            Executor executor = new DefaultExecutor();
+            executor.setStreamHandler(new ESH(output));
+            try {
+                if (executor.execute(cmdLine) != 0) {
+                    throw new RuntimeException(cmdLine + " failed");
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException(cmdLine + " failed", ex);
+            }
+            output.stream()
+                .map(line -> StringUtils.split(line, " ", 3))
+                .filter(ss -> ss.length == 3 && ss[1].equals("device"))
+                .forEach(ss -> {
+                    LOG.info("device {} -> {}", ss[0], ss[2]);
+                    SERIAL_PRODUCT.put(ss[0], ss[2]);
+                });
+        }
+        if (SERIAL_PRODUCT.isEmpty()) {
+            throw new RuntimeException("No device detected.");
+        }
+        SERIALS.addAll(SERIAL_PRODUCT.keySet());
     }
 
     public Adb() throws IOException, EntityCommunicationException {

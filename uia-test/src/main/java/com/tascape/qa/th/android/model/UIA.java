@@ -42,7 +42,7 @@ import org.xml.sax.SAXException;
 public class UIA {
     private static final Logger LOG = LoggerFactory.getLogger(UIA.class);
 
-    public static WindowHierarchy parseHierarchy(File file, UiAutomatorDevice device) throws UiException, IOException,
+    public static WindowHierarchy parseHierarchy(File file, UiAutomatorDevice device) throws IOException,
         SAXException,
         ParserConfigurationException {
         try (InputStream in = FileUtils.openInputStream(file)) {
@@ -50,8 +50,7 @@ public class UIA {
         }
     }
 
-    public static WindowHierarchy parseHierarchy(InputStream in, UiAutomatorDevice device) throws UiException,
-        SAXException,
+    public static WindowHierarchy parseHierarchy(InputStream in, UiAutomatorDevice device) throws SAXException,
         ParserConfigurationException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -70,10 +69,10 @@ public class UIA {
                 return hierarchy;
             }
         }
-        throw new UiException("Cannot parse view hierarchy");
+        throw new UIAException("Cannot parse view hierarchy");
     }
 
-    public static UIANode parseNode(Node node) throws UiException {
+    public static UIANode parseNode(Node node) {
         if (!node.getNodeName().equals(UIANode.TAG_NAME)) {
             return null;
         }
@@ -217,7 +216,7 @@ public class UIA {
         }
     }
 
-    public static Rect parseBounds(String bounds) throws UiException {
+    public static Rect parseBounds(String bounds) {
         Pattern pattern = Pattern.compile("\\[(\\d+?),(\\d+?)\\]\\[(\\d+?),(\\d+?)\\]");
         Matcher matcher = pattern.matcher(bounds);
         if (matcher.matches()) {
@@ -229,7 +228,7 @@ public class UIA {
 
             return rect;
         }
-        throw new UiException("Cannot parse bounds " + bounds);
+        throw new UIAException("Cannot parse bounds " + bounds);
     }
 
     public static void main(String[] args) throws Exception {

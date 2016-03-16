@@ -573,7 +573,7 @@ public class UIANode implements IUiObject {
         this.nodes.forEach(node -> node.setUiAutomatorDevice(device));
     }
 
-    UIANode setAttribute(String name, String value) throws UiException {
+    UIANode setAttribute(String name, String value) {
         switch (name) {
             case "text":
                 setTextOf(value);
@@ -627,7 +627,7 @@ public class UIANode implements IUiObject {
                 setIndex(Integer.parseInt(value));
                 break;
             default:
-                LOG.warn("Unknown node attribute {}", name);
+                LOG.trace("Unknown node attribute {}", name);
         }
         return this;
     }

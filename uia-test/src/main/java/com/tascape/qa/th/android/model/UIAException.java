@@ -15,20 +15,20 @@
  */
 package com.tascape.qa.th.android.model;
 
-import com.tascape.qa.th.exception.EntityDriverException;
-
 /**
  *
  * @author linsong wang
  */
-public class UiException extends EntityDriverException {
+public class UIAException extends RuntimeException {
     private static final long serialVersionUID = 8493532L;
 
-    public UiException(String message) {
+    public static final UIAException INTERACTION = new UIAException("Cannot interact with UI");
+
+    public UIAException(String message) {
         super(message);
     }
 
-    public UiException(String message, Throwable ex) {
+    public UIAException(String message, Throwable ex) {
         super(message, ex);
     }
 }

@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -89,6 +90,8 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
             throw new RuntimeException("Cannot get uia server/bundle jar files", ex);
         }
     }
+
+    private String productDetail;
 
     private final String ip = "localhost";
 
@@ -209,26 +212,22 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     }
 
     public void home() {
-        LOG.debug("press home");
-        uiDevice.pressHome();
+        pressHome();
     }
 
     public void back() {
-        LOG.debug("press back");
-        uiDevice.pressBack();
+        pressBack();
     }
 
     public void enter() {
-        LOG.debug("press enter");
-        uiDevice.pressEnter();
+        pressEnter();
     }
 
     public void backToHome() {
-        for (int i = 0; i < 5; i++) {
-            back();
+        while (pressBack()) {
         }
-        home();
-        home();
+        while (pressHome()) {
+        }
     }
 
     /**
@@ -401,7 +400,10 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     @Override
     public boolean click(int x, int y) {
-        return this.uiDevice.click(x, y);
+        LOG.debug("click {}, {}", x, y);
+        boolean ok = this.uiDevice.click(x, y);
+        this.waitForIdle();
+        return ok;
     }
 
     @Override
@@ -486,7 +488,10 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     @Override
     public boolean pressBack() {
-        return this.uiDevice.pressBack();
+        LOG.debug("press back");
+        boolean ok = this.uiDevice.pressBack();
+        this.waitForIdle();
+        return ok;
     }
 
     @Override
@@ -516,22 +521,34 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     @Override
     public boolean pressDelete() {
-        return this.uiDevice.pressDelete();
+        LOG.debug("press delete");
+        boolean ok = this.uiDevice.pressDelete();
+        this.waitForIdle();
+        return ok;
     }
 
     @Override
     public boolean pressEnter() {
-        return this.uiDevice.pressEnter();
+        LOG.debug("press enter");
+        boolean ok = this.uiDevice.pressEnter();
+        this.waitForIdle();
+        return ok;
     }
 
     @Override
     public boolean pressHome() {
-        return this.uiDevice.pressHome();
+        LOG.debug("press home");
+        boolean ok = this.uiDevice.pressHome();
+        this.waitForIdle();
+        return ok;
     }
 
     @Override
     public boolean pressKeyCode(int keyCode) {
-        return this.uiDevice.pressKeyCode(keyCode);
+        LOG.debug("press key {}", keyCode);
+        boolean ok = this.uiDevice.pressKeyCode(keyCode);
+        this.waitForIdle();
+        return ok;
     }
 
     @Override
@@ -541,17 +558,26 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     @Override
     public boolean pressMenu() {
-        return this.uiDevice.pressMenu();
+        LOG.debug("press menu");
+        boolean ok = this.uiDevice.pressMenu();
+        this.waitForIdle();
+        return ok;
     }
 
     @Override
     public boolean pressRecentApps() throws LipeRMIException {
-        return this.uiDevice.pressRecentApps();
+        LOG.debug("press recent apps");
+        boolean ok = this.uiDevice.pressRecentApps();
+        this.waitForIdle();
+        return ok;
     }
 
     @Override
     public boolean pressSearch() {
-        return this.uiDevice.pressSearch();
+        LOG.debug("press search");
+        boolean ok = this.uiDevice.pressSearch();
+        this.waitForIdle();
+        return ok;
     }
 
     @Override
@@ -591,17 +617,22 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     @Override
     public void sleep() throws LipeRMIException {
+        LOG.debug("put device to sleep");
         this.uiDevice.sleep();
     }
 
     @Override
     public boolean swipe(int startX, int startY, int endX, int endY, int steps) {
-        return this.uiDevice.swipe(startX, startY, endX, endY, steps);
+        boolean ok = this.uiDevice.swipe(startX, startY, endX, endY, steps);
+        this.waitForIdle();
+        return ok;
     }
 
     @Override
     public boolean swipe(Point[] segments, int segmentSteps) {
-        return this.uiDevice.swipe(segments, segmentSteps);
+        boolean ok = this.uiDevice.swipe(segments, segmentSteps);
+        this.waitForIdle();
+        return ok;
     }
 
     @Override
@@ -637,6 +668,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     @Override
     public void wakeUp() throws LipeRMIException {
         this.uiDevice.wakeUp();
+        this.waitForIdle();
     }
 
     @Override
@@ -646,17 +678,27 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     @Override
     public boolean openNotification() {
+        LOG.debug("open notification");
         return uiDevice.openNotification();
     }
 
     @Override
     public boolean openQuickSettings() {
+        LOG.debug("open quick settings");
         return uiDevice.openQuickSettings();
     }
 
     @Override
     public boolean drag(int startX, int startY, int endX, int endY, int steps) {
         return uiDevice.drag(startX, startY, endX, endY, steps);
+    }
+
+    public String getProductDetail() {
+        return productDetail;
+    }
+
+    public void setProductDetail(String productDetail) {
+        this.productDetail = productDetail;
     }
 
     private File ss() throws IOException {
@@ -715,9 +757,11 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     }
 
     public static void main(String[] args) throws Exception {
-        Adb adb = new Adb(Adb.getAllSerials().get(0));
+        Map.Entry<String, String> entry = Adb.getSerialProduct().entrySet().iterator().next();
+        Adb adb = new Adb(entry.getKey());
         UiAutomatorDevice device = new UiAutomatorDevice();
         device.setAdb(adb);
+        device.setProductDetail(entry.getValue());
         device.start();
         StopWatch sw = new StopWatch();
 
@@ -726,6 +770,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
             device.loadWindowHierarchy();
             sw.stop();
             LOG.debug("{}", sw.getTime());
+            LOG.debug(device.getProductDetail());
         } finally {
             device.stop();
             System.exit(0);
