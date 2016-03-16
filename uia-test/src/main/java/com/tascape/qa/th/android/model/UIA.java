@@ -211,7 +211,7 @@ public class UIA {
             case ZoomControls.CLASS_ANME:
                 return new ZoomControls();
             default:
-                LOG.warn("Unkown node type {}, use UiNode", klass);
+                LOG.trace("Unkown node type {}, use " + UIANode.class.getSimpleName(), klass);
                 return new UIANode();
         }
     }
