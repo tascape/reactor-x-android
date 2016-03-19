@@ -268,6 +268,8 @@ public final class Adb extends EntityCommunication {
     }
 
     private static class ESH implements ExecuteStreamHandler {
+        private static final String PATTERN = ".+? KB/s \\(.+? bytes in .+?s\\)";
+
         private final List<String> list;
 
         ESH() {
@@ -291,7 +293,11 @@ public final class Adb extends EntityCommunication {
                 if (line == null) {
                     break;
                 }
-                LOG.warn(line);
+                if (line.matches(PATTERN)) {
+                    continue;
+                } else {
+                    LOG.warn(line);
+                }
             }
         }
 
