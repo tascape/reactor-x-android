@@ -48,7 +48,6 @@ import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -182,7 +181,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         return uiScrollable;
     }
 
-    public void install(String apkPath) throws IOException, InterruptedException {
+    public UiAutomatorDevice install(String apkPath) throws IOException, InterruptedException {
         this.backToHome();
         ExecuteWatchdog dog = this.getAdb().adbAsync(Lists.newArrayList("install", "-rg", apkPath), 60000);
         Utils.sleep(10000, "wait for app push");
@@ -205,65 +204,78 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         if (dog.isWatching()) {
             dog.killedProcess();
         }
+        return this;
     }
 
     public Dimension getScreenDimension() {
         return screenDimension;
     }
 
-    public void home() {
+    public UiAutomatorDevice home() {
         pressHome();
+        return this;
     }
 
-    public void back() {
+    public UiAutomatorDevice back() {
         pressBack();
+        return this;
     }
 
-    public void enter() {
+    public UiAutomatorDevice enter() {
         pressEnter();
+        return this;
     }
 
-    public void backToHome() {
+    public UiAutomatorDevice backToHome() {
         while (pressBack()) {
         }
         while (pressHome()) {
         }
+        return this;
     }
 
     /**
      * Drags screen vertically from center.
      *
      * @param size positive to drag down, negative to drag up
+     *
+     * @return this
      */
-    public void dragVertically(int size) {
+    public UiAutomatorDevice dragVertically(int size) {
         LOG.debug("drag, from center, vertically");
         Dimension dimension = this.getScreenDimension();
         this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, dimension.height / 2 + size,
-            Math.abs(size / 10 + 1));
+            Math.abs(size / 20 + 5));
+        return this;
     }
 
     /**
      * Drags screen horizontally from center.
      *
      * @param size positive to drag right, negative to drag left
+     *
+     * @return this
      */
-    public void dragHorizontally(int size) {
+    public UiAutomatorDevice dragHorizontally(int size) {
         LOG.debug("drag, from center, horizontally");
         Dimension dimension = this.getScreenDimension();
         this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2 + size, dimension.height / 2,
-            Math.abs(size / 10 + 1));
+            Math.abs(size / 20 + 5));
+        return this;
     }
 
-    public void dragHalfScreenUp() {
+    public UiAutomatorDevice dragHalfScreenUp() {
         LOG.debug("drag, from center, half screen up");
         Dimension dimension = this.getScreenDimension();
         this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, 0, 10);
+        return this;
     }
 
-    public void dragHalfScreenDown() {
+    public UiAutomatorDevice dragHalfScreenDown() {
         LOG.debug("drag, from center, half screen down");
         Dimension dimension = this.getScreenDimension();
         this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, dimension.height, 10);
+        return this;
     }
 
     public boolean resourceIdExists(String resouceId) {
@@ -312,34 +324,37 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         uiDevice.waitForIdle();
     }
 
-    public void clickByText(String text) {
+    public UiAutomatorDevice clickByText(String text) {
         LOG.debug("click {}", text);
         uiObject.useUiObjectSelector(new UiSelector().text(text));
         uiObject.click();
         uiDevice.waitForIdle();
+        return this;
     }
 
-    public void clickByTextContains(String text) {
+    public UiAutomatorDevice clickByTextContains(String text) {
         LOG.debug("click {}", text);
         uiObject.useUiObjectSelector(new UiSelector().textContains(text));
         uiObject.click();
         uiDevice.waitForIdle();
+        return this;
     }
 
-    public void clickByDescription(String text) {
+    public UiAutomatorDevice clickByDescription(String text) {
         LOG.debug("click {}", text);
         uiObject.useUiObjectSelector(new UiSelector().description(text));
         uiObject.click();
         uiDevice.waitForIdle();
+        return this;
     }
 
-    public void clearTextByResourceId(String resouceId) {
+    public UiAutomatorDevice clearTextByResourceId(String resouceId) {
         LOG.debug("clear {}", resouceId);
         uiObject.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         uiObject.clearTextField();
         String text = uiObject.getText();
         if (text.isEmpty()) {
-            return;
+            return this;
         }
         uiObject.clickBottomRight();
         for (int i = 0; i < text.length(); i++) {
@@ -348,14 +363,16 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         for (int i = 0; i < text.length(); i++) {
             uiDevice.pressDelete();
         }
+        return this;
     }
 
-    public void setTextByResourceId(String resouceId, String text) {
+    public UiAutomatorDevice setTextByResourceId(String resouceId, String text) {
         LOG.debug("type {} into {}", text, resouceId);
         uiObject.useUiObjectSelector(new UiSelector().resourceId(resouceId));
         uiObject.setText(text);
         uiObject.click();
         this.back();
+        return this;
     }
 
     public String getTextByResourceId(String resouceId) {
@@ -764,14 +781,11 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         device.setAdb(adb);
         device.setProductDetail(entry.getValue());
         device.start();
-        StopWatch sw = new StopWatch();
 
         try {
-            sw.start();
-            device.loadWindowHierarchy();
-            sw.stop();
-            LOG.debug("{}", sw.getTime());
             LOG.debug(device.getProductDetail());
+            device.dragVertically(-1000000);
+            device.dragVertically(100000);
         } finally {
             device.stop();
             System.exit(0);
