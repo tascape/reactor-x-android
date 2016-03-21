@@ -690,6 +690,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     @Override
     public boolean drag(int startX, int startY, int endX, int endY, int steps) {
+        LOG.debug("drag from {},{} to {},{}", startX, startY, endX, endY);
         return uiDevice.drag(startX, startY, endX, endY, steps);
     }
 

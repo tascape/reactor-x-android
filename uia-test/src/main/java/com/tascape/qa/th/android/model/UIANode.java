@@ -545,6 +545,9 @@ public class UIANode implements IUiObject {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Not supported yet.
+     */
     @Override
     public boolean waitUntilGone(long timeout) {
         throw new UnsupportedOperationException("Not supported yet.");
