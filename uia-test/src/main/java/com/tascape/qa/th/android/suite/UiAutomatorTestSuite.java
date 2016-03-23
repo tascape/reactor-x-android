@@ -35,14 +35,10 @@ public interface UiAutomatorTestSuite {
     default UiAutomatorDevice getAvailableDevice() throws IOException, InterruptedException,
         EntityCommunicationException {
         String serial = SERIALS.poll(10, TimeUnit.SECONDS);
-        try {
-            Adb adb = new Adb(serial);
-            UiAutomatorDevice device = new UiAutomatorDevice();
-            device.setAdb(adb);
-            device.start();
-            return device;
-        } finally {
-            SERIALS.offer(serial);
-        }
+        Adb adb = new Adb(serial);
+        UiAutomatorDevice device = new UiAutomatorDevice();
+        device.setAdb(adb);
+        device.start();
+        return device;
     }
 }

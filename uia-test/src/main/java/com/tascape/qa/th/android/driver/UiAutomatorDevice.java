@@ -267,14 +267,14 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     public UiAutomatorDevice dragHalfScreenUp() {
         LOG.debug("drag, from center, half screen up");
         Dimension dimension = this.getScreenDimension();
-        this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, 0, 10);
+        this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, 0, 38);
         return this;
     }
 
     public UiAutomatorDevice dragHalfScreenDown() {
         LOG.debug("drag, from center, half screen down");
         Dimension dimension = this.getScreenDimension();
-        this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, dimension.height, 10);
+        this.swipe(dimension.width / 2, dimension.height / 2, dimension.width / 2, dimension.height, 38);
         return this;
     }
 
