@@ -388,6 +388,11 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
             return ss();
         } catch (ExecuteException ex) {
             LOG.warn(ex.getMessage());
+            try {
+                Utils.sleep(5000, "wait for device");
+            } catch (InterruptedException ex1) {
+                LOG.warn(ex.getMessage());
+            }
             return ss();
         }
     }
