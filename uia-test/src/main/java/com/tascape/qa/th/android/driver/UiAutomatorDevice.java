@@ -227,9 +227,11 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     }
 
     public UiAutomatorDevice backToHome() {
-        while (pressBack()) {
+        int i = 0;
+        while (pressBack() && i++ < 10) {
         }
-        while (pressHome()) {
+        i = 0;
+        while (pressHome() && i++ < 5) {
         }
         return this;
     }
