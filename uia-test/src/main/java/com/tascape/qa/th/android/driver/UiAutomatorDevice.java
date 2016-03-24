@@ -383,11 +383,12 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         return null;
     }
 
-    public File takeDeviceScreenshot() throws IOException {
+    public File takeDeviceScreenshot() throws IOException, InterruptedException {
         try {
             return ss();
         } catch (ExecuteException ex) {
             LOG.warn(ex.getMessage());
+            Utils.sleep(5000, "wait for device");
             return ss();
         }
     }
