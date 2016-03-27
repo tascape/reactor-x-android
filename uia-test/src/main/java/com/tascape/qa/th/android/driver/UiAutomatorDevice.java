@@ -36,13 +36,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.sf.lipermi.exception.LipeRMIException;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
@@ -71,6 +71,8 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
     private static final String UIA_BUNDLE_PATH;
 
     public static final long WAIT_FOR_EXISTS = 30000;
+
+    private static final AtomicInteger LOCAL_RMI_PORT = new AtomicInteger(IUiDevice.UIAUTOMATOR_RMI_PORT + 10000);
 
     private static final List<UiAutomatorDevice> DEVICES = new ArrayList<>();
 
@@ -116,10 +118,6 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     private String productDetail;
 
-    private final String ip = "localhost";
-
-    private int port = IUiDevice.UIAUTOMATOR_RMI_PORT;
-
     private ExecuteWatchdog uiautomatorDog;
 
     private Client client;
@@ -136,14 +134,12 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     private final Dimension screenDimension = new Dimension(0, 0);
 
-    private static final Set<Integer> LOCAL_PORTS = Collections.synchronizedSet(new HashSet<>());
-
     public void start() throws IOException, InterruptedException {
         uiautomatorDog = this.setupUiAutomatorRmiServer();
-        this.port = this.setupRmiPortForward();
+        int port = this.setupRmiPortForward();
 
         CallHandler callHandler = new CallHandler();
-        this.client = new Client(this.ip, this.port, callHandler);
+        this.client = new Client("localhost", port, callHandler);
         this.uiDevice = IUiDevice.class.cast(client.getGlobal(IUiDevice.class));
         this.uiObject = IUiObject.class.cast(client.getGlobal(IUiObject.class));
         this.uiCollection = IUiCollection.class.cast(client.getGlobal(IUiCollection.class));
@@ -785,14 +781,10 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         return dog;
     }
 
-    private synchronized int setupRmiPortForward() throws IOException, InterruptedException {
+    private int setupRmiPortForward() throws IOException, InterruptedException {
         int remote = IUiDevice.UIAUTOMATOR_RMI_PORT;
-        int local = IUiDevice.UIAUTOMATOR_RMI_PORT + 10000;
-        while (LOCAL_PORTS.contains(local)) {
-            local++;
-        }
+        int local = LOCAL_RMI_PORT.getAndIncrement();
         this.getAdb().setupAdbPortForward(local, remote);
-        LOCAL_PORTS.add(local);
         return local;
     }
 
