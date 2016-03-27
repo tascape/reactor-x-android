@@ -15,10 +15,7 @@
  */
 package com.tascape.qa.th.android.suite;
 
-import com.tascape.qa.th.android.comm.Adb;
 import com.tascape.qa.th.android.driver.UiAutomatorDevice;
-import com.tascape.qa.th.exception.EntityCommunicationException;
-import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -30,14 +27,11 @@ import java.util.concurrent.TimeUnit;
  */
 public interface UiAutomatorTestSuite {
 
-    BlockingQueue<String> SERIALS = new ArrayBlockingQueue<>(Adb.getAllSerials().size(), true, Adb.getAllSerials());
+    BlockingQueue<UiAutomatorDevice> DEVICES = new ArrayBlockingQueue<>(UiAutomatorDevice.getAllDevices().size(), true,
+        UiAutomatorDevice.getAllDevices());
 
-    default UiAutomatorDevice getAvailableDevice() throws IOException, InterruptedException,
-        EntityCommunicationException {
-        String serial = SERIALS.poll(10, TimeUnit.SECONDS);
-        Adb adb = new Adb(serial);
-        UiAutomatorDevice device = new UiAutomatorDevice();
-        device.setAdb(adb);
+    default UiAutomatorDevice getAvailableDevice() throws Exception {
+        UiAutomatorDevice device = DEVICES.poll(10, TimeUnit.SECONDS);
         device.start();
         return device;
     }

@@ -26,7 +26,9 @@ import com.google.common.collect.Lists;
 import com.tascape.qa.th.Utils;
 import com.tascape.qa.th.android.comm.Adb;
 import com.tascape.qa.th.android.model.UIA;
+import com.tascape.qa.th.android.model.UIAException;
 import com.tascape.qa.th.android.model.WindowHierarchy;
+import com.tascape.qa.th.exception.EntityCommunicationException;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -70,6 +72,8 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     public static final long WAIT_FOR_EXISTS = 30000;
 
+    private static final List<UiAutomatorDevice> DEVICES = new ArrayList<>();
+
     static {
         try {
             File server = Paths.get(File.createTempFile("uias", ".jar").getParent(), UIA_SERVER_JAR).toFile();
@@ -88,6 +92,26 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         } catch (IOException ex) {
             throw new RuntimeException("Cannot get uia server/bundle jar files", ex);
         }
+    }
+
+    public static synchronized List<UiAutomatorDevice> getAllDevices() {
+        if (DEVICES.isEmpty()) {
+            Adb.getSerialProduct().entrySet().stream().forEach((serial) -> {
+                try {
+                    Adb adb = new Adb(serial.getKey());
+                    UiAutomatorDevice device = new UiAutomatorDevice();
+                    device.setAdb(adb);
+                    device.setProductDetail(serial.getValue());
+                    DEVICES.add(device);
+                } catch (IOException | EntityCommunicationException ex) {
+                    LOG.warn("Cannnot debug device {}", serial, ex);
+                }
+            });
+            if (DEVICES.isEmpty()) {
+                throw new UIAException("Cannot debug any attached device");
+            }
+        }
+        return DEVICES;
     }
 
     private String productDetail;
