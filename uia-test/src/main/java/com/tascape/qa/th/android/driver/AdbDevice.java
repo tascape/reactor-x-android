@@ -335,6 +335,10 @@ class AdbDevice extends EntityDriver {
     public void reset() throws Exception {
     }
 
+    public String getSerial() {
+        return this.adb.getSerial();
+    }
+
     private boolean bufferedImagesEqual(BufferedImage img1, BufferedImage img2) {
         if (img1.getWidth() != img2.getWidth() || img1.getHeight() != img2.getHeight()) {
             return false;

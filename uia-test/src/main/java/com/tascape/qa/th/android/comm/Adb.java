@@ -267,6 +267,10 @@ public final class Adb extends EntityCommunication {
         LOG.debug("Device of serial '{}' is at localhost:{}", this.serial, local);
     }
 
+    public String getSerial() {
+        return serial;
+    }
+
     private static class ESH implements ExecuteStreamHandler {
         private static final String PATTERN = ".+? KB/s \\(.+? bytes in .+?s\\)";
 
