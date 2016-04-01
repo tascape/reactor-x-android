@@ -92,21 +92,24 @@ public abstract class App extends EntityDriver {
         if (killExisting) {
             device.getAdb().shell(Lists.newArrayList("am", "force-stop", this.getPackageName()));
         }
-        int w = device.getScreenDimension().width;
-        int h = device.getScreenDimension().height;
+        device.waitForIdle();
         if (device.descriptionExists("Apps")) {
             device.clickByDescription("Apps");
-            device.dragHorizontally(w * NUMBER_OF_HOME_PAGE);
         }
+
         String name = getName();
-        for (int i = 0; i < NUMBER_OF_HOME_PAGE; i++) {
-            if (device.textExists(name)) {
-                break;
-            } else {
-                LOG.debug("swipe to next screen");
-                device.swipe(w / 2, h / 2, 0, h / 2, 5);
-                Utils.sleep(1000, "wait for next screen");
-                device.takeDeviceScreenshot();
+        if (!device.textExists(name)) {
+            int w = device.getScreenDimension().width;
+            int h = device.getScreenDimension().height;
+            device.dragHorizontally(w * NUMBER_OF_HOME_PAGE);
+            for (int i = 0; i < NUMBER_OF_HOME_PAGE; i++) {
+                if (device.textExists(name)) {
+                    break;
+                } else {
+                    LOG.debug("swipe to next screen");
+                    device.swipe(w / 2, h / 2, 0, h / 2, 5);
+                    device.takeDeviceScreenshot();
+                }
             }
         }
         device.clickByText(name);
