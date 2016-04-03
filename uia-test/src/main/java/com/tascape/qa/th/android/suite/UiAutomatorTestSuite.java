@@ -35,4 +35,8 @@ public interface UiAutomatorTestSuite {
         device.start();
         return device;
     }
+
+    default int getNumberOfDevices() {
+        return DEVICES.size();
+    }
 }
