@@ -49,11 +49,6 @@ class AdbDevice extends EntityDriver {
 
     public void setAdb(Adb adb) throws IOException {
         this.adb = adb;
-
-        List<String> props = this.adb.shell(Lists.newArrayList("getprop"));
-        props.forEach(p -> {
-            LOG.debug(p);
-        });
     }
 
     public Adb getAdb() {
@@ -81,6 +76,12 @@ class AdbDevice extends EntityDriver {
             }
         }
         return version;
+    }
+
+    public List<String> getProp() throws IOException {
+        List<String> props = this.adb.shell(Lists.newArrayList("getprop"));
+        props.forEach(p -> LOG.debug(p));
+        return props;
     }
 
     public boolean grantPermission(String packageName, String permission) throws IOException {
