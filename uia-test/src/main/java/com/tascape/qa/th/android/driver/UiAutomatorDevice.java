@@ -153,16 +153,19 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         apps.forEach(app -> app.fetchUiaStubs());
     }
 
-    public void stop() throws IOException {
+    public void stop() {
         try {
-            client.close();
+            this.killUiAutomatorProcess();
         } catch (IOException ex) {
             LOG.warn("{}", ex.getMessage());
         }
         if (uiautomatorDog != null) {
-            uiautomatorDog.stop();
-            uiautomatorDog.killedProcess();
-            this.killUiAutomatorProcess();
+            uiautomatorDog.destroyProcess();
+        }
+        try {
+            client.close();
+        } catch (IOException ex) {
+            LOG.warn("{}", ex.getMessage());
         }
     }
 
