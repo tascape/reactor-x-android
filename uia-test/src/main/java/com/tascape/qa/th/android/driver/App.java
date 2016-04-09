@@ -93,6 +93,15 @@ public abstract class App extends EntityDriver {
             device.getAdb().shell(Lists.newArrayList("am", "force-stop", this.getPackageName()));
         }
         device.waitForIdle();
+        device.getAdb().shell(Lists.newArrayList("monkey", "-p", this.getPackageName(), "1"));
+    }
+
+    public void launchFromUi(boolean killExisting) throws IOException, InterruptedException {
+        if (killExisting) {
+            device.getAdb().shell(Lists.newArrayList("am", "force-stop", this.getPackageName()));
+        }
+        device.backToHome();
+        device.waitForIdle();
         if (device.descriptionExists("Apps")) {
             device.clickByDescription("Apps");
         }
