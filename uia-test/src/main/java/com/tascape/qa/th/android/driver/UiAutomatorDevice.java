@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 tascape.
+ * Copyright 2015 - 2016 Nebula Bay.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -751,7 +751,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
     private File ss() throws IOException {
         String name = "ss-" + UUID.randomUUID() + ".png";
-        this.uiDevice.takeScreenshot(name);
+        this.uiDevice.takeScreenshot(name, 1.0f, 68);
         File png = this.getLogPath().resolve(name).toFile();
         this.getAdb().pull(IUiDevice.TMP_DIR + name, png);
         LOG.debug("Save screenshot as {}", png.getAbsolutePath());
