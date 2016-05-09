@@ -6,6 +6,6 @@ This is host-driven test approach. All test cases are executed on host machine. 
 <dependency>
     <groupId>com.tascape.qa</groupId>
     <artifactId>thx-android-uiat</artifactId>
-    <version>1.1.5</version>
+    <version>version</version>
 </dependency>
 ```
