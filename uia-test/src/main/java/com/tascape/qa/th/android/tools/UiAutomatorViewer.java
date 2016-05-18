@@ -24,16 +24,16 @@ import org.slf4j.LoggerFactory;
  *
  * @author linsong wang
  */
-public class UiAutomatorDebugger implements UiAutomatorTest {
-    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(UiAutomatorDebugger.class);
+public class UiAutomatorViewer implements UiAutomatorTest {
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(UiAutomatorViewer.class);
 
     private UiAutomatorDevice device;
 
-    private String appName = "Moview";
+    private String appName = "F-Droid";
 
     private int debugMinutes = 30;
 
-    private UiAutomatorDebugger() {
+    private UiAutomatorViewer() {
         // todo: add ui for parameter input
     }
 
@@ -47,7 +47,7 @@ public class UiAutomatorDebugger implements UiAutomatorTest {
     public static void main(String[] args) {
         SystemConfiguration.getInstance();
 
-        UiAutomatorDebugger debugger = new UiAutomatorDebugger();
+        UiAutomatorViewer debugger = new UiAutomatorViewer();
         try {
             debugger.start();
         } catch (Throwable ex) {
