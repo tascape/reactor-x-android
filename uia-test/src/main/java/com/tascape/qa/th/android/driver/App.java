@@ -125,11 +125,15 @@ public abstract class App extends EntityDriver {
     }
 
     public void launch(boolean killExisting) throws IOException, InterruptedException {
+        if (StringUtils.isBlank(this.getPackageName())) {
+            return;
+        }
         if (killExisting) {
             device.getAdb().shell(Lists.newArrayList("am", "force-stop", this.getPackageName()));
         }
         device.waitForIdle();
         device.getAdb().shell(Lists.newArrayList("monkey", "-p", this.getPackageName(), "1"));
+        Utils.sleep(this.getLaunchDelayMillis(), "wait for app to launch");
     }
 
     public void launchFromUi(boolean killExisting) throws IOException, InterruptedException {
@@ -178,8 +182,7 @@ public abstract class App extends EntityDriver {
         AtomicBoolean pass = new AtomicBoolean(false);
         String tName = Thread.currentThread().getName() + "m";
         SwingUtilities.invokeLater(() -> {
-            String info = device.getProductDetail() + "" + device.getSerial();
-            JDialog jd = new JDialog((JFrame) null, "Manual Device UI Interaction - " + info);
+            JDialog jd = new JDialog((JFrame) null, "Manual Device UI Interaction - " + device.getProductDetail());
             jd.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 
             JPanel jpContent = new JPanel(new BorderLayout());
@@ -311,6 +314,7 @@ public abstract class App extends EntityDriver {
                                         LOG.debug("clicked at {},{}", e.getPoint().getX(), e.getPoint().getY());
                                         if (jcbTap.isSelected()) {
                                             device.click(e.getPoint().x, e.getPoint().y);
+                                            device.waitForIdle();
                                             jbLogUi.doClick();
                                         }
                                     }

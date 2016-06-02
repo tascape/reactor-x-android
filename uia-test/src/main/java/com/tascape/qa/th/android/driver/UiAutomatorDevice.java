@@ -433,6 +433,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         try {
             return wh();
         } catch (Exception ex) {
+            Utils.sleep(1000, "wait to retry");
             return wh();
         }
     }

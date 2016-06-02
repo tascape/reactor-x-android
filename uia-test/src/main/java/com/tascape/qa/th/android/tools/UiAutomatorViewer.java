@@ -165,7 +165,7 @@ public class UiAutomatorViewer extends App {
 
     private void detectDevices() {
         List<String> devices = Adb.getSerialProduct().entrySet().stream()
-            .map(entry -> entry.getKey() + ": " + entry.getValue()).collect(Collectors.toList());
+            .map(entry -> entry.getKey() + ":" + entry.getValue()).collect(Collectors.toList());
         ComboBoxModel<String> model = new DefaultComboBoxModel<>(devices.toArray(new String[0]));
         jcbDevices.setModel(model);
         if (model.getSize() == 0) {
@@ -179,9 +179,11 @@ public class UiAutomatorViewer extends App {
     private void launchApp() {
         try {
             jd.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-            Adb adb = new Adb(((String) this.jcbDevices.getSelectedItem()).split(":")[0]);
+            String serial = ((String) this.jcbDevices.getSelectedItem());
+            Adb adb = new Adb(serial.split(":")[0]);
             device = new UiAutomatorDevice();
             device.setAdb(adb);
+            device.setProductDetail(serial);
             device.start();
             this.setDevice(device);
             this.launch();
