@@ -212,7 +212,6 @@ public class UiAutomatorViewer extends App {
         if (args.length > 0) {
             viewer.appPackageName = args[0];
         }
-        viewer.appPackageName = "com.mykaishi.xinkaishi";
 
         try {
             viewer.start();

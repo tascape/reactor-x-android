@@ -430,14 +430,11 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
      * @throws Exception cannot dump window hierarchy
      */
     public WindowHierarchy loadWindowHierarchy() throws Exception {
-        String name = "uidump-" + UUID.randomUUID() + ".xml";
-        uiDevice.dumpWindowHierarchy(name);
-        File xml = this.getLogPath().resolve(name).toFile();
-        this.getAdb().pull(IUiDevice.TMP_DIR + name, xml);
-        LOG.debug("Save WindowHierarchy as {}", xml.getAbsolutePath());
-
-        WindowHierarchy hierarchy = UIA.parseHierarchy(xml, this);
-        return hierarchy;
+        try {
+            return wh();
+        } catch (Exception ex) {
+            return wh();
+        }
     }
 
     @Override
@@ -798,6 +795,17 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
             String[] ss = StringUtils.split(line.get(), " ");
             getAdb().shell(Lists.newArrayList("kill", ss[1]));
         }
+    }
+
+    private WindowHierarchy wh() throws Exception {
+        String name = "uidump-" + UUID.randomUUID() + ".xml";
+        uiDevice.dumpWindowHierarchy(name);
+        File xml = this.getLogPath().resolve(name).toFile();
+        this.getAdb().pull(IUiDevice.TMP_DIR + name, xml);
+        LOG.debug("Save WindowHierarchy as {}", xml.getAbsolutePath());
+
+        WindowHierarchy hierarchy = UIA.parseHierarchy(xml, this);
+        return hierarchy;
     }
 
     public static void main(String[] args) throws Exception {
