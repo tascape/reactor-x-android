@@ -64,7 +64,13 @@ public final class Adb extends EntityCommunication {
             return sysAdb;
         } else {
             String paths = System.getenv().get("PATH");
-            if (paths != null) {
+            if (StringUtils.isBlank(paths)) {
+                paths = System.getenv().get("Path");
+            }
+            if (StringUtils.isBlank(paths)) {
+                paths = System.getenv().get("path");
+            }
+            if (StringUtils.isNotBlank(paths)) {
                 String[] path = paths.split(System.getProperty("path.separator"));
                 for (String p : path) {
                     LOG.debug("path {}", p);
