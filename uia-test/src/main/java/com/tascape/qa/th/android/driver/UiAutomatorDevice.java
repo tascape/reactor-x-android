@@ -802,7 +802,16 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         String name = "uidump-" + UUID.randomUUID() + ".xml";
         uiDevice.dumpWindowHierarchy(name);
         File xml = this.getLogPath().resolve(name).toFile();
-        this.getAdb().pull(IUiDevice.TMP_DIR + name, xml);
+
+        String path = IUiDevice.TMP_DIR + name;
+        if (!this.getAdb().fileExists(path)) {
+            path = IUiDevice.TMP_DIR_V6 + name;
+        }
+        if (!this.getAdb().fileExists(path)) {
+            throw new UIAException("Cannot find file " + xml);
+        }
+
+        this.getAdb().pull(path, xml);
         LOG.debug("Save WindowHierarchy as {}", xml.getAbsolutePath());
 
         WindowHierarchy hierarchy = UIA.parseHierarchy(xml, this);

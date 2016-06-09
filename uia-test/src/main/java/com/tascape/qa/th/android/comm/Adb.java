@@ -277,6 +277,20 @@ public final class Adb extends EntityCommunication {
         return serial;
     }
 
+    /**
+     * Checks if a file exists in Android.
+     *
+     * @param path full path in Android
+     *
+     * @return true if file exists, false otherwise
+     *
+     * @throws IOException when error
+     */
+    public boolean fileExists(String path) throws IOException {
+        List<String> lines = this.shell(Lists.newArrayList("ls", path));
+        return lines.stream().filter(l -> l.equals(path)).findAny().isPresent();
+    }
+
     private static class ESH implements ExecuteStreamHandler {
         private static final String PATTERN = ".+? KB/s \\(.+? bytes in .+?s\\)";
 

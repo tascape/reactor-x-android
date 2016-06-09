@@ -157,6 +157,8 @@ class AdbDevice extends EntityDriver {
 
     public File getScreenRecord(String name) throws IOException {
         File mp4 = this.getLogPath().resolve(name).toFile();
+        
+        // todo
         this.getAdb().pull(IUiDevice.TMP_DIR + name, mp4);
         return mp4;
     }
