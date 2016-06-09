@@ -26,6 +26,8 @@ public interface IUiDevice extends Serializable {
 
     int UIAUTOMATOR_RMI_PORT = 8998;
 
+    String TMP_DIR_V6 = "/data/local/tmp/";
+
     String TMP_DIR = "/data/local/tmp/local/tmp/";
 
     /**
