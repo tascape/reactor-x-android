@@ -212,7 +212,7 @@ public final class Adb extends EntityCommunication {
         arguments.forEach((arg) -> {
             cmdLine.addArgument(arg + "");
         });
-        LOG.debug("{}", cmdLine.toString());
+        LOG.debug("[{} {}]", cmdLine.getExecutable(), StringUtils.join(cmdLine.getArguments(), " "));
         List<String> output = new ArrayList<>();
         Executor executor = new DefaultExecutor();
         executor.setStreamHandler(new ESH(output));
@@ -243,7 +243,7 @@ public final class Adb extends EntityCommunication {
         arguments.forEach((arg) -> {
             cmdLine.addArgument(arg + "");
         });
-        LOG.debug("{}", cmdLine.toString());
+        LOG.debug("[{} {}]", cmdLine.getExecutable(), StringUtils.join(cmdLine.getArguments(), " "));
         ExecuteWatchdog watchdog = new ExecuteWatchdog(timeoutMillis);
         Executor executor = new DefaultExecutor();
         executor.setWatchdog(watchdog);
