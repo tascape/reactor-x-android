@@ -19,11 +19,13 @@ import com.android.uiautomator.stub.IUiCollection;
 import com.android.uiautomator.stub.IUiDevice;
 import com.android.uiautomator.stub.IUiObject;
 import com.android.uiautomator.stub.IUiScrollable;
+import com.android.uiautomator.stub.Rect;
 import com.google.common.collect.Lists;
 import com.tascape.qa.th.Utils;
+import com.tascape.qa.th.android.model.UIANode;
+import com.tascape.qa.th.android.model.WindowHierarchy;
 import com.tascape.qa.th.driver.EntityDriver;
 import com.tascape.qa.th.exception.EntityDriverException;
-import com.tascape.qa.th.ui.SmartScroller;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -54,11 +56,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.slf4j.Logger;
@@ -244,14 +251,19 @@ public abstract class App extends EntityDriver {
             JPanel jpProgress = new JPanel(new BorderLayout());
             jpResponse.add(jpProgress, BorderLayout.PAGE_START);
 
-            JTextArea jtaResponse = new JTextArea();
-            jtaResponse.setEditable(false);
-            jtaResponse.setTabSize(4);
-            Font font = jtaResponse.getFont();
-            jtaResponse.setFont(new Font("Courier New", font.getStyle(), font.getSize()));
-            JScrollPane jsp = new JScrollPane(jtaResponse);
-            SmartScroller ss = new SmartScroller(jsp);
-            jpResponse.add(jsp, BorderLayout.CENTER);
+            JTextArea jtaJson = new JTextArea();
+            jtaJson.setEditable(false);
+            jtaJson.setTabSize(4);
+            Font font = jtaJson.getFont();
+            jtaJson.setFont(new Font("Courier New", font.getStyle(), font.getSize()));
+
+            JTree jtView = new JTree();
+
+            JTabbedPane jtp = new JTabbedPane();
+            jtp.add("tree", new JScrollPane(jtView));
+            jtp.add("json", new JScrollPane(jtaJson));
+
+            jpResponse.add(jtp, BorderLayout.CENTER);
 
             JPanel jpScreen = new JPanel();
             jpScreen.setMinimumSize(new Dimension(200, 200));
@@ -280,15 +292,18 @@ public abstract class App extends EntityDriver {
             {
                 jpLog.add(jbLogUi);
                 jbLogUi.addActionListener((ActionEvent event) -> {
-                    jtaResponse.setText("waiting for screenshot...");
+                    jtaJson.setText("waiting for screenshot...");
                     Thread t = new Thread(tName) {
                         @Override
                         public void run() {
                             LOG.debug("\n\n");
                             try {
-                                jtaResponse.setText("");
-                                jtaResponse.append(device.loadWindowHierarchy().root.toJson().toString(2));
-                                jtaResponse.append("\n");
+                                WindowHierarchy wh = device.loadWindowHierarchy();
+                                jtView.setModel(getModel(wh));
+
+                                jtaJson.setText("");
+                                jtaJson.append(wh.root.toJson().toString(2));
+                                jtaJson.append("\n");
 
                                 File png = device.takeDeviceScreenshot();
                                 BufferedImage image = ImageIO.read(png);
@@ -321,9 +336,9 @@ public abstract class App extends EntityDriver {
                                 });
                             } catch (Exception ex) {
                                 LOG.error("Cannot log screen", ex);
-                                jtaResponse.append("Cannot log screen");
+                                jtaJson.append("Cannot log screen");
                             }
-                            jtaResponse.append("\n\n\n");
+                            jtaJson.append("\n\n\n");
                             LOG.debug("\n\n");
 
                             jd.setSize(jd.getBounds().width + 1, jd.getBounds().height + 1);
@@ -382,7 +397,7 @@ public abstract class App extends EntityDriver {
                 JButton jbClear = new JButton("Clear");
                 jpLog.add(jbClear);
                 jbClear.addActionListener(event -> {
-                    jtaResponse.setText("");
+                    jtaJson.setText("");
                 });
             }
 
@@ -411,5 +426,24 @@ public abstract class App extends EntityDriver {
         } else {
             Assert.fail("Manual UI Interaction returns FAIL");
         }
+    }
+
+    private TreeModel getModel(WindowHierarchy wh) {
+        DefaultMutableTreeNode rootNode = createNode(wh.root);
+        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+        return treeModel;
+    }
+
+    private DefaultMutableTreeNode createNode(UIANode uiNode) {
+        Rect bounds = uiNode.getBounds();
+        String s = uiNode.getKlass() + " " + uiNode.getContentDescription() + " "
+            + String.format("[%d,%d][%d,%d]", bounds.left, bounds.top, bounds.right, bounds.bottom);
+        DefaultMutableTreeNode tNode = new DefaultMutableTreeNode(s);
+        tNode.setUserObject(uiNode);
+
+        for (UIANode n : uiNode.nodes()) {
+            tNode.add(createNode(n));
+        }
+        return tNode;
     }
 }
