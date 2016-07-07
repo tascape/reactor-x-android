@@ -235,8 +235,8 @@ public class UIANode implements IUiObject {
         hash = 41 * hash + (this.password ? 1 : 0);
         hash = 41 * hash + (this.selected ? 1 : 0);
         hash = 41 * hash + Objects.hashCode(this.bounds);
-        hash = 41 * hash + Objects.hashCode(this.nodes);
-        hash = 41 * hash + Objects.hashCode(this.parent);
+//        hash = 41 * hash + Objects.hashCode(this.nodes);
+//        hash = 41 * hash + Objects.hashCode(this.parent);
         hash = 41 * hash + Objects.hashCode(this.device);
         return hash;
     }
