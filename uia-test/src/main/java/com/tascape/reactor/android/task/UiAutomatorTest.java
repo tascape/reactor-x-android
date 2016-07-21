@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tascape.reactor.android.test;
+package com.tascape.reactor.android.task;
 
 import com.tascape.reactor.android.driver.App;
 
