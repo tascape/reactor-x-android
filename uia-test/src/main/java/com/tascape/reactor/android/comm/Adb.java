@@ -48,9 +48,9 @@ import org.slf4j.LoggerFactory;
 public final class Adb extends EntityCommunication {
     private static final Logger LOG = LoggerFactory.getLogger(Adb.class);
 
-    public static final String SYSPROP_ADB_EXECUTABLE = "qa.th.comm.ADB_EXECUTABLE";
+    public static final String SYSPROP_ADB_EXECUTABLE = "reactor.comm.ADB_EXECUTABLE";
 
-    public static final String SYSPROP_SERIALS = "qa.th.comm.android.SERIALS";
+    public static final String SYSPROP_SERIALS = "reactor.comm.android.SERIALS";
 
     private static final List<String> SERIALS = new ArrayList<>();
 
@@ -75,6 +75,14 @@ public final class Adb extends EntityCommunication {
                 for (String p : path) {
                     LOG.debug("path {}", p);
                     File f = Paths.get(p, "adb").toFile();
+                    if (f.exists()) {
+                        return f.getAbsolutePath();
+                    }
+                    f = Paths.get(p, "adb.bat").toFile();
+                    if (f.exists()) {
+                        return f.getAbsolutePath();
+                    }
+                    f = Paths.get(p, "adb.exe").toFile();
                     if (f.exists()) {
                         return f.getAbsolutePath();
                     }

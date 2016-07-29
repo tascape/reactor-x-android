@@ -79,7 +79,7 @@ import org.slf4j.LoggerFactory;
 public abstract class App extends EntityDriver {
     private static final Logger LOG = LoggerFactory.getLogger(App.class);
 
-    public static final String SYSPROP_APK_PATH = "qa.th.android.APK_PATH";
+    public static final String SYSPROP_APK_PATH = "reactor.android.APK_PATH";
 
     public static final int NUMBER_OF_HOME_PAGE = 10;
 

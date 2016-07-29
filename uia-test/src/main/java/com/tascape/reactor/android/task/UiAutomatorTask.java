@@ -22,7 +22,7 @@ import com.tascape.reactor.android.driver.App;
  *
  * @author linsong wang
  */
-public interface UiAutomatorTest {
+public interface UiAutomatorTask {
 
     default void testManully(App app) throws Exception {
         this.testManully(app, 30);
