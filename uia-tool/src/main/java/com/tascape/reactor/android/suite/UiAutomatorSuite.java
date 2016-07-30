@@ -21,11 +21,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This test suite supports plug-n-play for multiple devices.
+ * This suite supports plug-n-play for multiple devices.
  *
  * @author linsong wang
  */
-public interface UiAutomatorTestSuite {
+public interface UiAutomatorSuite {
 
     BlockingQueue<UiAutomatorDevice> DEVICES = new ArrayBlockingQueue<>(UiAutomatorDevice.getAllDevices().size(), true,
         UiAutomatorDevice.getAllDevices());

@@ -15,7 +15,7 @@
     <modules>
         <module>uia-client</module>
         <module>uia-server</module>
-        <module>uia-test</module>
+        <module>uia-tool</module>
     </modules>
 
     <properties>

@@ -175,7 +175,7 @@ public abstract class App extends EntityDriver {
 
     /**
      * The method starts a GUI to let an user inspect element tree and take screenshot when the user is interacting
-     * with the app-under-test manually. Please make sure to set timeout long enough for manual interaction.
+     * with the app-under-task manually. Please make sure to set timeout long enough for manual interaction.
      *
      * @param timeoutMinutes timeout in minutes to fail the manual steps
      *

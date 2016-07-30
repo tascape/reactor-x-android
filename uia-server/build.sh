@@ -27,5 +27,5 @@ pushd bin
   echo "adb forward tcp:8998 tcp:8998"
 popd
 
-cp bin/bundle.jar     ../uia-test/src/main/resources/uias/
-cp bin/uia-server.jar ../uia-test/src/main/resources/uias/
+cp bin/bundle.jar     ../uia-tool/src/main/resources/uias/
+cp bin/uia-server.jar ../uia-tool/src/main/resources/uias/
