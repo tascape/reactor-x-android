@@ -46,6 +46,9 @@
 </project>
 
 <!--
+wget http://dl.google.com/android/android-sdk_r24.2-linux.tgz
+android list sdk
+android update sdk --no-ui --filter
 mvn install:install-file -Dfile=/opt/android-sdk-macosx/platforms/android-23/android.jar -DgroupId=com.android -DartifactId=android -Dversion=23 -Dpackaging=jar
 mvn install:install-file -Dfile=/opt/android-sdk-macosx/platforms/android-23/uiautomator.jar -DgroupId=com.android -DartifactId=uiautomator -Dversion=23 -Dpackaging=jar
 -->
