@@ -806,9 +806,9 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
         String path = IUiDevice.TMP_DIR + name;
         if (!this.getAdb().fileExists(path)) {
             path = IUiDevice.TMP_DIR_V6 + name;
-        }
-        if (!this.getAdb().fileExists(path)) {
-            throw new UIAException("Cannot find file " + xml);
+            if (!this.getAdb().fileExists(path)) {
+                throw new UIAException("Cannot find file " + xml);
+            }
         }
 
         this.getAdb().pull(path, xml);
