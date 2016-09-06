@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,6 +136,11 @@ class AdbDevice extends EntityDriver {
         return res.stream().filter(s -> !(s.startsWith("*") && s.endsWith("*"))).findFirst().get();
     }
 
+    public List<String> getInstalledPackages() throws IOException {
+        List<String> res = this.adb.shell(Lists.newArrayList("pm", "list", "packages", "-f"));
+        return res.stream().map(l -> l.split("=")[1]).collect(Collectors.toList());
+    }
+
     /**
      * Gets event output lines.
      *
@@ -157,7 +163,7 @@ class AdbDevice extends EntityDriver {
 
     public File getScreenRecord(String name) throws IOException {
         File mp4 = this.getLogPath().resolve(name).toFile();
-        
+
         // todo
         this.getAdb().pull(IUiDevice.TMP_DIR + name, mp4);
         return mp4;
@@ -362,5 +368,7 @@ class AdbDevice extends EntityDriver {
         Adb adb = new Adb();
         AdbDevice device = new AdbDevice();
         device.setAdb(adb);
+        List<String> pkgs = device.getInstalledPackages();
+        pkgs.forEach(p -> LOG.debug(p));
     }
 }
