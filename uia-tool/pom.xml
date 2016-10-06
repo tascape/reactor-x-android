@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.tascape</groupId>
     <artifactId>reactor-x-android-uiat</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <packaging>jar</packaging>
 
     <name>reactor-x-android-uiat</name>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.tascape</groupId>
             <artifactId>reactor</artifactId>
-            <version>1.2.1</version>
+            <version>1.2.3</version>
             <type>jar</type>
         </dependency>
         <dependency>

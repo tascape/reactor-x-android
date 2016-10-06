@@ -92,6 +92,10 @@ class AdbDevice extends EntityDriver {
     }
 
     public boolean uninstall(String packageName) throws IOException {
+        if (StringUtils.isBlank(packageName)) {
+            LOG.warn("No package name specified");
+            return false;
+        }
         List<String> res = this.adb.adb(Lists.newArrayList("uninstall", packageName));
         LOG.debug("{}", res);
         return res.stream().filter(l -> l.contains("Success")).findAny().isPresent();
@@ -139,6 +143,23 @@ class AdbDevice extends EntityDriver {
     public List<String> getInstalledPackages() throws IOException {
         List<String> res = this.adb.shell(Lists.newArrayList("pm", "list", "packages", "-f"));
         return res.stream().map(l -> l.split("=")[1]).collect(Collectors.toList());
+    }
+
+    public void runWithMonkey(String pkgName, int events) throws IOException {
+        adb.shell(Lists.newArrayList("am", "force-stop", pkgName));
+        adb.shell(Lists.newArrayList("monkey", "-v", "-p", pkgName,
+            "--throttle", 200,
+            "--pct-touch", 80,
+            "--pct-motion", 20,
+            "--pct-trackball", 0,
+            "--pct-nav", 0,
+            "--pct-majornav", 0,
+            "--pct-syskeys ", 0,
+            "--pct-appswitch", 0,
+            "--kill-process-after-error",
+            "--ignore-security-exceptions",
+            "--ignore-crashes",
+            events));
     }
 
     /**
@@ -370,5 +391,9 @@ class AdbDevice extends EntityDriver {
         device.setAdb(adb);
         List<String> pkgs = device.getInstalledPackages();
         pkgs.forEach(p -> LOG.debug(p));
+
+        for (int i = 0; i < 10; i++) {
+            device.runWithMonkey("com.bethsoft.falloutshelter", 10000);
+        }
     }
 }

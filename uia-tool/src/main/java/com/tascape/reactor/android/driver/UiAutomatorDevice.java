@@ -148,7 +148,7 @@ public class UiAutomatorDevice extends AdbDevice implements IUiDevice {
 
         screenDimension.width = uiDevice.getDisplayWidth();
         screenDimension.height = uiDevice.getDisplayHeight();
-        LOG.debug("Device screen dimension '{}'", screenDimension);
+        LOG.debug("Device screen dimension '{}'", screenDimension.toString());
 
         apps.forEach(app -> app.fetchUiaStubs());
     }
